@@ -1,7 +1,7 @@
 #include <ogc/lwp_watchdog.h>
 #include <sys/unistd.h>
 #include <cstdint>
-#include "../../lib/sol/sol.hpp"
+#include "../../../lib/sol/sol.hpp"
 // Header
 #include "timer.hpp"
 

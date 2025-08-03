@@ -1,8 +1,23 @@
 #include <string>
 #include "audio.hpp"
 
+#include "../../../lib/sol/sol.hpp"
+
 namespace love {
     namespace audio {
+        void __init(sol::state &luastate) {
+            __registerTypes(luastate);
+        }
+
+        void __registerTypes(sol::state &luastate) {
+            luastate.new_usertype<AudioSource>(
+                "AudioSource",
+                sol::no_constructor,
+                "isPlaying", &AudioSource::isPlaying,
+                "play", &AudioSource::play
+            );
+        }
+
         AudioSource newSource_file_type(std::string file, std::string type) {
             AudioSource source;
             source.file = file;

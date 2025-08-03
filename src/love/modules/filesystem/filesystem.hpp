@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../lib/sol/sol.hpp"
+#include "../../../lib/sol/sol.hpp"
 #include <string>
 
 namespace love {

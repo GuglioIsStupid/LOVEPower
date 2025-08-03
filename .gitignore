@@ -2,3 +2,4 @@ meta.xml
 *.dol
 *.elf
 build/
+.vscode/

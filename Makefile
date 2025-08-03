@@ -26,6 +26,7 @@ SOURCES		:=	src \
 				src/love/modules/filesystem \
 				src/love/modules/system \
 				src/love/modules/timer \
+				src/love/modules/math \
 				src/lib/FreeTypeGX
 
 DATA		:=	data

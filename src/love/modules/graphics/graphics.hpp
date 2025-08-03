@@ -1,6 +1,6 @@
-#include "../../../lib/sol/sol.hpp"
-
 #pragma once
+
+#include "../../../lib/sol/sol.hpp"
 
 #include <tuple>
 #include <string>
@@ -24,9 +24,11 @@ namespace love {
         std::tuple<float, float, float, float> getBackgroundColor();
 
         #pragma region Shapes
+
         void rectangle(const std::string &mode, float x, float y, float width, float height);
 
         #pragma region Textures
+
         void _draw(love::graphics::Texture &texture, float x, float y, float rotation, float sx, float sy, float ox, float oy);
         void draw(love::graphics::Texture &texture);
         void draw_x(love::graphics::Texture &texture, float x);
@@ -40,6 +42,7 @@ namespace love {
         love::graphics::Texture newImage(std::string file);
 
         #pragma region Fonts
+        
         void setFont(love::graphics::Font &font);
         love::graphics::Font newFont();
         love::graphics::Font newFont_size(int size);
