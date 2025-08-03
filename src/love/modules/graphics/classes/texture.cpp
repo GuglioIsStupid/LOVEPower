@@ -1,7 +1,7 @@
 #include "../../lib/sol/sol.hpp"
 #include <grrlib.h>
 
-#include "../../../modules/filesystem.hpp"
+#include "../../../modules/filesystem/filesystem.hpp"
 
 #include "texture.hpp"
 

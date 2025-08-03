@@ -2,7 +2,7 @@
 #include "../../lib/FreeTypeGX/FreeTypeGX.h"
 #include <grrlib.h>
 
-#include "../../../modules/filesystem.hpp"
+#include "../../../modules/filesystem/filesystem.hpp"
 
 #include "font.hpp"
 

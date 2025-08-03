@@ -10,10 +10,10 @@
 
 #include "love/love.hpp"
 #include "love/modules/graphics/graphics.hpp"
-#include "love/modules/filesystem.hpp"
-#include "love/modules/timer.hpp"
-#include "love/modules/system.hpp"
-#include "love/modules/audio.hpp"
+#include "love/modules/filesystem/filesystem.hpp"
+#include "love/modules/timer/timer.hpp"
+#include "love/modules/system/system.hpp"
+#include "love/modules/audio/audio.hpp"
 
 #include "boot_lua.h"
 

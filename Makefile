@@ -17,7 +17,17 @@ include $(DEVKITPPC)/wii_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	src src/love/ src/love/modules/ src/love/modules/graphics src/love/modules/graphics/classes src/lib/FreeTypeGX
+SOURCES		:=	src \
+				src/love/ \
+				src/love/modules/ \
+				src/love/modules/graphics \
+				src/love/modules/graphics/classes \
+				src/love/modules/audio \
+				src/love/modules/filesystem \
+				src/love/modules/system \
+				src/love/modules/timer \
+				src/lib/FreeTypeGX
+
 DATA		:=	data
 INCLUDES    :=  src/lib/sol/ src/lib/FreeTypeGX
 
@@ -25,10 +35,10 @@ INCLUDES    :=  src/lib/sol/ src/lib/FreeTypeGX
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CFLAGS	= -g -O2 -Wall $(MACHDEP) $(INCLUDE) `freetype-config --cflags`
-CXXFLAGS	=	$(CFLAGS)
+CFLAGS  	=  -g -O2 -Wall $(MACHDEP) $(INCLUDE) `freetype-config --cflags`
+CXXFLAGS	=  $(CFLAGS)
 
-LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
+LDFLAGS	    =  -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
