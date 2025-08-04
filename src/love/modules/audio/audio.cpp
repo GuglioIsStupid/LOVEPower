@@ -1,7 +1,7 @@
 #include <string>
 #include "audio.hpp"
 
-#include "../../../lib/sol/sol.hpp"
+#include <sol/sol.hpp>
 
 namespace love {
     namespace audio {

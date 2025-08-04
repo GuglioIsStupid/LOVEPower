@@ -14,8 +14,8 @@ namespace love {
             return 1;
         }
 
-        std::tuple<PowerState, std::optional<int>, std::optional<int>> getPowerInfo() {
-            return std::make_tuple(PowerState::AC, std::nullopt, std::nullopt);
+        std::tuple<std::string, std::optional<int>, std::optional<int>> getPowerInfo() {
+            return std::make_tuple("AC", std::nullopt, std::nullopt);
         }
     }
 }

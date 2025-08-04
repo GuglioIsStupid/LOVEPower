@@ -1,11 +1,12 @@
 #pragma once
 
-#include "../../lib/FreeTypeGX/FreeTypeGX.h"
+#include <FreeTypeGX/FreeTypeGX.h>
 #include <string>
 #include <vector>
 
 namespace {
-    static std::vector<wchar_t> utf8_to_wchar_vec(const std::string &s) {
+    [[maybe_unused]] 
+    std::vector<wchar_t> utf8_to_wchar_vec(std::string s) {
         size_t len = mbstowcs(nullptr, s.c_str(), 0);
         if (len == static_cast<size_t>(-1)) {
             std::vector<wchar_t> fallback(s.size() + 1);

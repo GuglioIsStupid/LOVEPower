@@ -3,7 +3,7 @@
 #include <string>
 #include <tuple>
 
-#include "../lib/sol/sol.hpp"
+#include <sol/sol.hpp>
 
 namespace love {
     inline std::string _console                            = "Wii";

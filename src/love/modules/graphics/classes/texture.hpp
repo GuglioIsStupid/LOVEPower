@@ -3,7 +3,7 @@
 #include <tuple>
 #include <string>
 
-#include "../../../../lib/sol/sol.hpp"
+#include <sol/sol.hpp>
 #include <grrlib.h>
 
 namespace love {

@@ -1,25 +1,30 @@
 local quit
 package.path = "game/?.lua; game/?/init.lua"
 
-local function debug_print(msg)
-    if love and love.graphics and love.graphics.print then
-        love.graphics.clear(0, 0, 0)
-        love.graphics.origin()
-        love.graphics.print(tostring(msg), 10, 10)
-        love.graphics.present()
-    else
-        print(msg)
-    end
-end
+require("love.callbacks")
 
 local debug = true
 function love.run()
+    if love.math then
+        love.math.setRandomSeed(os.time())
+    end
     if love.load then love.load() end
     if love.timer then love.timer.step() end
 
-    while true do
-        local dt = 0
+    local dt = 0
 
+    while true do
+        --[[ if love.event then
+            love.event.pump()
+            for name, a, b, c, d, e, f in love.event.poll() do
+                if name == "quit" then
+                    if not love.quit or not love.quit() then
+                        return a or 0
+                    end
+                end
+                love.handlers[name](a, b, c, d, e, f)
+            end
+        end ]]
         if love.timer then dt = love.timer.step() end
 
         if love.update then love.update(dt) end

@@ -1,4 +1,4 @@
-#include "../../lib/sol/sol.hpp"
+#include <sol/sol.hpp>
 #include <grrlib.h>
 
 #include "../../../modules/filesystem/filesystem.hpp"

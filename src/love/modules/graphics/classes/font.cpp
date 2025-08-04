@@ -1,5 +1,5 @@
-#include "../../lib/sol/sol.hpp"
-#include "../../lib/FreeTypeGX/FreeTypeGX.h"
+#include <sol/sol.hpp>
+#include <FreeTypeGX/FreeTypeGX.h>
 #include <grrlib.h>
 
 #include "../../../modules/filesystem/filesystem.hpp"
@@ -45,12 +45,12 @@ namespace love {
         }
 
         int Font::getWidth(std::string text) {
-            auto wide = utf8_to_wchar_vec(text);
+            std::vector<wchar_t> wide = utf8_to_wchar_vec(text);
             return font->getWidth(wide.data());
         }
 
         int Font::getHeight() {
-            auto wide = utf8_to_wchar_vec("");
+            std::vector<wchar_t> wide = utf8_to_wchar_vec("");
             return font->getHeight(wide.data());
         }
     }

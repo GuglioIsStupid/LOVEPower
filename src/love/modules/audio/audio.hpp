@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "../../../lib/sol/sol.hpp"
+#include <sol/sol.hpp>
 
 // TODO: Seperate this into a seperate class file
 namespace love {

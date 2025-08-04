@@ -1,6 +1,8 @@
 #define SOL_ALL_SAFETIES_ON 1
+// disable SOL_LUAJIT
+#define SOL_LUAJIT 0
 
-#include "lib/sol/sol.hpp"
+#include <sol/sol.hpp>
 #include <grrlib.h>
 #include <wiiuse/wpad.h>
 #include <string>
@@ -14,7 +16,10 @@
 #include "love/modules/timer/timer.hpp"
 #include "love/modules/system/system.hpp"
 #include "love/modules/audio/audio.hpp"
+#include "love/modules/math/math.hpp"
+#include "love/modules/event/event.hpp"
 
+#include "callbacks_lua.h"
 #include "boot_lua.h"
 
 int main(int argc, char** argv) {
@@ -30,10 +35,12 @@ int main(int argc, char** argv) {
         sol::lib::debug
     );
 
+    // Register love submodules
     love::graphics::__init(luastate);
     love::filesystem::__init(luastate, argc, argv);
     love::timer::__init(luastate);
 
+    // Inject love table
     luastate["love"] = luastate.create_table_with(
         "_console", love::_console,
         "_os", love::_os,
@@ -47,7 +54,7 @@ int main(int argc, char** argv) {
             ),
             "getColor", love::graphics::getColor,
             "rectangle", love::graphics::rectangle,
-            "draw", sol::overload( // TODO: Maybe use sol::variadic_args for multiple argument functions?
+            "draw", sol::overload(
                 love::graphics::draw,
                 love::graphics::draw_x,
                 love::graphics::draw_x_y,
@@ -80,11 +87,6 @@ int main(int argc, char** argv) {
                 love::graphics::setBackgroundColor_float3
             ),
             "getBackgroundColor", love::graphics::getBackgroundColor,
-            /* "translate", love::graphics::translate,
-            "rotate", love::graphics::rotate,
-            "scale", love::graphics::scale,
-            "push", love::graphics::push,
-            "pop", love::graphics::pop, */
             "clear", sol::overload(
                 love::graphics::clear_float4,
                 love::graphics::clear_float3,
@@ -104,20 +106,59 @@ int main(int argc, char** argv) {
             "sleep", love::timer::sleep,
             "step", love::timer::step,
             "getFPS", love::timer::getFPS
-            /* 
-            "getAverageDelta", love::timer::getAverageDelta,
-            "getDelta", love::timer::getDelta */
         ),
         "system", luastate.create_table_with(
-            "getOS", love::system::getOS
+            "getOS", love::system::getOS,
+            "getProcessorCount", love::system::getProcessorCount,
+            "getPowerInfo", love::system::getPowerInfo
         ),
         "audio", luastate.create_table_with(
             "newSource", sol::overload(
                 love::audio::newSource_file,
                 love::audio::newSource_file_type
             )
+        ),
+        "math", luastate.create_table_with(
+            "setRandomSeed", sol::overload(
+                love::math::setRandomSeed_uint32,
+                love::math::setRandomSeed_parts
+            ),
+            "random", sol::overload(
+                love::math::random,
+                love::math::random_max,
+                love::math::random_min_max
+            ),
+            "setRandomState", love::math::setRandomState,
+            "getRandomSeed", love::math::getRandomSeed,
+            "getRandomState", love::math::getRandomState
+        ),
+        "event", luastate.create_table_with(
+            "pump", love::event::pump,
+            "poll", love::event::poll,
+            "push", love::event::push,
+            "quit", love::event::quit
         )
     );
+
+    std::string callback_src(callbacks_lua, callbacks_lua + callbacks_lua_size);
+    luastate["package"]["preload"]["love.callbacks"] = [callback_src](sol::this_state s) -> sol::object {
+        lua_State* L = s;
+
+        if (luaL_loadbuffer(L, callback_src.data(), callback_src.size(), "love.callbacks") != 0) {
+            const char* msg = lua_tostring(L, -1);
+            luaL_error(L, "failed to load love.callbacks: %s", msg ? msg : "unknown");
+        }
+
+        if (lua_pcall(L, 0, 1, 0) != 0) {
+            const char* msg = lua_tostring(L, -1);
+            luaL_error(L, "error running love.callbacks: %s", msg ? msg : "unknown");
+        }
+
+        sol::object ret = sol::stack::get<sol::object>(L, -1);
+        lua_pop(L, 1); // clean up stack
+        return ret;
+    };
+
 
     luastate.script(std::string(boot_lua, boot_lua + boot_lua_size));
 

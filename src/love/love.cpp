@@ -1,7 +1,7 @@
 #include <string>
 #include <tuple>
 
-#include "../lib/sol/sol.hpp"
+#include <sol/sol.hpp>
 
 #include "love.hpp"
 

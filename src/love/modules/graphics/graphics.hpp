@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../lib/sol/sol.hpp"
+#include <sol/sol.hpp>
 
 #include <tuple>
 #include <string>

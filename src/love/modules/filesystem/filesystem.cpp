@@ -1,4 +1,4 @@
-#include "../../lib/sol/sol.hpp"
+#include <sol/sol.hpp>
 #include <string>
 #include <filesystem>
 #include <fstream>

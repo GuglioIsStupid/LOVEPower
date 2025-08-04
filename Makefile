@@ -27,10 +27,12 @@ SOURCES		:=	src \
 				src/love/modules/system \
 				src/love/modules/timer \
 				src/love/modules/math \
+				src/love/modules/math/classes \
+				src/love/modules/event \
 				src/lib/FreeTypeGX
 
 DATA		:=	data
-INCLUDES    :=  src/lib/sol/ src/lib/FreeTypeGX
+INCLUDES    :=  src/lib/ 
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -98,10 +100,11 @@ export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES)))
 #---------------------------------------------------------------------------------
 # build a list of include paths
 #---------------------------------------------------------------------------------
-export INCLUDE	:=	$(foreach dir,$(INCLUDES), -iquote $(CURDIR)/$(dir)) \
+export INCLUDE	:=	$(foreach dir,$(INCLUDES), -I$(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
 					-I$(CURDIR)/$(BUILD) \
-					-I$(LIBOGC_INC)
+					-I$(LIBOGC_INC) \
+					-I$(PORTLIBS_PATH)/ppc/include/freetype2
 
 #---------------------------------------------------------------------------------
 # build a list of library paths
