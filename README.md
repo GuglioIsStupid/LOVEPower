@@ -16,5 +16,6 @@ When compiling, its recommended to do the first build with ONLY `make`. After th
 - Implement Mii data (love.mii)
 - Implement transforms (under love.graphics)
 - Implement quads (under love.graphics)
+- Fix freezing with some graphical functions (under love.graphics)
 
 Not in a specific order.
