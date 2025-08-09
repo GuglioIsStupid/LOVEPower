@@ -1,8 +1,7 @@
 # LoveWii
 
-A bare minimum "Port" of love to the Wii. Based heavily off of [WiiLove](https://github.com/HTV04/WiiLove)
+A de-make of LÖVE2D to the Wii. Based heavily off of [WiiLove](https://github.com/HTV04/WiiLove)
 
-This port contains the bare minimum for my [Vocaloid Chance Ports](https://github.com/GuglioIsStupid/VocaloidChancePorts) to run
 
 PR's are heavily appreaciated! I'm still new to this stuff
 
@@ -10,4 +9,12 @@ PR's are heavily appreaciated! I'm still new to this stuff
 
 TODO
 
-When compiling, its recommended to do the first build with ONLY `make`. After that you may do `make -j#` 
+When compiling, its recommended to do the first build with ONLY `make`. After that you may do `make -j#`
+
+# TODO
+- Implement wiimotes (love.wiimote)
+- Implement Mii data (love.mii)
+- Implement transforms (under love.graphics)
+- Implement quads (under love.graphics)
+
+Not in a specific order.
