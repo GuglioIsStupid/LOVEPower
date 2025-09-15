@@ -9,7 +9,7 @@ PR's are heavily appreaciated! I'm still new to this stuff
 
 TODO
 
-Modified libraries will be available in source code at compile for ease of user compiling
+Modified libraries will be available in source code for ease of user compiling
 
 # TODO
 - Implement Mii data (love.mii) (Via libmii)
