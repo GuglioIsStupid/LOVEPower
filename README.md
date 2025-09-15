@@ -12,7 +12,7 @@ TODO
 When compiling, its recommended to do the first build with ONLY `make`. After that you may do `make -j#`
 
 # TODO
-- Implement wiimotes (love.wiimote)
+- Implement wiimotes (love.wiimote) (1/2)
 - Implement Mii data (love.mii)
 - Implement transforms (under love.graphics)
 - Implement quads (under love.graphics)
