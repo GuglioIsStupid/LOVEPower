@@ -9,7 +9,7 @@ PR's are heavily appreaciated! I'm still new to this stuff
 
 TODO
 
-When compiling, its recommended to do the first build with ONLY `make`. After that you may do `make -j#`
+Modified libraries will be available in source code at compile for ease of user compiling
 
 # TODO
 - Implement Mii data (love.mii) (Via libmii)
@@ -21,7 +21,7 @@ When compiling, its recommended to do the first build with ONLY `make`. After th
 Not in a specific order.
 
 # Supported
-- Wiimote (love.wiimote. Based off of love.joystick)
+- Wiimote (love.wiimote based off of love.joystick)
 - Basic graphics (love.graphics)
 - Basic filesystem (love.filesystem)
 - Basic timer (love.timer)
