@@ -1,6 +1,8 @@
 #include "wiimoteController.hpp"
+
 #include <wiiuse/wpad.h>
 #include <tuple>
+#include <string>
 
 namespace love {
     namespace wiimote {
@@ -49,5 +51,12 @@ namespace love {
             return (isConnected() && data) ? data->ir.angle : 0.0f;
         }
 
+        int WiimoteController::getID() const {
+            return index;
+        }
+
+        std::string WiimoteController::getName() const {
+            return "Wiimote";
+        }
     }
 }

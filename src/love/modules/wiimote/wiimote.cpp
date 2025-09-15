@@ -37,7 +37,20 @@ namespace love {
                 "getDX", &love::wiimote::WiimoteController::getDX,
                 "getDY", &love::wiimote::WiimoteController::getDY,
                 "getPosition", &love::wiimote::WiimoteController::getPosition,
-                "getAngle", &love::wiimote::WiimoteController::getAngle
+                "getAngle", &love::wiimote::WiimoteController::getAngle,
+                "getID", &love::wiimote::WiimoteController::getID,
+                "getName", &love::wiimote::WiimoteController::getName,
+                "isDown", [](WiimoteController& wm, sol::variadic_args va) {
+                    if (!wm.isConnected() || !wm.data) return false;
+
+                    for (sol::variadic_args::iterator it = va.begin(); it != va.end(); ++it) {
+                        std::string button = (*it).as<std::string>();
+                        if (!wm.checkButton(button)) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
             );
         }
 

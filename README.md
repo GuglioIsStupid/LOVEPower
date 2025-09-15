@@ -12,10 +12,21 @@ TODO
 When compiling, its recommended to do the first build with ONLY `make`. After that you may do `make -j#`
 
 # TODO
-- Implement wiimotes (love.wiimote) (1/2)
 - Implement Mii data (love.mii)
-- Implement transforms (under love.graphics)
-- Implement quads (under love.graphics)
-- Fix freezing with some graphical functions (under love.graphics)
+- Implement transforms (love.graphics)
+- Implement quads (love.graphics)
+- Fix freezing with some graphical functions (love.graphics)
+- Audio (love.audio)
 
 Not in a specific order.
+
+# Supported
+- Wiimote (love.wiimote. Based off of love.joystick)
+- Basic graphics (love.graphics)
+- Basic filesystem (love.filesystem)
+- Basic timer (love.timer)
+- Basic math (love.math)
+- Basic event (love.event)
+
+# Unsupported
+Any keyboard, mouse, touch, joystick (except wiimote), window, physics functions.
