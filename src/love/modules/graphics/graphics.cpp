@@ -33,6 +33,61 @@ namespace love {
             curFont = new love::graphics::Font();
 
             __registerTypes(luastate);
+
+            sol::table graphics = luastate.create_table_with(
+                "setColor", sol::overload(
+                    setColor_float4,
+                    setColor_float3
+                ),
+                "getColor", getColor,
+                "rectangle", rectangle,
+                "draw", sol::overload(
+                    draw,
+                    draw_x,
+                    draw_x_y,
+                    draw_x_y_r,
+                    draw_x_y_r_sx,
+                    draw_x_y_r_sx_sy,
+                    draw_x_y_r_sx_sy_ox,
+                    draw_x_y_r_sx_sy_ox_oy
+                ),
+                "setFont", setFont,
+                "newFont", sol::overload(
+                    newFont,
+                    newFont_size,
+                    newFont_file,
+                    newFont_file_size
+                ),
+                "print", sol::overload(
+                    print,
+                    print_x,
+                    print_x_y,
+                    print_x_y_r,
+                    print_x_y_r_sx,
+                    print_x_y_r_sx_sy,
+                    print_x_y_r_sx_sy_ox,
+                    print_x_y_r_sx_sy_ox_oy
+                ),
+                "newImage", newImage,
+                "setBackgroundColor", sol::overload(
+                    setBackgroundColor_float4,
+                    setBackgroundColor_float3
+                ),
+                "getBackgroundColor", getBackgroundColor,
+                "clear", sol::overload(
+                    clear_float4,
+                    clear_float3,
+                    clear
+                ),
+                "isActive", isActive,
+                "origin", origin,
+                "present", present,
+                "getWidth", getWidth,
+                "getHeight", getHeight,
+                "getDimensions", getDimensions
+            );
+
+            luastate["love"]["graphics"] = graphics;
         }
 
         void __registerTypes(sol::state &luastate) {

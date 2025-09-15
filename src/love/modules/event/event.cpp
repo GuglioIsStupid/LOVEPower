@@ -12,7 +12,14 @@ namespace love {
         std::vector<event_t>::iterator currentEvent = events.end();
 
         void __init(sol::state & luastate) {
-            return;
+            sol::table event = luastate.create_table_with(
+                "pump", pump,
+                "poll", poll,
+                "push", push,
+                "quit", quit
+            );
+
+            luastate["love"]["event"] = event;
         }
 
         void pump(sol::this_state lua) {

@@ -11,6 +11,22 @@ namespace love {
         }
 
         void __init(sol::state &luastate) {
+            sol::table math = luastate.create_table_with(
+                "setRandomSeed", sol::overload(
+                    setRandomSeed_uint32,
+                    setRandomSeed_parts
+                ),
+                "random", sol::overload(
+                    random,
+                    random_max,
+                    random_min_max
+                ),
+                "setRandomState", setRandomState,
+                "getRandomSeed", getRandomSeed,
+                "getRandomState", getRandomState
+            );
+
+            luastate["love"]["math"] = math;
         }
 
         void setRandomSeed_uint32(uint32_t seed) {

@@ -20,6 +20,14 @@ namespace love {
         void __init(sol::state &luastate) {
             lastTime = gettime();
             lastFrameTime = lastTime;
+
+            sol::table timer = luastate.create_table_with(
+                "sleep", sleep,
+                "step", step,
+                "getFPS", getFPS
+            );
+
+            luastate["love"]["timer"] = timer;
         }
 
         void sleep(float ms) {
