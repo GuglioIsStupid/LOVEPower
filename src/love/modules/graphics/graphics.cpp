@@ -280,6 +280,10 @@ namespace love {
             return height;
         }
 
+        std::tuple<int, int> getDimensions() {
+            return std::make_tuple(getWidth(), getHeight());
+        }
+
         #pragma endregion
     }
 }

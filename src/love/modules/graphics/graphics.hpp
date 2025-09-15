@@ -73,6 +73,7 @@ namespace love {
 
         int getWidth();
         int getHeight();
+        std::tuple<int, int> getDimensions();
 
         #pragma endregion
     }

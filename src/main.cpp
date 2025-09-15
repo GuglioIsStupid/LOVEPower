@@ -10,6 +10,8 @@
 #include "love/modules/graphics/classes/texture.hpp"
 #include "love/modules/graphics/classes/font.hpp"
 
+#include "love/modules/wiimote/classes/wiimoteController.hpp"
+
 #include "love/love.hpp"
 #include "love/modules/graphics/graphics.hpp"
 #include "love/modules/filesystem/filesystem.hpp"
@@ -18,6 +20,7 @@
 #include "love/modules/audio/audio.hpp"
 #include "love/modules/math/math.hpp"
 #include "love/modules/event/event.hpp"
+#include "love/modules/wiimote/wiimote.hpp"
 
 #include "callbacks_lua.h"
 #include "boot_lua.h"
@@ -32,13 +35,15 @@ int main(int argc, char** argv) {
         sol::lib::os,
         sol::lib::math,
         sol::lib::table,
-        sol::lib::debug
+        sol::lib::debug,
+        sol::lib::io
     );
 
     // Register love submodules
     love::graphics::__init(luastate);
     love::filesystem::__init(luastate, argc, argv);
     love::timer::__init(luastate);
+    love::wiimote::__init(luastate);
 
     // Inject love table
     luastate["love"] = luastate.create_table_with(
@@ -96,7 +101,8 @@ int main(int argc, char** argv) {
             "origin", love::graphics::origin,
             "present", love::graphics::present,
             "getWidth", love::graphics::getWidth,
-            "getHeight", love::graphics::getHeight
+            "getHeight", love::graphics::getHeight,
+            "getDimensions", love::graphics::getDimensions
         ),
         "filesystem", luastate.create_table_with(
             "load", love::filesystem::load,
@@ -132,11 +138,16 @@ int main(int argc, char** argv) {
             "getRandomSeed", love::math::getRandomSeed,
             "getRandomState", love::math::getRandomState
         ),
+        "mii", luastate.create_table(),
         "event", luastate.create_table_with(
             "pump", love::event::pump,
             "poll", love::event::poll,
             "push", love::event::push,
             "quit", love::event::quit
+        ),
+        "wiimote", luastate.create_table_with(
+            "update", love::wiimote::update,
+            "getWiimote", love::wiimote::getWiimote
         )
     );
 

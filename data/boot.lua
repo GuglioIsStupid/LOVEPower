@@ -3,7 +3,7 @@ package.path = "game/?.lua; game/?/init.lua"
 
 require("love.callbacks")
 
-local debug = true
+local InDebug = true
 function love.run()
     if love.math then
         love.math.setRandomSeed(os.time())
@@ -26,7 +26,7 @@ function love.run()
             end
         end ]]
         if love.timer then dt = love.timer.step() end
-
+        if love.wiimote then love.wiimote.update() end
         if love.update then love.update(dt) end
 
         if love.graphics and love.graphics.isActive and love.graphics.isActive() then
@@ -35,7 +35,7 @@ function love.run()
 
             if love.draw then love.draw() end
 
-            if debug then -- REMOVE ME
+            if InDebug then -- REMOVE ME
                 love.graphics.setColor(1, 1, 1)
                 love.graphics.print("FPS: " .. tostring(love.timer.getFPS()), 10, 30)
             end
@@ -60,13 +60,13 @@ function love.errorhandler(err)
                 (debug and debug.traceback and debug.traceback("", 2) or "")
     writeLog(msg)
 
-    -- still display something on screen if you want
-   --[[  love.graphics.setFont(love.graphics.newFont(14))
+    love.graphics.setFont(love.graphics.newFont(14))
     while true do
+        love.graphics.origin()
         love.graphics.setColor(1, 1, 1)
         love.graphics.print("Error:\n" .. msg, 30, 30)
         love.graphics.present()
-    end ]]
+    end
 end
 
 local function main()
@@ -75,12 +75,10 @@ local function main()
     love.run()
 end
 
--- Capture error with a proper traceback
 local ok, err = xpcall(main, function(e)
     return debug and debug.traceback and debug.traceback(e, 2) or tostring(e)
 end)
 
 if not ok then
-    -- Now call your error handler with the full traceback/error string
-    love.errorhandler("test")
+    love.errorhandler(err)
 end

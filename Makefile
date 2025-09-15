@@ -29,6 +29,9 @@ SOURCES		:=	src \
 				src/love/modules/math \
 				src/love/modules/math/classes \
 				src/love/modules/event \
+				src/love/modules/mii \
+				src/love/modules/wiimote \
+				src/love/modules/wiimote/classes \
 				src/lib/FreeTypeGX
 
 DATA		:=	data
