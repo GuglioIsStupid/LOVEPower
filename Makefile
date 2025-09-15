@@ -32,7 +32,7 @@ SOURCES		:=	src \
 				src/love/modules/mii \
 				src/love/modules/wiimote \
 				src/love/modules/wiimote/classes \
-				src/lib/FreeTypeGX 
+				src/lib/FreeTypeGX
 
 DATA		:=	data
 INCLUDES    :=  src/lib/ 
@@ -51,7 +51,7 @@ LDFLAGS	    =  -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 # the order can-be/is critical
 #---------------------------------------------------------------------------------
 LIBS	:= -lgrrlib `freetype-config --libs` -lbz2 -lpngu -lpng -ljpeg -lz -lfat
-LIBS	+= -llua -lmii -lisfs
+LIBS	+= -llua
 LIBS	+= -lwiiuse
 #LIBS	+= -lmodplay -laesnd
 LIBS	+= -lbte -logc -lm
