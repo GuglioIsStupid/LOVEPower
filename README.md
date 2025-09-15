@@ -12,7 +12,7 @@ TODO
 When compiling, its recommended to do the first build with ONLY `make`. After that you may do `make -j#`
 
 # TODO
-- Implement Mii data (love.mii)
+- Implement Mii data (love.mii) (Via libmii)
 - Implement transforms (love.graphics)
 - Implement quads (love.graphics)
 - Fix freezing with some graphical functions (love.graphics)
