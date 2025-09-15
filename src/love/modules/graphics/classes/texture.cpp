@@ -9,9 +9,6 @@ namespace love {
     namespace graphics {
         Texture::Texture(std::string file) {
             std::string path = filesystem::getFilePath(file);
-            if (!love::filesystem::fileExists(path)) {
-                throw std::runtime_error("Texture file not found: " + path);
-            }
 
             texture = GRRLIB_LoadTextureFromFile(path.c_str());
             if (!texture) {

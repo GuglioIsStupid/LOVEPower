@@ -47,49 +47,27 @@ function love.run()
     end
 end
 
-function love.errorhandler(err)
-    local msg = "Error\n\n" ..
-	            tostring(err) ..
-				"\n\n\n" ..
-				string.gsub(string.gsub(debug.traceback(), "\t", ""), "stack traceback:", "Traceback\n") ..
-				"\n\n\nPress HOME to return to loader\n"
-	local msgTable = {}
-
-	for line in string.gmatch(msg, "([^\n]*)\n") do
-        local cleaned = line:gsub("\r", "")
-        cleaned = cleaned:gsub("\n", "")
-        cleaned = cleaned:gsub("\t", "")
-
-		table.insert(msgTable, cleaned)
-	end
-
-	love.graphics.setFont(love.graphics.newFont(14))
-
-	while true do
-		--[[ love.event.pump()
-
-		for name, a,b,c,d,e,f in love.event.poll do
-			if name == "homepressed" then
-				return 1
-			end
-		end ]]
-
-		-- love.graphics.clear(89, 157, 220)
-        -- TEMP UNTIL CLEAR IS FIXED
-        --[[ love.graphics.setColor(89/255, 157/255, 220/255)
-        love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
-        love.graphics.setColor(1, 1, 1) ]]
-
-		for i, line in ipairs(msgTable) do
-			love.graphics.print(line, 70, 60 + i * 18)
-		end
-
-		love.graphics.present()
-
-        love.timer.sleep(1)
-	end
+local function writeLog(msg)
+    local f = io.open("sd:/love_error_lua.log", "a")
+    if f then
+        f:write(msg, "\n")
+        f:close()
+    end
 end
 
+function love.errorhandler(err)
+    local msg = tostring(err) .. "\n" ..
+                (debug and debug.traceback and debug.traceback("", 2) or "")
+    writeLog(msg)
+
+    -- still display something on screen if you want
+   --[[  love.graphics.setFont(love.graphics.newFont(14))
+    while true do
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.print("Error:\n" .. msg, 30, 30)
+        love.graphics.present()
+    end ]]
+end
 
 local function main()
     local chunk = love.filesystem.load("main.lua")

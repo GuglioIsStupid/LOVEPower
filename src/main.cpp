@@ -159,8 +159,18 @@ int main(int argc, char** argv) {
         return ret;
     };
 
+    try {
+        luastate.script(std::string(boot_lua, boot_lua + boot_lua_size));
+    }
+    catch (const sol::error& e) {
+        FILE* f = fopen("sd:/love_error_cpp.log", "w");
+        if (f) {
+            fprintf(f, "Lua boot failed:\n%s\n", e.what());
+            fclose(f);
+        }
+        return -1;
+    }
 
-    luastate.script(std::string(boot_lua, boot_lua + boot_lua_size));
-
+    exit(0);
     return 0;
 }

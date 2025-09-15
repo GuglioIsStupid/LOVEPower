@@ -25,21 +25,23 @@ namespace love {
         }
 
         std::string getFilePath(const std::string& file) {
+            std::string path;
+
             if (doesPreferSaveDirectory) {
                 if (std::filesystem::exists("save/" + file)) {
-                    return "save/" + file;
+                    path = "save/" + file;
                 } else {
-                    return "game/" + file;
+                    path = "game/" + file;
+                }
+            } else {
+                if (std::filesystem::exists("game/" + file)) {
+                    path = "game/" + file;
+                } else {
+                    path = "save/" + file;
                 }
             }
 
-            if (std::filesystem::exists("game/" + file)) {
-                return "game/" + file;
-            } else {
-                return "save/" + file;
-            }
-
-            return file;
+            return path;
         }
 
         bool fileExists(const std::string& file) {
