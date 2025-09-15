@@ -15,13 +15,6 @@ namespace love {
 
             createDirectories("game");
             createDirectories("save");
-
-            sol::table filesystem = luastate.create_table_with(
-                "load", load,
-                "getInfo", getInfo
-            );
-
-            luastate["love"]["filesystem"] = filesystem;
         }
 
         void createDirectories(const std::string& path) {

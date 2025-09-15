@@ -7,15 +7,6 @@ namespace love {
     namespace audio {
         void __init(sol::state &luastate) {
             __registerTypes(luastate);
-
-            sol::table audio = luastate.create_table_with(
-                "newSource", sol::overload(
-                    newSource_file,
-                    newSource_file_type
-                )
-            );
-
-            luastate["love"]["audio"] = audio;
         }
 
         void __registerTypes(sol::state &luastate) {

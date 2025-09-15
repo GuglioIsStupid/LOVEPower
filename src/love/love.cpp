@@ -6,16 +6,6 @@
 #include "love.hpp"
 
 namespace love {
-    void __init(sol::state &luastate) {
-        luastate["love"] = luastate.create_table_with(
-            "_console", love::_console,
-            "_os", love::_os,
-            "hasDeprecationOutput", love::hasDeprecationOutput,
-            "setDeprecationOutput", love::setDeprecationOutput,
-            "getVersion", love::getVersion
-        );
-    }
-
     bool hasDeprecationOutput() {
         return _deprecationOutput;
     }

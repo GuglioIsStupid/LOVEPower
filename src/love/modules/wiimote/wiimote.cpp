@@ -24,13 +24,6 @@ namespace love {
             }
 
             __registerTypes(luastate);
-
-            sol::table wiimote = luastate.create_table_with(
-                "update", update,
-                "getWiimote", getWiimote
-            );
-
-            luastate["love"]["wiimote"] = wiimote;
         }
 
         void __registerTypes(sol::state &luastate) {

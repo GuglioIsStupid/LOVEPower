@@ -1,11 +1,8 @@
 #pragma once
 #include <string>
-#include <sol/sol.hpp>
 
 namespace love {
     namespace system {
-        void __init(sol::state &luastate);
-        
         std::string   getOS();
         int           getProcessorCount();
         
