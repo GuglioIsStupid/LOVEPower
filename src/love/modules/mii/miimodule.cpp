@@ -1,3 +1,5 @@
+#include "miimodule.hpp"
+
 #include <sol/sol.hpp>
 
 namespace love {
