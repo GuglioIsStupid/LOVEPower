@@ -3,7 +3,6 @@ package.path = "game/?.lua; game/?/init.lua"
 
 require("love.callbacks")
 
-local InDebug = true
 function love.run()
     if love.math then
         love.math.setRandomSeed(os.time())
@@ -35,11 +34,6 @@ function love.run()
 
             if love.draw then love.draw() end
 
-            if InDebug then -- REMOVE ME
-                love.graphics.setColor(1, 1, 1)
-                love.graphics.print("FPS: " .. tostring(love.timer.getFPS()), 10, 30)
-            end
-
             love.graphics.present()
         end
 
@@ -70,8 +64,14 @@ function love.errorhandler(err)
 end
 
 local function main()
-    local chunk = love.filesystem.load("main.lua")
-    if chunk then chunk() end
+    if love.filesystem.exists("main.lua") then
+        local chunk = love.filesystem.load("main.lua")
+        if chunk then chunk() end
+    else
+        require("love.nogame")
+        love.nogame()
+    end
+
     love.run()
 end
 

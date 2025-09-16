@@ -29,10 +29,11 @@ SOURCES		:=	src \
 				src/love/modules/math \
 				src/love/modules/math/classes \
 				src/love/modules/event \
-				src/love/modules/mii \
 				src/love/modules/wiimote \
 				src/love/modules/wiimote/classes \
-				src/lib/FreeTypeGX 
+				src/love/modules/data \
+				src/lib/FreeTypeGX \
+				src/lib/box2d 
 
 DATA		:=	data
 INCLUDES    :=  src/lib/ 
@@ -44,6 +45,7 @@ INCLUDES    :=  src/lib/
 CFLAGS  	=  -g -O2 -Wall $(MACHDEP) $(INCLUDE) `freetype-config --cflags`
 CXXFLAGS	=  $(CFLAGS)
 
+
 LDFLAGS	    =  -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 
 #---------------------------------------------------------------------------------
@@ -51,10 +53,17 @@ LDFLAGS	    =  -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 # the order can-be/is critical
 #---------------------------------------------------------------------------------
 LIBS	:= -lgrrlib `freetype-config --libs` -lbz2 -lpngu -lpng -ljpeg -lz -lfat
-LIBS	+= -llua -lmii -lisfs
+LIBS	+= -llua
 LIBS	+= -lwiiuse
 #LIBS	+= -lmodplay -laesnd
 LIBS	+= -lbte -logc -lm
+
+ifeq ($(strip $(USE_LIBMII)),true)
+    SOURCES  += src/love/modules/mii
+    CFLAGS   += -DUSE_LIBMII
+    CXXFLAGS += -DUSE_LIBMII
+	LIBS     += -lmii -lisfs
+endif
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

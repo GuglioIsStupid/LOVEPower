@@ -18,6 +18,19 @@ namespace love {
             height = texture->h;
         }
 
+        Texture::Texture(const std::vector<uint8_t>& data) {
+            if (data.empty()) {
+                throw std::runtime_error("Cannot create texture from empty data");
+            }
+
+            texture = GRRLIB_LoadTexture(const_cast<uint8_t*>(data.data()));
+            if (!texture) {
+                throw std::runtime_error("Failed to load texture from memory data");
+            }
+            width = texture->w;
+            height = texture->h;
+        }
+
         int Texture::getWidth() const {
             return width;
         }

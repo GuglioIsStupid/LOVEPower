@@ -16,7 +16,8 @@ namespace love {
 
         // API Accessible
         sol::protected_function       load(const std::string& file, sol::this_state lua);
-        sol::object                   getInfo(const std::string& file, sol::this_state lua);
+        sol::table                    getInfo(const std::string& file, sol::this_state s);
+        bool                          exists(const std::string& file, sol::this_state lua);
         sol::protected_function       lines(const std::string& file, sol::this_state lua); // TODO
         int                           getSize(const std::string& file, sol::this_state lua); // IN BYTES!! TODO
         sol::table                    getDirectoryItems(const std::string& dir, sol::this_state lua); // TODO
@@ -26,7 +27,7 @@ namespace love {
         std::pair<bool, std::string>  mkdir(const std::string& dir, sol::this_state lua); // TODO
         std::pair<bool, std::string>  newFile(const std::string& file, sol::this_state lua); // TODO
         std::pair<bool, std::string>  newFileData(const std::string& file, const std::string& data, sol::this_state lua); // TODO
-
+        
         void                          setSource(const std::string &source); // TODO
         void                          setRequirePath(const std::string &paths); // TODO
 

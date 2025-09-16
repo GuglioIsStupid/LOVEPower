@@ -3,8 +3,6 @@
 #define SOL_LUAJIT 0
 
 #include <sol/sol.hpp>
-#include <grrlib.h>
-#include <wiiuse/wpad.h>
 #include <string>
 
 #include "love/modules/graphics/classes/texture.hpp"
@@ -15,6 +13,7 @@
 #include "love/love.hpp"
 #include "love/modules/graphics/graphics.hpp"
 #include "love/modules/filesystem/filesystem.hpp"
+#include "love/modules/data/data.hpp"
 #include "love/modules/timer/timer.hpp"
 #include "love/modules/system/system.hpp"
 #include "love/modules/audio/audio.hpp"
@@ -24,6 +23,30 @@
 
 #include "callbacks_lua.h"
 #include "boot_lua.h"
+#include "nogame_lua.h"
+
+inline void preloadLuaModule(sol::state& lua, const std::string& moduleName,
+                             const uint8_t* buffer, size_t size) 
+{
+    lua["package"]["preload"][moduleName] =
+        [buffer, size, moduleName](sol::this_state s) -> sol::object {
+            lua_State* L = s;
+
+            if (luaL_loadbuffer(L, reinterpret_cast<const char*>(buffer), size, moduleName.c_str()) != 0) {
+                const char* msg = lua_tostring(L, -1);
+                luaL_error(L, "failed to load %s: %s", moduleName.c_str(), msg ? msg : "unknown");
+            }
+
+            if (lua_pcall(L, 0, 1, 0) != 0) {
+                const char* msg = lua_tostring(L, -1);
+                luaL_error(L, "error running %s: %s", moduleName.c_str(), msg ? msg : "unknown");
+            }
+
+            sol::object ret = sol::stack::get<sol::object>(L, -1);
+            lua_pop(L, 1);
+            return ret;
+        };
+}
 
 int main(int argc, char** argv) {
     sol::state luastate;
@@ -86,7 +109,10 @@ int main(int argc, char** argv) {
                 love::graphics::print_x_y_r_sx_sy_ox,
                 love::graphics::print_x_y_r_sx_sy_ox_oy
             ),
-            "newImage", love::graphics::newImage,
+            "newImage", sol::overload(
+                love::graphics::newImage,
+                love::graphics::newImage_data
+            ),
             "setBackgroundColor", sol::overload(
                 love::graphics::setBackgroundColor_float4,
                 love::graphics::setBackgroundColor_float3
@@ -104,9 +130,13 @@ int main(int argc, char** argv) {
             "getHeight", love::graphics::getHeight,
             "getDimensions", love::graphics::getDimensions
         ),
+        "data", luastate.create_table_with(
+            "decode", love::data::decode
+        ),
         "filesystem", luastate.create_table_with(
             "load", love::filesystem::load,
-            "getInfo", love::filesystem::getInfo
+            "getInfo", love::filesystem::getInfo,
+            "exists", love::filesystem::exists
         ),
         "timer", luastate.create_table_with(
             "sleep", love::timer::sleep,
@@ -138,7 +168,9 @@ int main(int argc, char** argv) {
             "getRandomSeed", love::math::getRandomSeed,
             "getRandomState", love::math::getRandomState
         ),
+#ifdef USE_LIBMII
         "mii", luastate.create_table(),
+#endif
         "event", luastate.create_table_with(
             "pump", love::event::pump,
             "poll", love::event::poll,
@@ -151,24 +183,8 @@ int main(int argc, char** argv) {
         )
     );
 
-    std::string callback_src(callbacks_lua, callbacks_lua + callbacks_lua_size);
-    luastate["package"]["preload"]["love.callbacks"] = [callback_src](sol::this_state s) -> sol::object {
-        lua_State* L = s;
-
-        if (luaL_loadbuffer(L, callback_src.data(), callback_src.size(), "love.callbacks") != 0) {
-            const char* msg = lua_tostring(L, -1);
-            luaL_error(L, "failed to load love.callbacks: %s", msg ? msg : "unknown");
-        }
-
-        if (lua_pcall(L, 0, 1, 0) != 0) {
-            const char* msg = lua_tostring(L, -1);
-            luaL_error(L, "error running love.callbacks: %s", msg ? msg : "unknown");
-        }
-
-        sol::object ret = sol::stack::get<sol::object>(L, -1);
-        lua_pop(L, 1); // clean up stack
-        return ret;
-    };
+    preloadLuaModule(luastate, "love.callbacks", callbacks_lua, callbacks_lua_size);
+    preloadLuaModule(luastate, "love.nogame", nogame_lua, nogame_lua_size);
 
     try {
         luastate.script(std::string(boot_lua, boot_lua + boot_lua_size));

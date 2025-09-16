@@ -55,25 +55,29 @@ namespace love {
             return luastate.load_file(getFilePath(file)).get<sol::protected_function>();
         }
 
-        sol::object getInfo(const std::string& file, sol::this_state state) {
-            sol::state_view luastate(state);
-            std::string path = getFilePath(file);
+        sol::table getInfo(const std::string& file, sol::this_state s) {
+            sol::state_view lua(s);
+            sol::table info = lua.create_table();
 
+            std::string path = getFilePath(file);
             if (!std::filesystem::exists(path)) {
-                return sol::nil;
+                return info; // return empty table instead of nil
             }
 
-            sol::table info = sol::table(luastate);
             info["filetype"] = std::filesystem::is_directory(path) ? "directory" : "file";
             info["size"] = static_cast<double>(std::filesystem::file_size(path));
 
             auto ftime = std::filesystem::last_write_time(path);
             auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(
                 ftime - decltype(ftime)::clock::now() + std::chrono::system_clock::now());
-            std::time_t mod_time = std::chrono::system_clock::to_time_t(sctp);
-            info["modtime"] = static_cast<double>(mod_time);
+            info["modtime"] = static_cast<double>(std::chrono::system_clock::to_time_t(sctp));
 
             return info;
+        }
+
+        bool exists(const std::string& file, sol::this_state lua) {
+            std::string path = getFilePath(file);
+            return std::filesystem::exists(path);
         }
 
         void preferSaveDirectory(const bool &preferSave) {

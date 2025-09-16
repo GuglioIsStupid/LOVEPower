@@ -20,6 +20,7 @@ namespace love {
             std::tuple<int, int> getDimensions() const;
 
             Texture(std::string file);
+            Texture(const std::vector<uint8_t>& data);
         };
     }
 }

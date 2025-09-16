@@ -169,6 +169,10 @@ namespace love {
             return love::graphics::Texture(file);
         }
 
+        love::graphics::Texture newImage_data(const std::vector<uint8_t>& data) {
+            return love::graphics::Texture(data);
+        }
+
         #pragma region Fonts
         void setFont(love::graphics::Font &font) {
             curFont = &font;

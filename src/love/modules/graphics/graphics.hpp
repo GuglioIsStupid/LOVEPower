@@ -40,6 +40,7 @@ namespace love {
         void draw_x_y_r_sx_sy_ox_oy(love::graphics::Texture &texture, float x, float y, float rotation, float sx, float sy, float ox, float oy);
 
         love::graphics::Texture newImage(std::string file);
+        love::graphics::Texture newImage_data(const std::vector<uint8_t>& data);
 
         #pragma region Fonts
         
