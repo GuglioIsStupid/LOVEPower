@@ -15,7 +15,6 @@ Modified libraries will be available in source code for ease of user compiling
 - Implement Mii data (love.mii) (Via libmii)
 - Implement transforms (love.graphics)
 - Implement quads (love.graphics)
-- Implement Audio (love.audio)
 - Implement physics (love.physics) (Via Box2d)
 - Fix freezing with some graphical functions (love.graphics)
 
@@ -28,6 +27,7 @@ Not in a specific order.
 - love.timer
 - love.math
 - love.event
+- love.audio
 
 A wiki containing supported functions will be created in the future, for now you can look inside the modules CPP files as your wiki.
 
