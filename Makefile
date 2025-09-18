@@ -23,6 +23,7 @@ SOURCES		:=	src \
 				src/love/modules/graphics \
 				src/love/modules/graphics/classes \
 				src/love/modules/audio \
+				src/love/modules/audio/classes \
 				src/love/modules/filesystem \
 				src/love/modules/system \
 				src/love/modules/timer \
@@ -33,6 +34,7 @@ SOURCES		:=	src \
 				src/love/modules/wiimote/classes \
 				src/love/modules/data \
 				src/lib/FreeTypeGX \
+				src/lib/audiogc \
 				src/lib/box2d 
 
 DATA		:=	data
@@ -55,7 +57,7 @@ LDFLAGS	    =  -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 LIBS	:= -lgrrlib `freetype-config --libs` -lbz2 -lpngu -lpng -ljpeg -lz -lfat
 LIBS	+= -llua
 LIBS	+= -lwiiuse
-#LIBS	+= -lmodplay -laesnd
+LIBS	+= -lmodplay -laesnd
 LIBS	+= -lbte -logc -lm
 
 ifeq ($(strip $(USE_LIBMII)),true)

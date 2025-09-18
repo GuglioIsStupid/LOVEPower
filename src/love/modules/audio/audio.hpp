@@ -3,22 +3,21 @@
 #include <string>
 
 #include <sol/sol.hpp>
+#include "classes/Source.hpp"
 
 // TODO: Seperate this into a seperate class file
 namespace love {
-    struct AudioSource {
-        std::string file;
-        std::string type;
-
-        // play and isplaying methods
-        void play();
-        bool isPlaying() const;
-    };
     namespace audio {
         void __init(sol::state &luastate);
         void __registerTypes(sol::state &luastate);
 
-        AudioSource newSource_file_type(std::string file, std::string type);
-        AudioSource newSource_file(std::string file);
+        love::audio::Source newSource_file_type(std::string file, std::string type);
+
+        double getVolume(love::audio::Source* source);
+        void setVolume(love::audio::Source* source, double volume);
+
+        void play(love::audio::Source* source);
+        void stop(love::audio::Source* source);
+        void pause(love::audio::Source* source);
     }
 }

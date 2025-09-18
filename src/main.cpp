@@ -63,6 +63,7 @@ int main(int argc, char** argv) {
     );
 
     // Register love submodules
+    love::audio::__init(luastate);
     love::graphics::__init(luastate);
     love::filesystem::__init(luastate, argc, argv);
     love::timer::__init(luastate);
@@ -149,10 +150,12 @@ int main(int argc, char** argv) {
             "getPowerInfo", love::system::getPowerInfo
         ),
         "audio", luastate.create_table_with(
-            "newSource", sol::overload(
-                love::audio::newSource_file,
-                love::audio::newSource_file_type
-            )
+            "newSource", love::audio::newSource_file_type,
+            "getVolume", love::audio::getVolume,
+            "setVolume", love::audio::setVolume,
+            "play", love::audio::play,
+            "stop", love::audio::stop,
+            "pause", love::audio::pause
         ),
         "math", luastate.create_table_with(
             "setRandomSeed", sol::overload(
@@ -198,6 +201,7 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    exit(0);
+    GRRLIB_Exit();
+    std::exit(0);
     return 0;
 }
