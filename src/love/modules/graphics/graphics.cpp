@@ -6,7 +6,6 @@
 #include <stdexcept>
 #include <cmath>
 #include <vector>
-#include <cwchar> // for mbstowcs
 #include <cstdint>
 
 #include "classes/texture.hpp"

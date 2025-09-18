@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace {
     [[maybe_unused]]
     static std::vector<uint8_t> base64Decode(const std::string &in) {

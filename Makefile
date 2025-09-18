@@ -35,7 +35,10 @@ SOURCES		:=	src \
 				src/love/modules/data \
 				src/lib/FreeTypeGX \
 				src/lib/audiogc \
-				src/lib/box2d 
+				src/lib/box2d  \
+				src/lib/pngu \
+				src/lib/GRRLIB \
+				src/lib/GRRLIB/grrlib
 
 DATA		:=	data
 INCLUDES    :=  src/lib/ 
@@ -54,7 +57,7 @@ LDFLAGS	    =  -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 # any extra libraries we wish to link with the project
 # the order can-be/is critical
 #---------------------------------------------------------------------------------
-LIBS	:= -lgrrlib `freetype-config --libs` -lbz2 -lpngu -lpng -ljpeg -lz -lfat
+LIBS	:= `freetype-config --libs` -lbz2 -lpng -ljpeg -lz -lfat
 LIBS	+= -llua
 LIBS	+= -lwiiuse
 LIBS	+= -lmodplay -laesnd
