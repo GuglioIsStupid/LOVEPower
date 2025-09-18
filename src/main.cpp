@@ -25,9 +25,7 @@
 #include "boot_lua.h"
 #include "nogame_lua.h"
 
-inline void preloadLuaModule(sol::state& lua, const std::string& moduleName,
-                             const uint8_t* buffer, size_t size) 
-{
+inline void preloadLuaModule(sol::state& lua, const std::string& moduleName, const uint8_t* buffer, size_t size) {
     lua["package"]["preload"][moduleName] =
         [buffer, size, moduleName](sol::this_state s) -> sol::object {
             lua_State* L = s;

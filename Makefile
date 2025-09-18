@@ -35,7 +35,6 @@ SOURCES		:=	src \
 				src/love/modules/data \
 				src/lib/FreeTypeGX \
 				src/lib/audiogc \
-				src/lib/box2d  \
 				src/lib/pngu \
 				src/lib/GRRLIB \
 				src/lib/GRRLIB/grrlib
@@ -68,6 +67,13 @@ ifeq ($(strip $(USE_LIBMII)),true)
     CFLAGS   += -DUSE_LIBMII
     CXXFLAGS += -DUSE_LIBMII
 	LIBS     += -lmii -lisfs
+endif
+
+ifeq ($(strip $(USE_PHYSICS)),true)
+	SOURCES  += src/love/modules/physics
+	CFLAGS   += -DUSE_PHYSICS
+	CXXFLAGS += -DUSE_PHYSICS
+	SOURCES  += src/lib/box2d
 endif
 
 #---------------------------------------------------------------------------------
