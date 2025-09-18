@@ -14,4 +14,6 @@ namespace love {
     bool hasDeprecationOutput();
     void setDeprecationOutput(bool deprecationOutput);
     std::tuple<int, int, int, std::string> getVersion();
+
+    void initialize(sol::state& luastate, int argc, char** argv);
 }

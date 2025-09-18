@@ -49,7 +49,6 @@ INCLUDES    :=  src/lib/
 CFLAGS  	=  -g -O2 -Wall $(MACHDEP) $(INCLUDE) `freetype-config --cflags`
 CXXFLAGS	=  $(CFLAGS)
 
-
 LDFLAGS	    =  -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 
 #---------------------------------------------------------------------------------
