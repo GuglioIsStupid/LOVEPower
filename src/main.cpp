@@ -91,7 +91,16 @@ int main(int argc, char** argv) {
                 love::graphics::draw_x_y_r_sx,
                 love::graphics::draw_x_y_r_sx_sy,
                 love::graphics::draw_x_y_r_sx_sy_ox,
-                love::graphics::draw_x_y_r_sx_sy_ox_oy
+                love::graphics::draw_x_y_r_sx_sy_ox_oy,
+
+                love::graphics::draw_quad,
+                love::graphics::draw_quad_x,
+                love::graphics::draw_quad_x_y,
+                love::graphics::draw_quad_x_y_r,
+                love::graphics::draw_quad_x_y_r_sx,
+                love::graphics::draw_quad_x_y_r_sx_sy,
+                love::graphics::draw_quad_x_y_r_sx_sy_ox,
+                love::graphics::draw_quad_x_y_r_sx_sy_ox_oy
             ),
             "setFont", love::graphics::setFont,
             "newFont", sol::overload(
@@ -114,6 +123,7 @@ int main(int argc, char** argv) {
                 love::graphics::newImage,
                 love::graphics::newImage_data
             ),
+            "newQuad", love::graphics::newQuad,
             "setBackgroundColor", sol::overload(
                 love::graphics::setBackgroundColor_float4,
                 love::graphics::setBackgroundColor_float3

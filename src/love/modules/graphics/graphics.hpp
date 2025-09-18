@@ -6,6 +6,8 @@
 #include <string>
 
 #include "classes/texture.hpp"
+#include "classes/font.hpp"
+#include "classes/quad.hpp"
 
 namespace love {
     namespace graphics {
@@ -30,6 +32,8 @@ namespace love {
         #pragma region Textures
 
         void _draw(love::graphics::Texture &texture, float x, float y, float rotation, float sx, float sy, float ox, float oy);
+        void _draw_quad(love::graphics::Texture &texture, love::graphics::Quad &quad, float x, float y, float rotation, float sx, float sy, float ox, float oy);
+
         void draw(love::graphics::Texture &texture);
         void draw_x(love::graphics::Texture &texture, float x);
         void draw_x_y(love::graphics::Texture &texture, float x, float y);
@@ -39,8 +43,19 @@ namespace love {
         void draw_x_y_r_sx_sy_ox(love::graphics::Texture &texture, float x, float y, float rotation, float sx, float sy, float ox);
         void draw_x_y_r_sx_sy_ox_oy(love::graphics::Texture &texture, float x, float y, float rotation, float sx, float sy, float ox, float oy);
 
+        void draw_quad(love::graphics::Texture &texture, love::graphics::Quad &quad);
+        void draw_quad_x(love::graphics::Texture &texture, love::graphics::Quad &quad, float x);
+        void draw_quad_x_y(love::graphics::Texture &texture, love::graphics::Quad &quad, float x, float y);
+        void draw_quad_x_y_r(love::graphics::Texture &texture, love::graphics::Quad &quad, float x, float y, float rotation);
+        void draw_quad_x_y_r_sx(love::graphics::Texture &texture, love::graphics::Quad &quad, float x, float y, float rotation, float sx);
+        void draw_quad_x_y_r_sx_sy(love::graphics::Texture &texture, love::graphics::Quad &quad, float x, float y, float rotation, float sx, float sy);
+        void draw_quad_x_y_r_sx_sy_ox(love::graphics::Texture &texture, love::graphics::Quad &quad, float x, float y, float rotation, float sx, float sy, float ox);
+        void draw_quad_x_y_r_sx_sy_ox_oy(love::graphics::Texture &texture, love::graphics::Quad &quad, float x, float y, float rotation, float sx, float sy, float ox, float oy);
+
         love::graphics::Texture newImage(std::string file);
         love::graphics::Texture newImage_data(const std::vector<uint8_t>& data);
+
+        love::graphics::Quad newQuad(float x, float y, float width, float height, float sw, float sh);
 
         #pragma region Fonts
         

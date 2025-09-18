@@ -10,6 +10,7 @@
 
 #include "classes/texture.hpp"
 #include "classes/font.hpp"
+#include "classes/quad.hpp"
 
 #include "graphics.hpp"
 #include "Vera_ttf.h"
@@ -50,6 +51,12 @@ namespace love {
                 "getHeight", &love::graphics::Font::getHeight
             );
 
+            luastate.new_usertype<love::graphics::Quad>(
+                "Quad",
+                sol::no_constructor,
+                "getViewport", &love::graphics::Quad::getViewport,
+                "setViewport", &love::graphics::Quad::setViewport
+            );
         }
 
         static GXColor make_gxcolor_from_uint32(unsigned int packed) {
@@ -139,6 +146,26 @@ namespace love {
             GRRLIB_DrawImg(x, y, texture.texture, rotation, sx, sy, color);
         }
 
+        void _draw_quad(love::graphics::Texture &texture, love::graphics::Quad &quad,
+            float x, float y, float rotation, float sx, float sy,
+            float ox, float oy
+        ) {
+            if (ox != 0 || oy != 0) {
+                x -= ox * sx;
+                y -= oy * sy;
+                float cos_r = cos(rotation);
+                float sin_r = sin(rotation);
+                x += ox * cos_r - oy * sin_r;
+                y += ox * sin_r + oy * cos_r;
+            }
+
+            GRRLIB_DrawPart(
+                x, y,
+                quad.quadX, quad.quadY, quad.quadWidth, quad.quadHeight,
+                texture.texture, rotation, sx, sy, color
+            );
+        }
+
         void draw(love::graphics::Texture &texture) {
             _draw(texture, 0, 0, 0, 1, 1, 0, 0);
         }
@@ -164,12 +191,47 @@ namespace love {
             _draw(texture, x, y, rotation, sx, sy, ox, oy);
         }
 
+        void draw_quad(love::graphics::Texture &texture, love::graphics::Quad &quad) {
+            _draw_quad(texture, quad, 0, 0, 0, 1, 1, 0, 0);
+        }
+        void draw_quad_x(love::graphics::Texture &texture, love::graphics::Quad &quad, float x) {
+            _draw_quad(texture, quad, x, 0, 0, 1, 1, 0, 0);
+        }
+
+        void draw_quad_x_y(love::graphics::Texture &texture, love::graphics::Quad &quad, float x, float y) {
+            _draw_quad(texture, quad, x, y, 0, 1, 1, 0, 0);
+        }
+
+        void draw_quad_x_y_r(love::graphics::Texture &texture, love::graphics::Quad &quad, float x, float y, float rotation) {
+            _draw_quad(texture, quad, x, y, rotation, 1, 1, 0, 0);
+        }
+
+        void draw_quad_x_y_r_sx(love::graphics::Texture &texture, love::graphics::Quad &quad, float x, float y, float rotation, float sx) {
+            _draw_quad(texture, quad, x, y, rotation, sx, 1, 0, 0);
+        }
+
+        void draw_quad_x_y_r_sx_sy(love::graphics::Texture &texture, love::graphics::Quad &quad, float x, float y, float rotation, float sx, float sy) {
+            _draw_quad(texture, quad, x, y, rotation, sx, sy, 0, 0);
+        }
+
+        void draw_quad_x_y_r_sx_sy_ox(love::graphics::Texture &texture, love::graphics::Quad &quad, float x, float y, float rotation, float sx, float sy, float ox) {
+            _draw_quad(texture, quad, x, y, rotation, sx, sy, ox, 0);
+        }
+
+        void draw_quad_x_y_r_sx_sy_ox_oy(love::graphics::Texture &texture, love::graphics::Quad &quad, float x, float y, float rotation, float sx, float sy, float ox, float oy) {
+            _draw_quad(texture, quad, x, y, rotation, sx, sy, ox, oy);
+        }
+
         love::graphics::Texture newImage(std::string file) {
             return love::graphics::Texture(file);
         }
 
         love::graphics::Texture newImage_data(const std::vector<uint8_t>& data) {
             return love::graphics::Texture(data);
+        }
+
+        love::graphics::Quad newQuad(float x, float y, float width, float height, float sw, float sh) {
+            return love::graphics::Quad(x, y, width, height, sw, sh);
         }
 
         #pragma region Fonts
