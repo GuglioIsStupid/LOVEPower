@@ -377,14 +377,15 @@ ftgxCharData *FreeTypeGX::cacheGlyphData(wchar_t charCode) {
 			textureWidth = adjustTextureWidth(glyphBitmap->width, this->textureFormat);
 			textureHeight = adjustTextureHeight(glyphBitmap->rows, this->textureFormat);
 
+			// [LoveWii] Warnings removed (Casting)
 			this->fontData[charCode] = (ftgxCharData){
-				this->ftFace->glyph->advance.x >> 6,
-				gIndex,
+				static_cast<uint16_t>(this->ftFace->glyph->advance.x >> 6),
+				static_cast<uint16_t>(gIndex),
 				textureWidth,
 				textureHeight,
-				this->ftFace->glyph->bitmap_top,
-				this->ftFace->glyph->bitmap_top,
-				textureHeight - this->ftFace->glyph->bitmap_top,
+				static_cast<uint16_t>(this->ftFace->glyph->bitmap_top),
+				static_cast<uint16_t>(this->ftFace->glyph->bitmap_top),
+				static_cast<uint16_t>(textureHeight - this->ftFace->glyph->bitmap_top),
 				NULL
 			};
 			this->loadGlyphData(glyphBitmap, &this->fontData[charCode]);

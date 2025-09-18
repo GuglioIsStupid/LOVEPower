@@ -31,6 +31,6 @@ namespace love {
         void                          setSource(const std::string &source); // TODO
         void                          setRequirePath(const std::string &paths); // TODO
 
-        void                          preferSaveDirectory(bool &preferSave);
+        void                          preferSaveDirectory(bool preferSave);
     }
 }

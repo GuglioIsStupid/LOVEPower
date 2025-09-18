@@ -137,7 +137,8 @@ int main(int argc, char** argv) {
         "filesystem", luastate.create_table_with(
             "load", love::filesystem::load,
             "getInfo", love::filesystem::getInfo,
-            "exists", love::filesystem::exists
+            "exists", love::filesystem::exists,
+            "preferSaveDirectory", love::filesystem::preferSaveDirectory
         ),
         "timer", luastate.create_table_with(
             "sleep", love::timer::sleep,

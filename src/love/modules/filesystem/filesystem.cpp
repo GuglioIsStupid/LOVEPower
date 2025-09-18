@@ -80,7 +80,7 @@ namespace love {
             return std::filesystem::exists(path);
         }
 
-        void preferSaveDirectory(const bool &preferSave) {
+        void preferSaveDirectory(const bool preferSave) {
             doesPreferSaveDirectory = preferSave;
         }
     }
