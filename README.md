@@ -14,7 +14,6 @@ Modified libraries will be available in source code for ease of user compiling
 # TODO
 - Implement Mii data (love.mii) (Via libmii)
 - Implement transforms (love.graphics)
-- Implement quads (love.graphics)
 - Implement physics (love.physics) (Via Box2d)
 - Fix freezing with some graphical functions (love.graphics)
 
