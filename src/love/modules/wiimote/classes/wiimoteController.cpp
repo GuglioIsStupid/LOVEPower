@@ -57,8 +57,8 @@ namespace love {
             return name;
         }
 
-        u8 WiimoteController::getBatteryLevel() const {
-            return (isConnected() && data) ? data->battery_level : 0;
+        float WiimoteController::getBatteryLevel() const {
+            return (isConnected() && data) ? (data->battery_level) : 0;
         }
         
         #pragma region IR Data
@@ -141,7 +141,6 @@ namespace love {
         std::tuple<float, float> WiimoteController::getSmoothPosition() const {
             return std::make_tuple(getSmoothX(), getSmoothY());
         }
-
 
         void WiimoteController::setMotionPlus(bool enabled) {
             if (isConnected()) {

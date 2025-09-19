@@ -24,7 +24,7 @@ namespace love {
             bool isConnected() const;
             void update();
 
-            u8 getBatteryLevel() const;
+            float getBatteryLevel() const;
 
             #pragma region IR Data
 

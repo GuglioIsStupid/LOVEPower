@@ -134,35 +134,37 @@ namespace love {
             float x, float y, float rotation, float sx, float sy,
             float ox, float oy
         ) {
-            
-            if (ox != 0 || oy != 0) {
-                x -= ox * sx;
-                y -= oy * sy;
-                float cos_r = cos(rotation);
-                float sin_r = sin(rotation);
-                x += ox * cos_r - oy * sin_r;
-                y += ox * sin_r + oy * cos_r;
-            }
-            GRRLIB_DrawImg(x, y, texture.texture, rotation, sx, sy, color);
+            float rotationDeg = rotation * (180.0f / M_PI);
+            float cos_r = cos(rotation);
+            float sin_r = sin(rotation);
+
+            float rx = ox * sx * cos_r - oy * sy * sin_r;
+            float ry = ox * sx * sin_r + oy * sy * cos_r;
+
+            x -= rx;
+            y -= ry;
+
+            GRRLIB_DrawImg(x, y, texture.texture, rotationDeg, sx, sy, color);
         }
 
         void _draw_quad(love::graphics::Texture &texture, love::graphics::Quad &quad,
             float x, float y, float rotation, float sx, float sy,
             float ox, float oy
         ) {
-            if (ox != 0 || oy != 0) {
-                x -= ox * sx;
-                y -= oy * sy;
-                float cos_r = cos(rotation);
-                float sin_r = sin(rotation);
-                x += ox * cos_r - oy * sin_r;
-                y += ox * sin_r + oy * cos_r;
-            }
+            float rotationDeg = rotation * (180.0f / M_PI);
+            float cos_r = cos(rotation);
+            float sin_r = sin(rotation);
+
+            float rx = ox * sx * cos_r - oy * sy * sin_r;
+            float ry = ox * sx * sin_r + oy * sy * cos_r;
+
+            x -= rx;
+            y -= ry;
 
             GRRLIB_DrawPart(
                 x, y,
                 quad.quadX, quad.quadY, quad.quadWidth, quad.quadHeight,
-                texture.texture, rotation, sx, sy, color
+                texture.texture, rotationDeg, sx, sy, color
             );
         }
 
