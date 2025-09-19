@@ -9,7 +9,7 @@
 
 namespace {
     std::vector<love::wiimote::WiimoteController*> wiimotes(4);
-    std::vector<love::wiimote::BalanceBoard*> balanceBoards(4);
+    love::wiimote::BalanceBoard* balanceBoard = nullptr;
 }
 
 namespace love {
@@ -25,9 +25,7 @@ namespace love {
                 wiimotes[i] = new love::wiimote::WiimoteController(i);
             }
 
-            for (int i = 0; i < 4; ++i) {
-                balanceBoards[i] = new love::wiimote::BalanceBoard(i);
-            }
+            balanceBoard = new love::wiimote::BalanceBoard(1);
 
             __registerTypes(luastate);
         }
@@ -134,8 +132,8 @@ namespace love {
                 wiimotes[i]->update();
             }
 
-            for (size_t i = 0; i < balanceBoards.size(); ++i) {
-                balanceBoards[i]->update();
+            if (balanceBoard) {
+                balanceBoard->update();
             }
         }
 
@@ -147,12 +145,8 @@ namespace love {
             return wiimotes[index - 1];
         }
 
-        BalanceBoard* getBalanceBoard(int index) {
-            if (index < 1 || index > 4) {
-                return nullptr;
-            }
-
-            return balanceBoards[index - 1];
+        BalanceBoard* getBalanceBoard() {
+            return balanceBoard;
         }
     }
 }

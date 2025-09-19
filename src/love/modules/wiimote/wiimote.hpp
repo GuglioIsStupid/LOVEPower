@@ -13,8 +13,8 @@ namespace love {
         void    __registerTypes(sol::state &luastate);
 
         WiimoteController* getWiimote(int index);
-        BalanceBoard*     getBalanceBoard(int index);
-        
+        BalanceBoard*      getBalanceBoard();
+
         void    update();
     }
 }
