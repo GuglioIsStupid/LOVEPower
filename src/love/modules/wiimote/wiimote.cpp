@@ -34,10 +34,27 @@ namespace love {
                 "update", &love::wiimote::WiimoteController::update,
                 "getX", &love::wiimote::WiimoteController::getX,
                 "getY", &love::wiimote::WiimoteController::getY,
+                "getZ", &love::wiimote::WiimoteController::getZ,
+                "getRawX", &love::wiimote::WiimoteController::getRawX,
+                "getRawY", &love::wiimote::WiimoteController::getRawY,
+                "getSmoothX", &love::wiimote::WiimoteController::getSmoothX,
+                "getSmoothY", &love::wiimote::WiimoteController::getSmoothY,
+                "getDistance", &love::wiimote::WiimoteController::getDistance,
                 "getDX", &love::wiimote::WiimoteController::getDX,
                 "getDY", &love::wiimote::WiimoteController::getDY,
                 "getPosition", &love::wiimote::WiimoteController::getPosition,
+                "getRawPosition", &love::wiimote::WiimoteController::getRawPosition,
+                "getSmoothPosition", &love::wiimote::WiimoteController::getSmoothPosition,
                 "getAngle", &love::wiimote::WiimoteController::getAngle,
+                "getRoll", &love::wiimote::WiimoteController::getRoll,
+                "getPitch", &love::wiimote::WiimoteController::getPitch,
+                "getYaw", &love::wiimote::WiimoteController::getYaw,
+                "getAbsoluteRoll", &love::wiimote::WiimoteController::getAbsoluteRoll,
+                "getAbsolutePitch", &love::wiimote::WiimoteController::getAbsolutePitch,
+                "getGforceX", &love::wiimote::WiimoteController::getGforceX,
+                "getGforceY", &love::wiimote::WiimoteController::getGforceY,
+                "getGforceZ", &love::wiimote::WiimoteController::getGforceZ,
+                "getBatteryLevel", &love::wiimote::WiimoteController::getBatteryLevel,
                 "getID", &love::wiimote::WiimoteController::getID,
                 "getName", &love::wiimote::WiimoteController::getName,
                 "isDown", [](WiimoteController& wm, sol::variadic_args va) {
@@ -50,7 +67,9 @@ namespace love {
                         }
                     }
                     return true;
-                }
+                },
+                "setMotionPlus", &love::wiimote::WiimoteController::setMotionPlus,
+                "getMotionPlus", &love::wiimote::WiimoteController::getMotionPlus
             );
         }
 
