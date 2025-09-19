@@ -35,6 +35,7 @@ namespace love {
 
     void initialize(sol::state& luastate, int argc, char** argv) {
         // Register love submodules
+        love::event::__init(luastate);
         love::audio::__init(luastate);
         love::graphics::__init(luastate);
         love::filesystem::__init(luastate, argc, argv);
@@ -137,7 +138,10 @@ namespace love {
                 "getVolume", love::audio::getVolume,
                 "setVolume", love::audio::setVolume,
                 "play", love::audio::play,
-                "stop", love::audio::stop,
+                "stop", sol::overload(
+                    love::audio::stop_source,
+                    love::audio::stop
+                ),
                 "pause", love::audio::pause
             ),
             "math", luastate.create_table_with(

@@ -64,7 +64,6 @@ namespace love {
             bool getMotionPlus() const;
 
             #pragma region Nunchuk
-            // No base xy because theres no ir on nunchuk
             bool hasNunchuk() const;
             float getNunchukX() const;
             float getNunchukY() const;
@@ -92,6 +91,29 @@ namespace love {
             std::tuple<float, float> getNunchukJoystickAxisRaw();
             std::tuple<float, float> getNunchukJoystickAxis();
 
+            #pragma region Classic
+
+            bool hasClassic() const;
+
+            float getClassicLeftJoystickRawX() const;
+            float getClassicLeftJoystickRawY() const;
+            float getClassicLeftJoystickX() const;
+            float getClassicLeftJoystickY() const;
+            std::tuple<float, float> getClassicLeftJoystickRaw() const;
+            std::tuple<float, float> getClassicLeftJoystick() const;
+
+            float getClassicRightJoystickRawX() const;
+            float getClassicRightJoystickRawY() const;
+            float getClassicRightJoystickX() const;
+            float getClassicRightJoystickY() const;
+            std::tuple<float, float> getClassicRightJoystickRaw() const;
+            std::tuple<float, float> getClassicRightJoystick() const;
+
+            float getClassicLeftShoulder() const;
+            float getClassicRightShoulder() const;
+            std::tuple<sol::object, sol::object> getClassicAxisRaw(sol::state_view lua) const;
+            std::tuple<sol::object, sol::object> getClassicAxis(sol::state_view lua) const;
+
             #pragma endregion
 
             bool checkButton(const std::string& buttonName) const {
@@ -110,8 +132,25 @@ namespace love {
                 if (lowerButtonName == "down")  return data->btns_h & WPAD_BUTTON_DOWN;
                 if (lowerButtonName == "left")  return data->btns_h & WPAD_BUTTON_LEFT;
                 if (lowerButtonName == "right") return data->btns_h & WPAD_BUTTON_RIGHT;
-                if (lowerButtonName == "c")     return hasNunchuk() ? (data->exp.nunchuk.btns & WPAD_NUNCHUK_BUTTON_C) : false;
-                if (lowerButtonName == "z")     return hasNunchuk() ? (data->exp.nunchuk.btns & WPAD_NUNCHUK_BUTTON_Z) : false;
+                if (hasNunchuk()) {
+                    if (lowerButtonName == "c")     return data->exp.nunchuk.btns & WPAD_NUNCHUK_BUTTON_C;
+                    if (lowerButtonName == "z")     return data->exp.nunchuk.btns & WPAD_NUNCHUK_BUTTON_Z;
+                } else if (hasClassic()) {
+                    if (lowerButtonName == "classic_a")      return data->btns_h & WPAD_CLASSIC_BUTTON_A;
+                    if (lowerButtonName == "classic_b")      return data->btns_h & WPAD_CLASSIC_BUTTON_B;
+                    if (lowerButtonName == "classic_x")      return data->btns_h & WPAD_CLASSIC_BUTTON_X;
+                    if (lowerButtonName == "classic_y")      return data->btns_h & WPAD_CLASSIC_BUTTON_Y;
+                    if (lowerButtonName == "classic_zl")     return data->btns_h & WPAD_CLASSIC_BUTTON_ZL;
+                    if (lowerButtonName == "classic_zr")     return data->btns_h & WPAD_CLASSIC_BUTTON_ZR;
+                    if (lowerButtonName == "classic_minus")  return data->btns_h & WPAD_CLASSIC_BUTTON_MINUS;
+                    if (lowerButtonName == "classic_plus")   return data->btns_h & WPAD_CLASSIC_BUTTON_PLUS;
+                    if (lowerButtonName == "classic_up")     return data->btns_h & WPAD_CLASSIC_BUTTON_UP;
+                    if (lowerButtonName == "classic_down")   return data->btns_h & WPAD_CLASSIC_BUTTON_DOWN;
+                    if (lowerButtonName == "classic_left")   return data->btns_h & WPAD_CLASSIC_BUTTON_LEFT;
+                    if (lowerButtonName == "classic_right")  return data->btns_h & WPAD_CLASSIC_BUTTON_RIGHT;
+                    if (lowerButtonName == "classic_l")      return data->btns_h & WPAD_CLASSIC_BUTTON_FULL_L;
+                    if (lowerButtonName == "classic_r")      return data->btns_h & WPAD_CLASSIC_BUTTON_FULL_R;
+                }
 
                 return false;
             }

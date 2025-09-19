@@ -95,7 +95,25 @@ namespace love {
                 "getNunchukJoystickX", &love::wiimote::WiimoteController::getNunchukJoystickX,
                 "getNunchukJoystickY", &love::wiimote::WiimoteController::getNunchukJoystickY,
                 "getNunchukJoystickAxisRaw", &love::wiimote::WiimoteController::getNunchukJoystickAxisRaw,
-                "getNunchukJoystickAxis", &love::wiimote::WiimoteController::getNunchukJoystickAxis
+                "getNunchukJoystickAxis", &love::wiimote::WiimoteController::getNunchukJoystickAxis,
+
+                "hasClassic", &love::wiimote::WiimoteController::hasClassic,
+                "getClassicLeftJoystickRawX", &love::wiimote::WiimoteController::getClassicLeftJoystickRawX,
+                "getClassicLeftJoystickRawY", &love::wiimote::WiimoteController::getClassicLeftJoystickRawY,
+                "getClassicLeftJoystickX", &love::wiimote::WiimoteController::getClassicLeftJoystickX,
+                "getClassicLeftJoystickY", &love::wiimote::WiimoteController::getClassicLeftJoystickY,
+                "getClassicLeftJoystick", &love::wiimote::WiimoteController::getClassicLeftJoystick,
+                "getClassicRightJoystickRawX", &love::wiimote::WiimoteController::getClassicRightJoystickRawX,
+                "getClassicRightJoystickRawY", &love::wiimote::WiimoteController::getClassicRightJoystickRawY,
+                "getClassicRightJoystickX", &love::wiimote::WiimoteController::getClassicRightJoystickX,
+                "getClassicRightJoystickY", &love::wiimote::WiimoteController::getClassicRightJoystickY,
+                "getClassicRightJoystick", &love::wiimote::WiimoteController::getClassicRightJoystick,
+                "getClassicAxisRaw", &love::wiimote::WiimoteController::getClassicAxisRaw,
+                "getClassicAxis", &love::wiimote::WiimoteController::getClassicAxis,
+                "getClassicLeftShoulder", &love::wiimote::WiimoteController::getClassicLeftShoulder,
+                "getClassicRightShoulder", &love::wiimote::WiimoteController::getClassicRightShoulder,
+                "getClassicAxisRaw", &love::wiimote::WiimoteController::getClassicAxisRaw,
+                "getClassicAxis", &love::wiimote::WiimoteController::getClassicAxis
             );
 
             luastate.new_usertype<love::wiimote::BalanceBoard>(

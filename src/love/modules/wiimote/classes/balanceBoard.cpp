@@ -136,7 +136,10 @@ namespace love {
         }
         
         /* #pragma region Temperature
-
+        // Okay so wiiuse/wpad.h doesn't implement the temperature reading for balance boards
+        // It sucks! But whatever,, I thought it would have been cool (and funny) to have
+        // I might attempt to implement it in the future.
+        // ^ I'm sure I can get around it with straight wiiuse data reading, but like my brain is NOT working rn
         void BalanceBoard::updateTemperature() {
             if (!isConnected()) return;
 

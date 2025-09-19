@@ -5,6 +5,16 @@
 #include <tuple>
 #include <string>
 
+#include <sol/sol.hpp>
+
+namespace {
+    enum {
+        CLASSIC_CONTROLLER_PRO  = 0x01,
+        CLASSIC_CONTROLLER      = 0x02,
+        CLASSIC_CONTROLLER_WIIU = 0x03
+    };
+}
+
 namespace love {
     namespace wiimote {
 
@@ -13,7 +23,6 @@ namespace love {
             index = idx;
             status = WPAD_Probe(index, nullptr);
             isMotionPlusEnabled = false;
-            //wm = wiiuse_get_by_id(index);
             data = nullptr;
             prev_data = nullptr;
 
@@ -46,6 +55,14 @@ namespace love {
                 name += " + Nunchuk";
             } else if (data->exp.type == EXP_CLASSIC) {
                 name += " + Classic Controller";
+                // This is wrong, I gotta fix it lol
+                if (data->exp.classic.type == CLASSIC_CONTROLLER) {
+                    name += " (Original)";
+                } else if (data->exp.classic.type == CLASSIC_CONTROLLER_PRO) {
+                    name += " (Pro)";
+                } else if (data->exp.classic.type == CLASSIC_CONTROLLER_WIIU) {
+                    name += " (Wii U)";
+                }
             } else if (data->exp.type == EXP_GUITAR_HERO_3) {
                 name = "Guitar Hero 3 Controller";
             } else if (data->exp.type == EXP_MOTION_PLUS) {
@@ -230,6 +247,82 @@ namespace love {
         }
         std::tuple<float, float> WiimoteController::getNunchukJoystickAxis() {
             return std::make_tuple(getNunchukJoystickX(), getNunchukJoystickY());
+        }
+
+        #pragma region Classic
+
+        bool WiimoteController::hasClassic() const {
+            return isConnected() && data && data->exp.type == EXP_CLASSIC;
+        }
+
+        float WiimoteController::getClassicLeftShoulder() const {
+            return hasClassic() ? data->exp.classic.l_shoulder : 0.0f;
+        }
+        float WiimoteController::getClassicRightShoulder() const {
+            return hasClassic() ? data->exp.classic.r_shoulder : 0.0f;
+        }
+
+        float WiimoteController::getClassicLeftJoystickRawX() const {
+            return hasClassic() ? data->exp.classic.ljs.pos.x : 0.0f;
+        }
+        float WiimoteController::getClassicLeftJoystickRawY() const {
+            return hasClassic() ? data->exp.classic.ljs.pos.y : 0.0f;
+        }
+        float WiimoteController::getClassicLeftJoystickX() const {
+            if (!hasClassic()) return 0.0f;
+            float x = static_cast<float>(data->exp.classic.ljs.pos.x - data->exp.classic.ljs.center.x);
+            float range = static_cast<float>(data->exp.classic.ljs.max.x - data->exp.classic.ljs.center.x);
+            return range != 0.0f ? x / range : 0.0f;
+        }
+        float WiimoteController::getClassicLeftJoystickY() const {
+            if (!hasClassic()) return 0.0f;
+            float y = static_cast<float>(data->exp.classic.ljs.pos.y - data->exp.classic.ljs.center.y);
+            float range = static_cast<float>(data->exp.classic.ljs.max.y - data->exp.classic.ljs.center.y);
+            return range != 0.0f ? y / range : 0.0f;
+        }
+        std::tuple<float, float> WiimoteController::getClassicLeftJoystickRaw() const {
+            return std::make_tuple(getClassicLeftJoystickRawX(), getClassicLeftJoystickRawY());
+        }
+        std::tuple<float, float> WiimoteController::getClassicLeftJoystick() const {
+            return std::make_tuple(getClassicLeftJoystickX(), getClassicLeftJoystickY());
+        }
+
+        float WiimoteController::getClassicRightJoystickRawX() const {
+            return hasClassic() ? data->exp.classic.rjs.pos.x : 0.0f;
+        }
+        float WiimoteController::getClassicRightJoystickRawY() const {
+            return hasClassic() ? data->exp.classic.rjs.pos.y : 0.0f;
+        }
+        float WiimoteController::getClassicRightJoystickX() const {
+            if (!hasClassic()) return 0.0f;
+            float x = static_cast<float>(data->exp.classic.rjs.pos.x - data->exp.classic.rjs.center.x);
+            float range = static_cast<float>(data->exp.classic.rjs.max.x - data->exp.classic.rjs.center.x);
+            return range != 0.0f ? x / range : 0.0f;
+        }
+        float WiimoteController::getClassicRightJoystickY() const {
+            if (!hasClassic()) return 0.0f;
+            float y = static_cast<float>(data->exp.classic.rjs.pos.y - data->exp.classic.rjs.center.y);
+            float range = static_cast<float>(data->exp.classic.rjs.max.y - data->exp.classic.rjs.center.y);
+            return range != 0.0f ? y / range : 0.0f;
+        }
+        std::tuple<float, float> WiimoteController::getClassicRightJoystickRaw() const {
+            return std::make_tuple(getClassicRightJoystickRawX(), getClassicRightJoystickRawY());
+        }
+        std::tuple<float, float> WiimoteController::getClassicRightJoystick() const {
+            return std::make_tuple(getClassicRightJoystickX(), getClassicRightJoystickY());
+        }
+
+        std::tuple<sol::object, sol::object> WiimoteController::getClassicAxisRaw(sol::state_view lua) const {
+            if (!hasClassic()) return std::make_tuple(sol::nil, sol::nil);
+            sol::object left = sol::make_object(lua, getClassicLeftJoystickRaw());
+            sol::object right = sol::make_object(lua, getClassicRightJoystickRaw());
+            return std::make_tuple(left, right);
+        }
+        std::tuple<sol::object, sol::object> WiimoteController::getClassicAxis(sol::state_view lua) const {
+            if (!hasClassic()) return std::make_tuple(sol::nil, sol::nil);
+            sol::object left = sol::make_object(lua, getClassicLeftJoystick());
+            sol::object right = sol::make_object(lua, getClassicRightJoystick());
+            return std::make_tuple(left, right);
         }
 
         #pragma endregion

@@ -7,6 +7,10 @@
 #include <audiogc/audiogc.hpp>
 #include "classes/Source.hpp"
 
+namespace {
+    std::vector<love::audio::Source*> sources;
+}
+
 namespace love {
     namespace audio {
         void __init(sol::state &luastate) {
@@ -55,8 +59,13 @@ namespace love {
         void play(love::audio::Source* source) {
             source->play();
         }
-        void stop(love::audio::Source* source) {
+        void stop_source(love::audio::Source* source) {
             source->stop();
+        }
+        void stop() {
+            for (size_t i = 0; i < sources.size(); ++i) {
+                sources[i]->stop();
+            }
         }
         void pause(love::audio::Source* source) {
             source->pause();

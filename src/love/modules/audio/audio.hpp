@@ -17,7 +17,8 @@ namespace love {
         void setVolume(love::audio::Source* source, double volume);
 
         void play(love::audio::Source* source);
-        void stop(love::audio::Source* source);
+        void stop_source(love::audio::Source* source);
+        void stop();
         void pause(love::audio::Source* source);
     }
 }
