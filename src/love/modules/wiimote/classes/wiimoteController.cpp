@@ -48,8 +48,6 @@ namespace love {
                 name += " + Classic Controller";
             } else if (data->exp.type == EXP_GUITAR_HERO_3) {
                 name = "Guitar Hero 3 Controller";
-            } else if (data->exp.type == EXP_WII_BOARD) {
-                name = "Balance Board";
             } else if (data->exp.type == EXP_MOTION_PLUS) {
                 name += " + Motion Plus";
             }
@@ -58,7 +56,8 @@ namespace love {
         }
 
         float WiimoteController::getBatteryLevel() const {
-            return (isConnected() && data) ? (data->battery_level) : 0;
+            if (!isConnected() || !data) return -1.0f;
+            return static_cast<float>(data->battery_level) / 255.0f;
         }
         
         #pragma region IR Data
@@ -151,6 +150,86 @@ namespace love {
 
         bool WiimoteController::getMotionPlus() const {
             return isMotionPlusEnabled;
+        }
+
+        #pragma region Nunchuk
+
+        bool WiimoteController::hasNunchuk() const {
+            return isConnected() && data && data->exp.type == EXP_NUNCHUK;
+        }
+
+        float WiimoteController::getNunchukXRaw() const {
+            return hasNunchuk() ? data->exp.nunchuk.accel.x : 0.0f;
+        }
+        float WiimoteController::getNunchukYRaw() const {
+            return hasNunchuk() ? data->exp.nunchuk.accel.y : 0.0f;
+        }
+        float WiimoteController::getNunchukZRaw() const {
+            return hasNunchuk() ? data->exp.nunchuk.accel.z : 0.0f;
+        }
+
+        float WiimoteController::getNunchukX() const {
+            return hasNunchuk() ? data->exp.nunchuk.accel_calib.cal_g.x : 0.0f;
+        }
+        float WiimoteController::getNunchukY() const {
+            return hasNunchuk() ? data->exp.nunchuk.accel_calib.cal_g.y : 0.0f;
+        }
+        float WiimoteController::getNunchukZ() const {
+            return hasNunchuk() ? data->exp.nunchuk.accel_calib.cal_g.z : 0.0f;
+        }
+        
+        std::tuple<float, float, float> WiimoteController::getNunchukPositionRaw() const {
+            return std::make_tuple(getNunchukXRaw(), getNunchukYRaw(), getNunchukZRaw());
+        }
+        std::tuple<float, float, float> WiimoteController::getNunchukPosition() const {
+            return std::make_tuple(getNunchukX(), getNunchukY(), getNunchukZ());
+        }
+
+        float WiimoteController::getNunchukRoll() const {
+            return hasNunchuk() ? data->exp.nunchuk.orient.roll : 0.0f;
+        }
+        float WiimoteController::getNunchukPitch() const {
+            return hasNunchuk() ? data->exp.nunchuk.orient.pitch : 0.0f;
+        }
+        float WiimoteController::getNunchukYaw() const {
+            return hasNunchuk() ? data->exp.nunchuk.orient.yaw : 0.0f;
+        }
+
+        float WiimoteController::getNunchukGforceX() const {
+            return hasNunchuk() ? data->exp.nunchuk.gforce.x : 0.0f;
+        }
+        float WiimoteController::getNunchukGforceY() const {
+            return hasNunchuk() ? data->exp.nunchuk.gforce.y : 0.0f;
+        }
+        float WiimoteController::getNunchukGforceZ() const {
+            return hasNunchuk() ? data->exp.nunchuk.gforce.z : 0.0f;
+        }
+
+        float WiimoteController::getNunchukJoystickRawX() const {
+            return hasNunchuk() ? data->exp.nunchuk.js.pos.x : 0.0f;
+        }
+        float WiimoteController::getNunchukJoystickRawY() const {
+            return hasNunchuk() ? data->exp.nunchuk.js.pos.y : 0.0f;
+        }
+
+        float WiimoteController::getNunchukJoystickX() const {
+            if (!hasNunchuk()) return 0.0f;
+            float x = static_cast<float>(data->exp.nunchuk.js.pos.x - data->exp.nunchuk.js.center.x);
+            float range = static_cast<float>(data->exp.nunchuk.js.max.x - data->exp.nunchuk.js.center.x);
+            return range != 0.0f ? x / range : 0.0f;
+        }
+        float WiimoteController::getNunchukJoystickY() const {
+            if (!hasNunchuk()) return 0.0f;
+            float y = static_cast<float>(data->exp.nunchuk.js.pos.y - data->exp.nunchuk.js.center.y);
+            float range = static_cast<float>(data->exp.nunchuk.js.max.y - data->exp.nunchuk.js.center.y);
+            return range != 0.0f ? y / range : 0.0f;
+        }
+
+        std::tuple<float, float> WiimoteController::getNunchukJoystickAxisRaw() {
+            return std::make_tuple(getNunchukJoystickRawX(), getNunchukJoystickRawY());
+        }
+        std::tuple<float, float> WiimoteController::getNunchukJoystickAxis() {
+            return std::make_tuple(getNunchukJoystickX(), getNunchukJoystickY());
         }
 
         #pragma endregion

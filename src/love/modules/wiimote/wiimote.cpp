@@ -9,6 +9,7 @@
 
 namespace {
     std::vector<love::wiimote::WiimoteController*> wiimotes(4);
+    std::vector<love::wiimote::BalanceBoard*> balanceBoards(4);
 }
 
 namespace love {
@@ -19,8 +20,13 @@ namespace love {
             WPAD_SetDataFormat(WPAD_CHAN_ALL, WPAD_FMT_BTNS_ACC_IR);
             WPAD_ScanPads();
 
+            // 0-3 are wiimotes, 4-7 are balance boards
             for (int i = 0; i < 4; ++i) {
                 wiimotes[i] = new love::wiimote::WiimoteController(i);
+            }
+
+            for (int i = 0; i < 4; ++i) {
+                balanceBoards[i] = new love::wiimote::BalanceBoard(i);
             }
 
             __registerTypes(luastate);
@@ -69,7 +75,55 @@ namespace love {
                     return true;
                 },
                 "setMotionPlus", &love::wiimote::WiimoteController::setMotionPlus,
-                "getMotionPlus", &love::wiimote::WiimoteController::getMotionPlus
+                "getMotionPlus", &love::wiimote::WiimoteController::getMotionPlus,
+
+                "hasNunchuk", &love::wiimote::WiimoteController::hasNunchuk,
+                "getNunchukX", &love::wiimote::WiimoteController::getNunchukX,
+                "getNunchukY", &love::wiimote::WiimoteController::getNunchukY,
+                "getNunchukZ", &love::wiimote::WiimoteController::getNunchukZ,
+                "getNunchukXRaw", &love::wiimote::WiimoteController::getNunchukXRaw,
+                "getNunchukYRaw", &love::wiimote::WiimoteController::getNunchukYRaw,
+                "getNunchukZRaw", &love::wiimote::WiimoteController::getNunchukZRaw,
+                "getNunchukPosition", &love::wiimote::WiimoteController::getNunchukPosition,
+                "getNunchukPositionRaw", &love::wiimote::WiimoteController::getNunchukPositionRaw,
+                "getNunchukRoll", &love::wiimote::WiimoteController::getNunchukRoll,
+                "getNunchukPitch", &love::wiimote::WiimoteController::getNunchukPitch,
+                "getNunchukYaw", &love::wiimote::WiimoteController::getNunchukYaw,
+                "getNunchukGforceX", &love::wiimote::WiimoteController::getNunchukGforceX,
+                "getNunchukGforceY", &love::wiimote::WiimoteController::getNunchukGforceY,
+                "getNunchukGforceZ", &love::wiimote::WiimoteController::getNunchukGforceZ,
+                "getNunchukJoystickRawX", &love::wiimote::WiimoteController::getNunchukJoystickRawX,
+                "getNunchukJoystickRawY", &love::wiimote::WiimoteController::getNunchukJoystickRawY,
+                "getNunchukJoystickX", &love::wiimote::WiimoteController::getNunchukJoystickX,
+                "getNunchukJoystickY", &love::wiimote::WiimoteController::getNunchukJoystickY,
+                "getNunchukJoystickAxisRaw", &love::wiimote::WiimoteController::getNunchukJoystickAxisRaw,
+                "getNunchukJoystickAxis", &love::wiimote::WiimoteController::getNunchukJoystickAxis
+            );
+
+            luastate.new_usertype<love::wiimote::BalanceBoard>(
+                "BalanceBoard",
+                sol::no_constructor,
+                "isConnected", &love::wiimote::BalanceBoard::isConnected,
+                "update", &love::wiimote::BalanceBoard::update,
+                "getTopLeftWeight", &love::wiimote::BalanceBoard::getTopLeftWeight,
+                "getTopRightWeight", &love::wiimote::BalanceBoard::getTopRightWeight,
+                "getBottomLeftWeight", &love::wiimote::BalanceBoard::getBottomLeftWeight,
+                "getBottomRightWeight", &love::wiimote::BalanceBoard::getBottomRightWeight,
+                "getWeights", &love::wiimote::BalanceBoard::getWeights,
+                "getTotalWeight", &love::wiimote::BalanceBoard::getTotalWeight,
+                "getRawTopLeftWeight", &love::wiimote::BalanceBoard::getRawTopLeftWeight,
+                "getRawTopRightWeight", &love::wiimote::BalanceBoard::getRawTopRightWeight,
+                "getRawBottomLeftWeight", &love::wiimote::BalanceBoard::getRawBottomLeftWeight,
+                "getRawBottomRightWeight", &love::wiimote::BalanceBoard::getRawBottomRightWeight,
+                "getRawWeights", &love::wiimote::BalanceBoard::getRawWeightsInt,
+                "getRawTotalWeight", &love::wiimote::BalanceBoard::getRawTotalWeight,
+                "getBalanceX", &love::wiimote::BalanceBoard::getBalanceX,
+                "getBalanceY", &love::wiimote::BalanceBoard::getCenterOfBalanceY,
+                "getBalance", &love::wiimote::BalanceBoard::getBalance,
+                "getBatteryLevel", &love::wiimote::BalanceBoard::getBatteryLevel,
+                "getID", &love::wiimote::BalanceBoard::getID,
+                "getName", &love::wiimote::BalanceBoard::getName,
+                "getCalibrationData", &love::wiimote::BalanceBoard::getCalibrationData
             );
         }
 
@@ -79,6 +133,10 @@ namespace love {
             for (size_t i = 0; i < wiimotes.size(); ++i) {
                 wiimotes[i]->update();
             }
+
+            for (size_t i = 0; i < balanceBoards.size(); ++i) {
+                balanceBoards[i]->update();
+            }
         }
 
         WiimoteController* getWiimote(int index) {
@@ -87,6 +145,14 @@ namespace love {
             }
 
             return wiimotes[index - 1];
+        }
+
+        BalanceBoard* getBalanceBoard(int index) {
+            if (index < 1 || index > 4) {
+                return nullptr;
+            }
+
+            return balanceBoards[index - 1];
         }
     }
 }

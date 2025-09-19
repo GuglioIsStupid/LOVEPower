@@ -168,7 +168,8 @@ namespace love {
             ),
             "wiimote", luastate.create_table_with(
                 "update", love::wiimote::update,
-                "getWiimote", love::wiimote::getWiimote
+                "getWiimote", love::wiimote::getWiimote,
+                "getBalanceBoard", love::wiimote::getBalanceBoard
             )
         );
     }

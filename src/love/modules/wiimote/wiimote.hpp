@@ -5,6 +5,7 @@
 #include <string>
 
 #include "classes/wiimoteController.hpp"
+#include "classes/balanceBoard.hpp"
 
 namespace love {
     namespace wiimote {
@@ -12,6 +13,8 @@ namespace love {
         void    __registerTypes(sol::state &luastate);
 
         WiimoteController* getWiimote(int index);
+        BalanceBoard*     getBalanceBoard(int index);
+        
         void    update();
     }
 }

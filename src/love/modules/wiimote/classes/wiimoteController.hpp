@@ -25,6 +25,7 @@ namespace love {
             void update();
 
             float getBatteryLevel() const;
+            int getID() const;
 
             #pragma region IR Data
 
@@ -57,12 +58,39 @@ namespace love {
             float getGforceY() const;
             float getGforceZ() const;
 
-            int getID() const;
-            // TODO: Add extentions to the name
             std::string getName() const;
 
             void setMotionPlus(bool enabled);
             bool getMotionPlus() const;
+
+            #pragma region Nunchuk
+            // No base xy because theres no ir on nunchuk
+            bool hasNunchuk() const;
+            float getNunchukX() const;
+            float getNunchukY() const;
+            float getNunchukZ() const;
+
+            float getNunchukXRaw() const;
+            float getNunchukYRaw() const;
+            float getNunchukZRaw() const;
+
+            std::tuple<float, float, float> getNunchukPositionRaw() const;
+            std::tuple<float, float, float> getNunchukPosition() const;
+
+            float getNunchukRoll() const;
+            float getNunchukPitch() const;
+            float getNunchukYaw() const;
+
+            float getNunchukGforceX() const;
+            float getNunchukGforceY() const;
+            float getNunchukGforceZ() const;
+            
+            float getNunchukJoystickRawX() const;
+            float getNunchukJoystickRawY() const;
+            float getNunchukJoystickX() const;
+            float getNunchukJoystickY() const;
+            std::tuple<float, float> getNunchukJoystickAxisRaw();
+            std::tuple<float, float> getNunchukJoystickAxis();
 
             #pragma endregion
 
@@ -82,6 +110,8 @@ namespace love {
                 if (lowerButtonName == "down")  return data->btns_h & WPAD_BUTTON_DOWN;
                 if (lowerButtonName == "left")  return data->btns_h & WPAD_BUTTON_LEFT;
                 if (lowerButtonName == "right") return data->btns_h & WPAD_BUTTON_RIGHT;
+                if (lowerButtonName == "c")     return hasNunchuk() ? (data->exp.nunchuk.btns & WPAD_NUNCHUK_BUTTON_C) : false;
+                if (lowerButtonName == "z")     return hasNunchuk() ? (data->exp.nunchuk.btns & WPAD_NUNCHUK_BUTTON_Z) : false;
 
                 return false;
             }
