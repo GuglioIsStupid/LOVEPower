@@ -46,7 +46,7 @@ INCLUDES    :=  src/lib/
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CFLAGS  	=  -g -O2 -Wall $(MACHDEP) $(INCLUDE) `freetype-config --cflags`
+CFLAGS  	=  -g -O2 -Wall $(MACHDEP) $(INCLUDE)
 CXXFLAGS	=  $(CFLAGS)
 
 LDFLAGS	    =  -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
@@ -55,7 +55,7 @@ LDFLAGS	    =  -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 # any extra libraries we wish to link with the project
 # the order can-be/is critical
 #---------------------------------------------------------------------------------
-LIBS	:= `freetype-config --libs` -lbz2 -lpng -ljpeg -lz -lfat
+LIBS	:= -lfreetype -lbz2 -lpng -ljpeg -lz -lfat
 LIBS	+= -llua
 LIBS	+= -lwiiuse
 LIBS	+= -lmodplay -laesnd
