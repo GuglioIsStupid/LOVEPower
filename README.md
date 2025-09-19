@@ -2,12 +2,13 @@
 
 A "port" of LÖVE2D to the Wii. Based heavily off of [WiiLove](https://github.com/HTV04/WiiLove)
 
-
 PR's are heavily appreaciated! I'm still new to this stuff
 
 # Compiling
 
-TODO
+1. Download, compile and install [Lua for Wii](https://wiibrew.org/wiki/Lua_for_Wii).
+2. (Optional) Download and install [libmii](https://wiibrew.org/wiki/Libmii).
+3. Compiled with "make". For some reason multiple threads don't work(?). I'll look into it in the near future.
 
 Modified libraries will be available in source code for ease of user compiling
 
