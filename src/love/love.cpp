@@ -19,6 +19,9 @@
 #include "modules/math/math.hpp"
 #include "modules/event/event.hpp"
 #include "modules/wiimote/wiimote.hpp"
+#ifndef NO_LIBMII
+    #include "modules/mii/miimodule.hpp"
+#endif
 
 namespace love {
     bool hasDeprecationOutput() {
@@ -41,6 +44,9 @@ namespace love {
         love::filesystem::__init(luastate, argc, argv);
         love::timer::__init(luastate);
         love::wiimote::__init(luastate);
+        #ifndef NO_LIBMII
+            love::mii::__init(luastate);
+        #endif
 
         // Inject love table
         luastate["love"] = luastate.create_table_with(
@@ -158,8 +164,10 @@ namespace love {
                 "getRandomSeed", love::math::getRandomSeed,
                 "getRandomState", love::math::getRandomState
             ),
-#ifdef USE_LIBMII
-            "mii", luastate.create_table(),
+#ifndef NO_LIBMII
+            "mii", luastate.create_table_with(
+                "getMiis", love::mii::getMiis
+            ),
 #endif
 #ifdef USE_PHYSICS
             "physics", luastate.create_table(),

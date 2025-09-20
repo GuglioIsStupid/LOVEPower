@@ -61,7 +61,8 @@ LIBS	+= -lwiiuse
 LIBS	+= -lmodplay -laesnd
 LIBS	+= -lbte -logc -lm
 
-ifeq ($(strip $(USE_LIBMII)),true)
+ifeq ($(strip $(NO_LIBMII)),true)
+else
     SOURCES  += src/love/modules/mii
     CFLAGS   += -DUSE_LIBMII
     CXXFLAGS += -DUSE_LIBMII
