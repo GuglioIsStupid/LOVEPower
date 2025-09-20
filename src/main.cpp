@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
     preloadLuaModule(luastate, "love.nogame", nogame_lua, nogame_lua_size);
 
     try {
-        luastate.script(std::string(boot_lua, boot_lua + boot_lua_size));
+        luastate.script(std::string(boot_lua, boot_lua + boot_lua_size), "boot.lua", sol::load_mode::text);
     }
     catch (const sol::error& e) {
         FILE* f = fopen("sd:/love_error_cpp.log", "w");
@@ -70,5 +70,6 @@ int main(int argc, char** argv) {
 
     GRRLIB_Exit();
     std::exit(0);
+
     return 0;
 }

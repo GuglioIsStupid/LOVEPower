@@ -150,6 +150,7 @@ namespace love {
                     if (lowerButtonName == "classic_right")  return data->btns_h & WPAD_CLASSIC_BUTTON_RIGHT;
                     if (lowerButtonName == "classic_l")      return data->btns_h & WPAD_CLASSIC_BUTTON_FULL_L;
                     if (lowerButtonName == "classic_r")      return data->btns_h & WPAD_CLASSIC_BUTTON_FULL_R;
+                    if (lowerButtonName == "classic_home")   return data->btns_h & WPAD_CLASSIC_BUTTON_HOME;
                 }
 
                 return false;

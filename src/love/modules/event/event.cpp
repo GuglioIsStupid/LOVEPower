@@ -49,6 +49,7 @@ namespace love {
 
                 if (requestReset) {
                     SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
+                    exit(0);
                 } else {
                     SYS_ResetSystem(SYS_POWEROFF, 0, 0);
                     exit(0);
@@ -75,6 +76,9 @@ namespace love {
 
         void quit(sol::this_state lua) {
             __pushEvent(lua, "quit");
+
+            SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
+            std::exit(0);
         }
     }
 }
