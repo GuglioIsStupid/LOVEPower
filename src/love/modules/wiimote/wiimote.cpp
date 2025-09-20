@@ -163,6 +163,10 @@ namespace love {
             return wiimotes[index - 1];
         }
 
+        sol::object getWiimotes(sol::state &luastate) {
+            return sol::make_object(luastate, wiimotes);
+        }
+
         BalanceBoard* getBalanceBoard() {
             return balanceBoard;
         }
