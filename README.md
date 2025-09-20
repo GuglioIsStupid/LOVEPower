@@ -4,6 +4,8 @@ A "port" of LÖVE2D to the Wii. Based heavily off of [WiiLove](https://github.co
 
 PR's are heavily appreaciated! I'm still new to this stuff
 
+Want support? Join the [Discord Server](https://discord.gg/wqkQxKNNu5)
+
 # Compiling
 
 1. Download, compile and install [Lua for Wii](https://wiibrew.org/wiki/Lua_for_Wii).
