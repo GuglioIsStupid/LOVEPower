@@ -27,7 +27,7 @@ namespace love {
             float getBatteryLevel() const;
             int getID() const;
 
-            #pragma region IR Data
+            #pragma region IR + Motion
 
             float getX() const;
             float getY() const;
