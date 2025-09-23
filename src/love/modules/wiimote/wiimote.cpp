@@ -111,9 +111,7 @@ namespace love {
                 "getClassicAxisRaw", &love::wiimote::WiimoteController::getClassicAxisRaw,
                 "getClassicAxis", &love::wiimote::WiimoteController::getClassicAxis,
                 "getClassicLeftShoulder", &love::wiimote::WiimoteController::getClassicLeftShoulder,
-                "getClassicRightShoulder", &love::wiimote::WiimoteController::getClassicRightShoulder,
-                "getClassicAxisRaw", &love::wiimote::WiimoteController::getClassicAxisRaw,
-                "getClassicAxis", &love::wiimote::WiimoteController::getClassicAxis
+                "getClassicRightShoulder", &love::wiimote::WiimoteController::getClassicRightShoulder
             );
 
             luastate.new_usertype<love::wiimote::BalanceBoard>(
