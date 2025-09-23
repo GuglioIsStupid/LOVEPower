@@ -77,7 +77,7 @@ namespace love {
             return static_cast<float>(data->battery_level) / 255.0f;
         }
         
-        #pragma region IR Data
+        #pragma region IR + Motion
 
         float WiimoteController::getX() const {
             return (isConnected() && data) ? data->ir.x : 0.0f;
