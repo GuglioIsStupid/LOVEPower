@@ -56,7 +56,6 @@ LDFLAGS	    =  -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 # the order can-be/is critical
 #---------------------------------------------------------------------------------
 LIBS	:= -lfreetype -lbz2 -lpng -ljpeg -lz -lfat
-LIBS	+= -L$(CURDIR)/lib/ -lluajit
 LIBS	+= -lwiiuse
 LIBS	+= -lmodplay -laesnd
 LIBS	+= -lbte -logc -lm
@@ -67,6 +66,15 @@ else
     CFLAGS   += -DUSE_LIBMII
     CXXFLAGS += -DUSE_LIBMII
 	LIBS     += -lmii -lisfs
+endif
+
+ifeq ($(strip $(NO_LUAJIT)),true)
+# just use regular lua
+LIBS    += -llua
+else
+LIBS	 += -L$(CURDIR)/lib/ -lluajit
+CFLAGS   += -DUSE_LUAJIT
+CXXFLAGS += -DUSE_LUAJIT
 endif
 
 ifeq ($(strip $(USE_PHYSICS)),true)

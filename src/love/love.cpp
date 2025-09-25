@@ -190,9 +190,12 @@ namespace love {
                 sol::lib::debug,
                 sol::lib::bit32,
                 sol::lib::io,
-                sol::lib::utf8,
+                sol::lib::utf8
+                #ifdef USE_LUAJIT
+                ,
                 sol::lib::ffi,
                 sol::lib::jit
+                #endif
             );
 
             lua_State *L = luastate.lua_state();

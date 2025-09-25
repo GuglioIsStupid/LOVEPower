@@ -1,4 +1,7 @@
 #define SOL_ALL_SAFETIES_ON 1
+#ifndef USE_LUAJIT
+    #define SOL_LUAJIT 0
+#endif
 
 #include "love/love.hpp"
 

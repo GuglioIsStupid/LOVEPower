@@ -1,4 +1,4 @@
-# LoveWii
+# LÖVEWii
 
 A "port" of LÖVE2D to the Wii. Based heavily off of [WiiLove](https://github.com/HTV04/WiiLove)
 
