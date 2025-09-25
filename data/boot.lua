@@ -30,6 +30,7 @@ function love.boot()
 
     if canHasGame and not (love.filesystem.exists("main.lua") or love.filesystem.exists("conf.lua")) then
         noGameCode = true
+        canHasGame = false
     end
 
     if not canHasGame then

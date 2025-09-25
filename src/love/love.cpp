@@ -22,7 +22,7 @@ extern "C" {
 #include "modules/math/math.hpp"
 #include "modules/event/event.hpp"
 #include "modules/wiimote/wiimote.hpp"
-#ifndef NO_LIBMII
+#ifdef USE_LIBMII
     #include "modules/mii/miimodule.hpp"
 #endif
 
@@ -54,7 +54,7 @@ static const luaL_Reg modules[] = {
     {"love.math", luaopen_love_math},
     {"love.event", luaopen_love_event},
     {"love.wiimote", luaopen_love_wiimote},
-    #ifndef NO_LIBMII
+    #ifdef USE_LIBMII
         {"love.mii", luaopen_love_mii},
     #endif
 
@@ -214,7 +214,7 @@ namespace love {
             love::filesystem::__init(luastate, argc, argv);
             love::timer::__init(luastate);
             love::wiimote::__init(luastate);
-            #ifndef NO_LIBMII
+            #ifdef USE_LIBMII
                 love::mii::__init(luastate);
             #endif
 
