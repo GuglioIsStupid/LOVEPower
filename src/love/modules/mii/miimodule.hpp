@@ -2,6 +2,9 @@
 
 #include <sol/sol.hpp>
 #include "mii.h"
+extern "C" {
+    #include <lua.h>
+}
 
 namespace love {
     namespace mii {
@@ -11,3 +14,5 @@ namespace love {
         sol::object getMiis(sol::state &luastate);
     }
 }
+
+int luaopen_love_mii(lua_State *L);

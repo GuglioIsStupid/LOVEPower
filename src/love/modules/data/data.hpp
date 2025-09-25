@@ -1,4 +1,7 @@
 #pragma once
+extern "C" {
+    #include <lua.h>
+}
 
 namespace {
     [[maybe_unused]]
@@ -42,6 +45,16 @@ namespace {
 
 namespace love {
     namespace data {
+        struct Data {
+            std::vector<uint8_t> bytes;
+            Data(std::vector<uint8_t> &&b) : bytes(std::move(b)) {}
+            bool empty() const { return bytes.empty(); }
+            const uint8_t* data() const { return bytes.data(); }
+            size_t size() const { return bytes.size(); }
+            std::vector<uint8_t>::const_iterator begin() const { return bytes.begin(); }
+            std::vector<uint8_t>::const_iterator end() const { return bytes.end(); }
+        };
+        
         void __init(sol::state &luastate);
         void __registerTypes(sol::state &luastate);
 
@@ -51,3 +64,5 @@ namespace love {
                             sol::this_state ts);
     }
 }
+
+int luaopen_love_data(lua_State *L);

@@ -2,7 +2,9 @@
 #include <sys/unistd.h>
 #include <cstdint>
 #include <sol/sol.hpp>
-// Header
+extern "C" {
+    #include <lua.h>
+}
 #include "timer.hpp"
 
 namespace {
@@ -57,4 +59,16 @@ namespace love {
             return fps;
         }
     }
+}
+
+int luaopen_love_timer(lua_State *L) {
+    sol::state_view luastate(L);
+
+    luastate["love"]["timer"] = luastate.create_table_with(
+        "sleep", love::timer::sleep,
+        "step", love::timer::step,
+        "getFPS", love::timer::getFPS
+    );
+
+    return 1;
 }

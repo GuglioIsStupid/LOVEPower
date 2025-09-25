@@ -6,6 +6,9 @@
 #include <vector>
 
 #include "wiimote.hpp"
+extern "C" {
+    #include <lua.h>
+}
 
 namespace {
     std::vector<love::wiimote::WiimoteController*> wiimotes(4);
@@ -169,4 +172,17 @@ namespace love {
             return balanceBoard;
         }
     }
+}
+
+int luaopen_love_wiimote(lua_State *L) {
+    sol::state_view luastate(L);
+
+    luastate["love"]["wiimote"] = luastate.create_table_with(
+        "getWiimote", love::wiimote::getWiimote,
+        "getWiimotes", love::wiimote::getWiimotes,
+        "getBalanceBoard", love::wiimote::getBalanceBoard,
+        "update", love::wiimote::update
+    );
+
+    return 1;
 }

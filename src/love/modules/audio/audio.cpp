@@ -6,6 +6,9 @@
 #include <fat.h>
 #include <audiogc/audiogc.hpp>
 #include "classes/Source.hpp"
+extern "C" {
+    #include <lua.h>
+}
 
 namespace {
     std::vector<love::audio::Source*> sources;
@@ -71,4 +74,22 @@ namespace love {
             source->pause();
         }
     }
+}
+
+int luaopen_love_audio(lua_State *L) {
+    sol::state_view luastate(L);
+
+    luastate["love"]["audio"] = luastate.create_table_with(
+        "newSource", love::audio::newSource_file_type,
+        "getVolume", love::audio::getVolume,
+        "setVolume", love::audio::setVolume,
+        "play", love::audio::play,
+        "stop", sol::overload(
+            static_cast<void(*)(love::audio::Source*)>(&love::audio::stop_source),
+            love::audio::stop
+        ),
+        "pause", love::audio::pause
+    );
+
+    return 1;
 }

@@ -8,6 +8,11 @@
 #include "classes/texture.hpp"
 #include "classes/font.hpp"
 #include "classes/quad.hpp"
+extern "C" {
+    #include <lua.h>
+}
+
+#include "../data/data.hpp"
 
 namespace love {
     namespace graphics {
@@ -53,7 +58,7 @@ namespace love {
         void draw_quad_x_y_r_sx_sy_ox_oy(love::graphics::Texture &texture, love::graphics::Quad &quad, float x, float y, float rotation, float sx, float sy, float ox, float oy);
 
         love::graphics::Texture newImage(std::string file);
-        love::graphics::Texture newImage_data(const std::vector<uint8_t>& data);
+        love::graphics::Texture newImage_data(love::data::Data data);
 
         love::graphics::Quad newQuad(float x, float y, float width, float height, float sw, float sh);
 
@@ -94,3 +99,5 @@ namespace love {
         #pragma endregion
     }
 }
+
+int luaopen_love_graphics(lua_State *L);

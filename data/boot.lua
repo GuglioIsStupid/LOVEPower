@@ -1,190 +1,178 @@
-package.path = "game/?.lua; game/?/init.lua"
+local love = require("love")
 
+require("love.arg")
 require("love.callbacks")
 
-function love.run()
-    if love.math then
-        love.math.setRandomSeed(os.time())
+local noGameCode = false
+local invalidGamePath = nil
+
+function love.boot()
+    require("love.filesystem")
+    local arg0 = love.arg.getLow(arg) or "sd:/lovewii/lovewii.dol"
+    if type(arg0) == "string" and arg0 ~= "" then
+        -- Dolpin or something like that
+        arg0 = "sd:/lovewii/"
+    else
+        arg0 = arg0:match("^(.-)[^/\\]-$") -- Gets the directory of the executable
+        if arg0 == nil or arg0 == "" then -- Fall back to default
+            arg0 = "sd:/lovewii/"
+        end
     end
-    if love.load then love.load() end
+    love.filesystem.init(arg0)
+
+    local canHasGame = true
+    -- TODO: Implement fusing
+
+    local isFusedGame = canHasGame
+    --love.filesystem.setFused(isFusedGame)
+
+    love.setDeprecationOutput(true)
+
+    if canHasGame and not (love.filesystem.exists("main.lua") or love.filesystem.exists("conf.lua")) then
+        noGameCode = true
+    end
+
+    if not canHasGame then
+        local nogame = require("love.nogame")
+        nogame()
+    end
+end
+
+function love.init()
+    local c = {
+        --title = "LoveWii", -- Not used in LoveWii
+        version = "0.1", -- TODO: Implement version checking
+        window = {}, -- Not supported, but here for compatibility
+        modules = {
+            audio = true,
+            data = true,
+            event = true,
+            font = true,
+            graphics = true,
+            image = true,
+            --joystick = false, -- No love.joystick module in LoveWii
+            --keyboard = false, -- No love.keyboard module in LoveWii
+            wiimote = true, -- LoveWii specific module
+            mii = true, -- LoveWii specific module
+            math = true,
+            mouse = false, -- No love.mouse module in LoveWii
+            physics = true,
+            sound = true,
+            system = true,
+            timer = true,
+            --touch = false, -- No love.touch module in LoveWii
+            --video = false, -- No love.video module in LoveWii
+            --window = false -- No love.window module in LoveWii
+        },
+        audio = {
+            --mic = false, -- Not supported in LoveWii
+            --mixwithsystem = false -- Not supported in LoveWii
+        },
+        --console = false, -- Not supported in LoveWii
+        --identity = nil, -- Not supported in LoveWii
+        appendidentity = false, -- Sources in the save directory first if true
+        --accelerometerjoystick = false, -- Not supported in LoveWii
+        --externalstorage = false, -- Not supported in LoveWii
+        --gammacorrect = false, -- Not supported in LoveWii
+    }
+
+    local openedconsole = false
+
+    local confok, conferr
+    if (not love.conf) and love.filesystem and love.filesystem.exists("conf.lua") then
+        confok, conferr = pcall(function()
+            local chunk, err = love.filesystem.load("conf.lua")
+            if chunk then
+                chunk(c)
+            else
+                error(err)
+            end
+        end)
+    end
+
+    if love.conf then
+        confok, conferr = pcall(love.conf, c)
+    end
+
+    for _,v in ipairs{
+        "data",
+        "timer",
+        "event",
+        --"sound",
+        "system",
+        "audio",
+        --"image",
+        --"font",
+        --"window",
+        "graphics",
+        "math",
+        --"physics",
+        "wiimote",
+        "mii"
+    } do
+        if c.modules[v] then
+            require("love." .. v)
+        end
+    end
+
+    if love.event then
+		love.createhandlers()
+	end
+
+    -- VERSION CHECKING.... TODO
+
+    if not confok and conferr then
+        error(conferr)
+    end
+
     if love.timer then love.timer.step() end
 
-    local dt = 0
-
-    while true do
-        if love.event then
-            love.event.pump()
-            while true do
-                local name, a, b, c, d, e, f = love.event.poll()
-                if not name then break end
-                if name == "quit" then
-                    if not love.quit or not love.quit() then
-                        return a or 0
-                    end
-                else
-                    love.handlers[name](a, b, c, d, e, f)
-                end
-            end
+    if love.filesystem then
+        if love.filesystem.getInfo("main.lua") then
+            local mainok, mainerr = pcall(function()
+                local chunk, err = love.filesystem.load("main.lua")
+                if chunk then chunk()
+                else error(err) end
+            end)
         end
-        if love.timer then dt = love.timer.step() end
-        if love.wiimote then love.wiimote.update() end
-        if love.update then love.update(dt) end
+    end
 
-        if love.graphics and love.graphics.isActive and love.graphics.isActive() then
-            love.graphics.origin()
-            --love.graphics.clear(love.graphics.getBackgroundColor()) -- TODO: Figure out why this freezes the game
-
-            if love.draw then love.draw() end
-
-            love.graphics.present()
-        end
-
-        love.timer.sleep(1)
+    if noGameCode then
+        error("No code to run\nYour game might be packaged incorrectly.\nMake sure main.lua is at the top level of the zip.")
+    elseif invalidGamePath then
+        error("Cannot load game at path '" .. invalidGamePath .. "'\nMake sure a folder exists at the specified path.")
     end
 end
 
-local function writeLog(msg)
-    local f = io.open("sd:/love_error_lua.log", "a")
-    if f then
-        f:write(msg, "\n")
-        f:close()
-    end
+local print, debug, tostring = print, debug, tostring
+
+local inerror = false
+
+local function error_printer(msg, layer)
+    print((debug.traceback("Error: " .. tostring(msg), 1 + (layer or 1)):gsub("\n[^\n]+$", "")))
 end
 
-function love.errorhandler(err)
-    love.audio.stop()
-    local msg = tostring(err) .. "\n" ..
-                (debug and debug.traceback and debug.traceback("", 2) or "")
-    writeLog(msg)
-
-    love.graphics.setFont(love.graphics.newFont(14))
-    while true do
-        love.graphics.origin()
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.print("Error:", 10, 10)
-        -- get a table of all the lines
-        local lines = {}
-        for line in msg:gmatch("([^\n]*)\n?") do
-            table.insert(lines, line)
-        end
-        local y = 30
-        for i, line in ipairs(lines) do
-            love.graphics.print(line, 10, y)
-            y = y + 20
-        end
-        love.graphics.present()
-
-        love.event.pump()
-        while true do
-            local name, a, b, c, d, e, f = love.event.poll()
-            if not name then break end
-            if name == "quit" then
-                return
-            end
-        end
-    end
+local function deferErrHand(...)
+    local errhand = love.errorhandler or love.errhand
+    local handler = (not inerror and errhand) or error_printer
+    inerror = true
+    func = handler(...)
 end
 
-local function main()
-    if love.filesystem.exists("main.lua") then
-        -- Main.lua exists, so lets check for a conf.lua
-        local t = {
-            --identity = nil, -- Not supported in LoveWii
-            appendidentity = false, -- Sources in the save directory first if true
-            version = "0.1", -- TODO: Implement version checking
-            --accelerometerjoystick = false, -- Not supported in LoveWii
-            --externalstorage = false, -- Not supported in LoveWii
-            --gammacorrect = false, -- Not supported in LoveWii
-
-            audio = {
-                --mic = false, -- Not supported in LoveWii
-                --mixwithsystem = false -- Not supported in LoveWii
-            },
-
-            window = {}, -- Not supported, but here for compatibility
-
-            modules = {
-                audio = true,
-                data = true,
-                event = true,
-                font = true,
-                graphics = true,
-                image = true,
-                --joystick = false, -- No love.joystick module in LoveWii
-                --keyboard = false, -- No love.keyboard module in LoveWii
-                wiimote = true, -- LoveWii specific module
-                mii = true, -- LoveWii specific module
-                math = true,
-                mouse = false, -- No love.mouse module in LoveWii
-                physics = true,
-                sound = true,
-                system = true,
-                thread = true,
-                timer = true,
-                --touch = false, -- No love.touch module in LoveWii
-                --video = false, -- No love.video module in LoveWii
-                --window = false -- No love.window module in LoveWii
-            }
-        }
-
-        if love.filesystem.exists("conf.lua") then
-            local conf = love.filesystem.load("conf.lua")
-            if conf then
-                local ok, res = pcall(conf, t)
-                if not ok then
-                    writeLog("Error in conf.lua: " .. tostring(res))
-                end
-            end
-        end
-
-        if not t.modules.audio then love.audio = nil end
-        if not t.modules.data then love.data = nil end
-        if not t.modules.event then love.event = nil end
-        if not t.modules.font then love.font = nil end
-        if not t.modules.graphics then love.graphics = nil end
-        if not t.modules.image then love.image = nil end
-        --if not t.modules.joystick then love.joystick = nil end
-        --if not t.modules.keyboard then love.keyboard = nil end
-        if not t.modules.wiimote then love.wiimote = nil end
-        if not t.modules.mii then love.mii = nil end
-        if not t.modules.math then love.math = nil end
-        --if not t.modules.mouse then love.mouse = nil end
-        if not t.modules.physics then love.physics = nil end
-        if not t.modules.sound then love.sound = nil end
-        if not t.modules.system then love.system = nil end
-        if not t.modules.thread then love.thread = nil end
-        if not t.modules.timer then love.timer = nil end
-        --if not t.modules.touch then love.touch = nil end
-        --if not t.modules.video then love.video = nil end
-        --if not t.modules.window then love.window = nil end
-
-        if love.filesystem and t.appendidentity then
-            love.filesystem.preferSaveDirectory(true)
-        end
-
-        -- TODO: Implement version checking
-
-        --local min, maj, rev = love.getVersion()
-
-        local version_ok = true -- TODO: Set to false if version is not compatible
-        if not version_ok then
-            print("Warning: Game version is not compatible with this version of LoveWii. Issues may occur.")
-        end
-
-        local chunk = love.filesystem.load("main.lua")
-        if chunk then chunk() end
-    else
-        require("love.nogame")
-        love.nogame()
+local function safe_call(f)
+    local ok, err = pcall(f, deferErrHand)
+    if not ok then
+        return false, err
     end
-
-    love.run()
+    return true
 end
 
-local ok, err = xpcall(main, function(e)
-    return debug and debug.traceback and debug.traceback(e, 2) or tostring(e)
-end)
+local ok = safe_call(love.boot)
+if not ok then return end
 
-if not ok then
-    love.errorhandler(err)
+ok = safe_call(love.init)
+if not ok then return end
+
+if love.run then
+    safe_call(love.run)
 end

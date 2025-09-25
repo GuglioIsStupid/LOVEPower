@@ -3,6 +3,10 @@
 #include <sol/sol.hpp>
 #include <string>
 
+extern "C" {
+    #include <lua.h>
+}
+
 namespace love {
     namespace filesystem {
         void __init(sol::state &state, int argc, char **argv);
@@ -15,6 +19,7 @@ namespace love {
         inline bool  doesPreferSaveDirectory = false;
 
         // API Accessible
+        void                          init(std::string identity);
         sol::protected_function       load(const std::string& file, sol::this_state lua);
         sol::table                    getInfo(const std::string& file, sol::this_state s);
         bool                          exists(const std::string& file, sol::this_state lua);
@@ -34,3 +39,6 @@ namespace love {
         void                          preferSaveDirectory(bool preferSave);
     }
 }
+
+
+int luaopen_love_filesystem(lua_State *L);

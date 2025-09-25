@@ -1,6 +1,9 @@
 #include "physics.hpp"
 
 #include <sol/sol.hpp>
+extern "C" {
+    #include <lua.h>
+}
 
 namespace love {
     namespace physics {
@@ -12,4 +15,13 @@ namespace love {
             
         }
     }
+}
+
+int luaopen_love_physics(lua_State *L) {
+    sol::state_view luastate(L);
+
+    luastate["love"]["physics"] = luastate.create_table(
+    );
+
+    return 1;
 }

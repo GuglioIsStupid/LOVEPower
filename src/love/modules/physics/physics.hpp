@@ -1,6 +1,9 @@
 #pragma once
 
 #include <sol/sol.hpp>
+extern "C" {
+    #include <lua.h>
+}
 
 namespace love {
     namespace physics {
@@ -8,3 +11,5 @@ namespace love {
         void __registerTypes(sol::state &luastate);
     }
 }
+
+int luaopen_love_physics(lua_State *L);

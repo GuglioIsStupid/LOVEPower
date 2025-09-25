@@ -3,6 +3,9 @@
 #include <sol/sol.hpp>
 #include <tuple>
 #include <vector>
+extern "C" {
+    #include <lua.h>
+}
 
 namespace love {
     namespace event {
@@ -20,3 +23,5 @@ namespace love {
 
     }
 }
+
+int luaopen_love_event(lua_State *L);

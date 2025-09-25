@@ -4,6 +4,9 @@
 
 #include <sol/sol.hpp>
 #include "classes/Source.hpp"
+extern "C" {
+    #include <lua.h>
+}
 
 // TODO: Seperate this into a seperate class file
 namespace love {
@@ -22,3 +25,5 @@ namespace love {
         void pause(love::audio::Source* source);
     }
 }
+
+int luaopen_love_audio(lua_State *L);

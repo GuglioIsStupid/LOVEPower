@@ -3,6 +3,9 @@
 #include <sol/sol.hpp>
 #include "mii.h"
 #include "classes/miisafe.hpp"
+extern "C" {
+    #include <lua.h>
+}
 
 namespace {
     std::vector<std::shared_ptr<love::mii::MiiSafe>> miis;
@@ -102,4 +105,14 @@ namespace love {
             return sol::make_object(luastate, t);
         }
     }
+}
+
+int luaopen_love_mii(lua_State *L) {
+    sol::state_view luastate(L);
+
+    luastate["love"]["mii"] = luastate.create_table_with(
+        "getMiis", love::mii::getMiis
+    );
+
+    return 1;
 }

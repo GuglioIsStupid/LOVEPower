@@ -1,5 +1,8 @@
 #include "math.hpp"
 #include "classes/randomGenerator.hpp"
+extern "C" {
+    #include <lua.h>
+}
 
 namespace love {
     namespace math {
@@ -51,4 +54,25 @@ namespace love {
             return g_rng.random(min, max);
         }
     }
+}
+
+int luaopen_love_math(lua_State *L) {
+    sol::state_view luastate(L);
+
+    luastate["love"]["math"] = luastate.create_table_with(
+        "setRandomSeed", sol::overload(
+            static_cast<void(*)(uint32_t)>(&love::math::setRandomSeed_uint32),
+            static_cast<void(*)(uint16_t, uint16_t)>(&love::math::setRandomSeed_parts)
+        ),
+        "setRandomState", love::math::setRandomState,
+        "getRandomSeed", love::math::getRandomSeed,
+        "getRandomState", love::math::getRandomState,
+        "random", sol::overload(
+            static_cast<double(*)()>(&love::math::random),
+            static_cast<double(*)(double)>(&love::math::random_max),
+            static_cast<double(*)(double, double)>(&love::math::random_min_max)
+        )
+    );
+
+    return 1;
 }

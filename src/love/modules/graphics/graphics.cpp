@@ -15,6 +15,12 @@
 #include "graphics.hpp"
 #include "Vera_ttf.h"
 
+#include "../data/data.hpp"
+
+extern "C" {
+    #include <lua.h>
+}
+
 namespace {
     unsigned int color             = 0xffffffff;
     unsigned int backgroundColor   = 0xff000000;
@@ -228,7 +234,7 @@ namespace love {
             return love::graphics::Texture(file);
         }
 
-        love::graphics::Texture newImage_data(const std::vector<uint8_t>& data) {
+        love::graphics::Texture newImage_data(love::data::Data data) {
             return love::graphics::Texture(data);
         }
 
@@ -353,4 +359,76 @@ namespace love {
 
         #pragma endregion
     }
+}
+
+int luaopen_love_graphics(lua_State *L) {
+    sol::state_view luastate(L);
+
+    luastate["love"]["graphics"] = luastate.create_table_with(
+        "setColor", sol::overload(
+            love::graphics::setColor_float4,
+            love::graphics::setColor_float3
+        ),
+        "getColor", love::graphics::getColor,
+        "rectangle", love::graphics::rectangle,
+        "draw", sol::overload(
+            love::graphics::draw,
+            love::graphics::draw_x,
+            love::graphics::draw_x_y,
+            love::graphics::draw_x_y_r,
+            love::graphics::draw_x_y_r_sx,
+            love::graphics::draw_x_y_r_sx_sy,
+            love::graphics::draw_x_y_r_sx_sy_ox,
+            love::graphics::draw_x_y_r_sx_sy_ox_oy,
+
+            love::graphics::draw_quad,
+            love::graphics::draw_quad_x,
+            love::graphics::draw_quad_x_y,
+            love::graphics::draw_quad_x_y_r,
+            love::graphics::draw_quad_x_y_r_sx,
+            love::graphics::draw_quad_x_y_r_sx_sy,
+            love::graphics::draw_quad_x_y_r_sx_sy_ox,
+            love::graphics::draw_quad_x_y_r_sx_sy_ox_oy
+        ),
+        "setFont", love::graphics::setFont,
+        "newFont", sol::overload(
+            love::graphics::newFont,
+            love::graphics::newFont_size,
+            love::graphics::newFont_file,
+            love::graphics::newFont_file_size
+        ),
+        "print", sol::overload(
+            love::graphics::print,
+            love::graphics::print_x,
+            love::graphics::print_x_y,
+            love::graphics::print_x_y_r,
+            love::graphics::print_x_y_r_sx,
+            love::graphics::print_x_y_r_sx_sy,
+            love::graphics::print_x_y_r_sx_sy_ox,
+            love::graphics::print_x_y_r_sx_sy_ox_oy
+        ),
+        "newImage", sol::overload(
+            love::graphics::newImage,
+            love::graphics::newImage_data
+        ),
+        "newQuad", love::graphics::newQuad,
+        "setBackgroundColor", sol::overload(
+            love::graphics::setBackgroundColor_float4,
+            love::graphics::setBackgroundColor_float3
+        ),
+        "getBackgroundColor", love::graphics::getBackgroundColor,
+        "clear", sol::overload(
+            love::graphics::clear_float4,
+            love::graphics::clear_float3,
+            love::graphics::clear
+        ),
+        "isActive", love::graphics::isActive,
+        "origin", love::graphics::origin,
+        "present", love::graphics::present,
+        "getWidth", love::graphics::getWidth,
+        "getHeight", love::graphics::getHeight,
+        "getDimensions", love::graphics::getDimensions
+    );
+
+    return 1;
 }

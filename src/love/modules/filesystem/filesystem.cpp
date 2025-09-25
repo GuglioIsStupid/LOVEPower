@@ -6,6 +6,9 @@
 #include <ctime>
 
 #include "filesystem.hpp"
+extern "C" {
+    #include <lua.h>
+}
 
 namespace love {
     namespace filesystem {
@@ -42,6 +45,17 @@ namespace love {
             }
 
             return path;
+        }
+
+        void init(std::string identity) { // Lua accesible
+            // identity is the new path to use for save and game files
+            if (identity.empty()) {
+                identity = "sd:/lovewii";
+            }
+            std::filesystem::current_path(identity);
+
+            createDirectories("game");
+            createDirectories("save");
         }
 
         bool fileExists(const std::string& file) {
@@ -84,4 +98,18 @@ namespace love {
             doesPreferSaveDirectory = preferSave;
         }
     }
+}
+
+int luaopen_love_filesystem(lua_State *L)  {
+    sol::state_view luastate(L);
+
+    luastate["love"]["filesystem"] = luastate.create_table_with(
+        "init", love::filesystem::init,
+        "load", love::filesystem::load,
+        "getInfo", love::filesystem::getInfo,
+        "exists", love::filesystem::exists,
+        "preferSaveDirectory", love::filesystem::preferSaveDirectory
+    );
+
+    return 1;
 }

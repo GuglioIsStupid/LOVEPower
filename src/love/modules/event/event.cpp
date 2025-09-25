@@ -7,6 +7,9 @@
 #include <cstdlib>
 #include "event.hpp"
 #include <ogc/system.h>
+extern "C" {
+    #include <lua.h>
+}
 
 namespace love {
     namespace event {
@@ -81,4 +84,17 @@ namespace love {
             std::exit(0);
         }
     }
+}
+
+int luaopen_love_event(lua_State *L) {
+    sol::state_view luastate(L);
+
+    luastate["love"]["event"] = luastate.create_table_with(
+        "pump", love::event::pump,
+        "poll", love::event::poll,
+        "push", love::event::push,
+        "quit", love::event::quit
+    );
+
+    return 1;
 }

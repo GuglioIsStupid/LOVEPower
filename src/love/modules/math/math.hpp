@@ -3,6 +3,9 @@
 #include <sol/sol.hpp>
 
 #include "classes/randomGenerator.hpp"
+extern "C" {
+    #include <lua.h>
+}
 
 namespace love {
     namespace math {
@@ -26,3 +29,5 @@ namespace love {
         std::string getRandomState();
     }
 }
+
+int luaopen_love_math(lua_State *L);

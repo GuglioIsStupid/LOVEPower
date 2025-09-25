@@ -5,6 +5,7 @@
 
 #include <sol/sol.hpp>
 #include <grrlib.h>
+#include "../../data/data.hpp"
 
 namespace love {
     namespace graphics {
@@ -20,7 +21,7 @@ namespace love {
             std::tuple<int, int> getDimensions() const;
 
             Texture(std::string file);
-            Texture(const std::vector<uint8_t>& data);
+            Texture(love::data::Data data);
         };
     }
 }

@@ -1,3 +1,5 @@
+local love = require("love")
+
 function love.nogame()
     -- TODO: Make this pretty?
     function love.draw()

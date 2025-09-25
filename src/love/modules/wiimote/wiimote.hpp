@@ -3,6 +3,9 @@
 #include <sol/sol.hpp>
 #include <vector>
 #include <string>
+extern "C" {
+    #include <lua.h>
+}
 
 #include "classes/wiimoteController.hpp"
 #include "classes/balanceBoard.hpp"
@@ -19,3 +22,5 @@ namespace love {
         void    update();
     }
 }
+
+int luaopen_love_wiimote(lua_State *L);

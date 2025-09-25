@@ -39,7 +39,7 @@ SOURCES		:=	src \
 				src/lib/GRRLIB \
 				src/lib/GRRLIB/grrlib
 
-DATA		:=	data
+DATA		:=	data 
 INCLUDES    :=  src/lib/ 
 
 #---------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ LDFLAGS	    =  -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 # the order can-be/is critical
 #---------------------------------------------------------------------------------
 LIBS	:= -lfreetype -lbz2 -lpng -ljpeg -lz -lfat
-LIBS	+= -llua
+LIBS	+= -L$(CURDIR)/lib/ -lluajit
 LIBS	+= -lwiiuse
 LIBS	+= -lmodplay -laesnd
 LIBS	+= -lbte -logc -lm

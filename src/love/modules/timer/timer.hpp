@@ -1,6 +1,9 @@
 #pragma once
 
 #include <sol/sol.hpp>
+extern "C" {
+    #include <lua.h>
+}
 
 namespace love {
     namespace timer {
@@ -11,3 +14,5 @@ namespace love {
         double  getFPS();
     }
 }
+
+int luaopen_love_timer(lua_State *L);
