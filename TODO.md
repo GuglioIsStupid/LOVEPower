@@ -1,2 +1,4 @@
 - love.keyboard *(Via libwiikeyboard)*
 - love.thread *(Via wii-sdl)*
+- love.joystick *(Via GC controller)*
+- Create dummy functions for missing functions
