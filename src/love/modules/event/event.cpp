@@ -10,6 +10,8 @@
 extern "C" {
     #include <lua.h>
 }
+#include <malloc.h>
+#include <ogcsys.h>
 
 namespace love {
     namespace event {
@@ -29,6 +31,22 @@ namespace love {
 
         static void onWpadPower(int chan) {
             requestQuit = true;
+        }
+
+        static bool checkLowMemory() {
+            // guh???
+            u32 mem1Free = (u32)((uintptr_t)SYS_GetArena1Hi() - (uintptr_t)SYS_GetArena1Lo());
+            u32 mem2Free = (u32)((uintptr_t)SYS_GetArena2Hi() - (uintptr_t)SYS_GetArena2Lo());
+
+            struct mallinfo mi = mallinfo();
+
+            const u32 MEM1_THRESHOLD = 512 * 1024;
+            const u32 MEM2_THRESHOLD = 2 * 1024 * 1024;
+            const u32 MALLOC_THRESHOLD = 512 * 1024;
+
+            return (mem1Free < MEM1_THRESHOLD) || 
+                (mem2Free < MEM2_THRESHOLD) || 
+                (mi.fordblks < (int)MALLOC_THRESHOLD);
         }
 
         void __init(sol::state & luastate) {
@@ -57,6 +75,10 @@ namespace love {
                     SYS_ResetSystem(SYS_POWEROFF, 0, 0);
                     exit(0);
                 }
+            }
+
+            if (checkLowMemory()) {
+                __pushEvent(lua, "lowmemory");
             }
         }
 

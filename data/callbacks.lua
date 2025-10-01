@@ -4,7 +4,12 @@ function love.createhandlers()
     love.handlers = setmetatable({
         quit = function()
 			return
-		end
+		end,
+        lowmemory = function()
+            if love.lowmemory then love.lowmemory() end
+            collectgarbage()
+            collectgarbage()
+        end
     }, {
         __index = function(self, name)
             error("Unknown event: " .. name)
