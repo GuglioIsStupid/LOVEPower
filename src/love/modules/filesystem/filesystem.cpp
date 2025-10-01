@@ -13,8 +13,8 @@ extern "C" {
 namespace love {
     namespace filesystem {
         void __init(sol::state &luastate, int argc, char **argv) {
-            createDirectories("sd:/lovewii");
-            std::filesystem::current_path("sd:/lovewii");
+            createDirectories("sd:/PowerLove");
+            std::filesystem::current_path("sd:/PowerLove");
 
             createDirectories("game");
             createDirectories("save");
@@ -50,7 +50,7 @@ namespace love {
         void init(std::string identity) { // Lua accesible
             // identity is the new path to use for save and game files
             if (identity.empty()) {
-                identity = "sd:/lovewii";
+                identity = "sd:/PowerLove";
             }
             std::filesystem::current_path(identity);
 

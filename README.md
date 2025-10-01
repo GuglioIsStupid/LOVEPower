@@ -1,6 +1,6 @@
-# LÖVEWii
+# PowerLÖVE
 
-A "port" of LÖVE2D to the Wii. Based heavily off of [WiiLove](https://github.com/HTV04/WiiLove)
+A "port" of LÖVE2D to the Wii. Based off of [WiiLove](https://github.com/HTV04/WiiLove)
 
 PR's are heavily appreaciated! I'm still new to this stuff
 

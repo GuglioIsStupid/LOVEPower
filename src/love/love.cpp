@@ -156,7 +156,7 @@ int luaopen_love_jitsetup(lua_State *L) {
 
 namespace love {
     void logError(const std::string &msg) {
-        std::ofstream log("sd:/lovewii_cpp_error.log", std::ios::app); // append mode
+        std::ofstream log("sd:/PowerLove_cpp_error.log", std::ios::app); // append mode
         if (log.is_open()) {
             log << msg << std::endl;
         }
