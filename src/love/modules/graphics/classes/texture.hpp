@@ -22,6 +22,7 @@ namespace love {
 
             Texture(std::string file);
             Texture(love::data::Data data);
+            Texture();
         };
     }
 }

@@ -8,6 +8,7 @@
 #include "classes/texture.hpp"
 #include "classes/font.hpp"
 #include "classes/quad.hpp"
+
 extern "C" {
     #include <lua.h>
 }
@@ -91,6 +92,12 @@ namespace love {
         void clear_float4(float r, float g, float b, float a);
         void clear_float3(float r, float g, float b);
         void clear();
+
+        void push();
+        void pop();
+        void translate(float x, float y);
+        void rotate(float r);
+        void scale(float sx, float sy);
 
         int getWidth();
         int getHeight();

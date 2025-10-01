@@ -34,6 +34,16 @@ namespace love {
             height = texture->h;
         }
 
+        Texture::Texture() {
+            texture = GRRLIB_CreateEmptyTexture(4, 4);
+            if (!texture) {
+                throw std::runtime_error("Failed to create empty texture");
+            }
+
+            width = 4;
+            height = 4;
+        }
+
         int Texture::getWidth() const {
             return width;
         }

@@ -11,6 +11,7 @@
 #include "classes/texture.hpp"
 #include "classes/font.hpp"
 #include "classes/quad.hpp"
+#include "classes/transform.hpp"
 
 #include "graphics.hpp"
 #include "Vera_ttf.h"
@@ -28,6 +29,8 @@ namespace {
     
     int width  = 640;
     int height = 480;
+
+    std::vector<love::graphics::Transform> transforms;
 }
 
 namespace love {
@@ -140,6 +143,9 @@ namespace love {
             float x, float y, float rotation, float sx, float sy,
             float ox, float oy
         ) {
+            if (!texture.texture) {
+                return;
+            }
             float rotationDeg = rotation * (180.0f / M_PI);
             float cos_r = cos(rotation);
             float sin_r = sin(rotation);
@@ -149,6 +155,15 @@ namespace love {
 
             x -= rx;
             y -= ry;
+
+            if (transforms.size() > 0) {
+                auto &t = transforms.back();
+                x += t.x;
+                y += t.y;
+                rotationDeg += t.r * (180.0f / M_PI);
+                sx *= t.sx;
+                sy *= t.sy;
+            }
 
             GRRLIB_DrawImg(x, y, texture.texture, rotationDeg, sx, sy, color);
         }
@@ -157,6 +172,9 @@ namespace love {
             float x, float y, float rotation, float sx, float sy,
             float ox, float oy
         ) {
+            if (!texture.texture) {
+                return;
+            }
             float rotationDeg = rotation * (180.0f / M_PI);
             float cos_r = cos(rotation);
             float sin_r = sin(rotation);
@@ -166,6 +184,15 @@ namespace love {
 
             x -= rx;
             y -= ry;
+
+            if (transforms.size() > 0) {
+                auto &t = transforms.back();
+                x += t.x;
+                y += t.y;
+                rotationDeg += t.r * (180.0f / M_PI);
+                sx *= t.sx;
+                sy *= t.sy;
+            }
 
             GRRLIB_DrawPart(
                 x, y,
@@ -238,6 +265,10 @@ namespace love {
             return love::graphics::Texture(data);
         }
 
+        love::graphics::Texture newImage_empty() {
+            return love::graphics::Texture();
+        }
+
         love::graphics::Quad newQuad(float x, float y, float width, float height, float sw, float sh) {
             return love::graphics::Quad(x, y, width, height, sw, sh);
         }
@@ -264,14 +295,25 @@ namespace love {
             if (!curFont) {
                 throw std::runtime_error("No font set for printing text.");
             }
-            if (ox != 0 || oy != 0) {
-                x -= ox * sx;
-                y -= oy * sy;
-                float cos_r = cos(rotation);
-                float sin_r = sin(rotation);
-                x += ox * cos_r - oy * sin_r;
-                y += ox * sin_r + oy * cos_r;
+            float rotationDeg = rotation * (180.0f / M_PI);
+            float cos_r = cos(rotation);
+            float sin_r = sin(rotation);
+
+            float rx = ox * sx * cos_r - oy * sy * sin_r;
+            float ry = ox * sx * sin_r + oy * sy * cos_r;
+
+            x -= rx;
+            y -= ry;
+
+            if (transforms.size() > 0) {
+                auto &t = transforms.back();
+                x += t.x;
+                y += t.y;
+                rotationDeg += t.r * (180.0f / M_PI);
+                sx *= t.sx;
+                sy *= t.sy;
             }
+
             GXColor gxColor = make_gxcolor_from_uint32(color);
             auto wide = utf8_to_wchar_vec(text);
             curFont->font->drawText(float_to_int16_rounded(x), float_to_int16_rounded(y), wide.data(), gxColor, FTGX_NULL);
@@ -345,6 +387,38 @@ namespace love {
             GRRLIB_Render();
         }
 
+        void push() {
+            if (!transforms.empty()) {
+                transforms.push_back(transforms.back().clone());
+            } else {
+                transforms.push_back(Transform());
+            }
+        }
+        
+        void pop() {
+            if (!transforms.empty()) {
+                transforms.pop_back();
+            }
+        }
+        
+        void translate(float x, float y) {
+            if (!transforms.empty()) {
+                transforms.back().translate(x, y);
+            }
+        }
+        
+        void rotate(float r) {
+            if (!transforms.empty()) {
+                transforms.back().rotate(r);
+            }
+        }
+        
+        void scale(float sx, float sy) {
+            if (!transforms.empty()) {
+                transforms.back().scale(sx, sy);
+            }
+        }
+        
         int getWidth() {
             return width;
         }
@@ -409,7 +483,8 @@ int luaopen_love_graphics(lua_State *L) {
         ),
         "newImage", sol::overload(
             love::graphics::newImage,
-            love::graphics::newImage_data
+            love::graphics::newImage_data,
+            love::graphics::newImage_empty
         ),
         "newQuad", love::graphics::newQuad,
         "setBackgroundColor", sol::overload(
@@ -425,6 +500,11 @@ int luaopen_love_graphics(lua_State *L) {
         "isActive", love::graphics::isActive,
         "origin", love::graphics::origin,
         "present", love::graphics::present,
+        "push", love::graphics::push,
+        "pop", love::graphics::pop,
+        "translate", love::graphics::translate,
+        "rotate", love::graphics::rotate,
+        "scale", love::graphics::scale,
         "getWidth", love::graphics::getWidth,
         "getHeight", love::graphics::getHeight,
         "getDimensions", love::graphics::getDimensions
