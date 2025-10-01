@@ -8,14 +8,14 @@ local invalidGamePath = nil
 
 function love.boot()
     require("love.filesystem")
-    local arg0 = love.arg.getLow(arg) or "sd:/PowerLove/PowerLove.dol"
+    local arg0 = love.arg.getLow(arg) or "sd:/LOVEPower/LOVEPower.dol"
     if type(arg0) == "string" and arg0 ~= "" then
         -- Dolpin or something like that
-        arg0 = "sd:/PowerLove/"
+        arg0 = "sd:/LOVEPower/"
     else
         arg0 = arg0:match("^(.-)[^/\\]-$") -- Gets the directory of the executable
         if arg0 == nil or arg0 == "" then -- Fall back to default
-            arg0 = "sd:/PowerLove/"
+            arg0 = "sd:/LOVEPower/"
         end
     end
     love.filesystem.init(arg0)
@@ -41,7 +41,7 @@ end
 
 function love.init()
     local c = {
-        --title = "PowerLove", -- Not used in PowerLove
+        --title = "LOVEPower", -- Not used in LOVEPower
         version = "0.1", -- TODO: Implement version checking
         window = {}, -- Not supported, but here for compatibility
         modules = {
@@ -51,30 +51,30 @@ function love.init()
             font = true,
             graphics = true,
             image = true,
-            --joystick = false, -- No love.joystick module in PowerLove
-            --keyboard = false, -- No love.keyboard module in PowerLove
-            wiimote = true, -- PowerLove specific module
-            mii = true, -- PowerLove specific module
+            --joystick = false, -- No love.joystick module in LOVEPower
+            --keyboard = false, -- No love.keyboard module in LOVEPower
+            wiimote = true, -- LOVEPower specific module
+            mii = true, -- LOVEPower specific module
             math = true,
-            mouse = false, -- No love.mouse module in PowerLove
+            mouse = false, -- No love.mouse module in LOVEPower
             physics = true,
             sound = true,
             system = true,
             timer = true,
-            --touch = false, -- No love.touch module in PowerLove
-            --video = false, -- No love.video module in PowerLove
-            --window = false -- No love.window module in PowerLove
+            --touch = false, -- No love.touch module in LOVEPower
+            --video = false, -- No love.video module in LOVEPower
+            --window = false -- No love.window module in LOVEPower
         },
         audio = {
-            --mic = false, -- Not supported in PowerLove
-            --mixwithsystem = false -- Not supported in PowerLove
+            --mic = false, -- Not supported in LOVEPower
+            --mixwithsystem = false -- Not supported in LOVEPower
         },
-        --console = false, -- Not supported in PowerLove
-        --identity = nil, -- Not supported in PowerLove
+        --console = false, -- Not supported in LOVEPower
+        --identity = nil, -- Not supported in LOVEPower
         appendidentity = false, -- Sources in the save directory first if true
-        --accelerometerjoystick = false, -- Not supported in PowerLove
-        --externalstorage = false, -- Not supported in PowerLove
-        --gammacorrect = false, -- Not supported in PowerLove
+        --accelerometerjoystick = false, -- Not supported in LOVEPower
+        --externalstorage = false, -- Not supported in LOVEPower
+        --gammacorrect = false, -- Not supported in LOVEPower
     }
 
     local openedconsole = false

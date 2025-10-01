@@ -461,7 +461,7 @@ bool player::play() {
 		data.aesnd_pb = AESND_AllocateVoice(aesnd_callback);
 		AESND_SetVoiceUserData(data.aesnd_pb, this);
 #else
-        // [PowerLove] Replaced AESND_AllocateVoice with AESND_AllocateVoiceWithArg
+        // [LOVEPower] Replaced AESND_AllocateVoice with AESND_AllocateVoiceWithArg
 		data.aesnd_pb = AESND_AllocateVoiceWithArg(aesnd_callback, this);
 		if (data.aesnd_pb == nullptr) {
 			data.playing = false;
