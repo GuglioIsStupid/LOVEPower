@@ -32,6 +32,8 @@ namespace {
     int width  = 640;
     int height = 480;
 
+    int lineWidth = 1;
+
     std::vector<love::graphics::Transform> transforms;
 }
 
@@ -186,6 +188,50 @@ namespace love {
                 colors[i] = color;
             }
             GRRLIB_GXEngine(verts.data(), colors, size / 2, fill ? GX_TRIANGLEFAN : GX_LINESTRIP);
+        }
+
+        void line_variadic(sol::variadic_args args) {
+            GX_SetLineWidth(lineWidth, GX_TO_ZERO);
+
+            std::vector<guVector> verts;
+            unsigned int size = args.size();
+            verts.reserve(size / 2);
+            for (unsigned int i = 0; i < size; i += 2) {
+                verts.push_back(guVector{
+                    args[i].as<float>(),
+                    args[i + 1].as<float>(),
+                    0.0
+                });
+            }
+
+            GX_Begin(GX_LINES, GX_VTXFMT0, size / 2);
+                for (unsigned int i = 0; i < size / 2; i++) {
+                    GX_Color1u32(color); // Colour is always the same
+                    GX_Position3f32(verts[i].x, verts[i].y, 0.0f);
+                }
+            GX_End();
+        }
+
+        void line_verts(sol::table vertices) {
+            GX_SetLineWidth(lineWidth, GX_TO_ZERO);
+
+            std::vector<guVector> verts;
+            unsigned int size = vertices.size();
+            verts.reserve(size / 2);
+            for (unsigned int i = 1; i < size; i += 2) {
+                verts.push_back(guVector{
+                    vertices.get<float>(i),
+                    vertices.get<float>(i + 1),
+                    0.0
+                });
+            }
+
+            GX_Begin(GX_LINES, GX_VTXFMT0, size / 2);
+                for (unsigned int i = 0; i < size / 2; i++) {
+                    GX_Color1u32(color);
+                    GX_Position3f32(verts[i].x, verts[i].y, 0.0f);
+                }
+            GX_End();
         }
 
         #pragma region Textures
@@ -482,6 +528,17 @@ namespace love {
             return std::make_tuple(getWidth(), getHeight());
         }
 
+        void setLineWidth(int width) {
+            if (width < 1) {
+                width = 1;
+            }
+            lineWidth = width;
+        }
+
+        int getLineWidth() {
+            return lineWidth;
+        }
+
         #pragma endregion
     }
 }
@@ -501,6 +558,10 @@ int luaopen_love_graphics(lua_State *L) {
             love::graphics::polygon_verts
         ),
         "circle", love::graphics::circle,
+        "line", sol::overload(
+            love::graphics::line_variadic,
+            love::graphics::line_verts
+        ),
         "draw", sol::overload(
             love::graphics::draw,
             love::graphics::draw_x,
@@ -563,7 +624,10 @@ int luaopen_love_graphics(lua_State *L) {
         "scale", love::graphics::scale,
         "getWidth", love::graphics::getWidth,
         "getHeight", love::graphics::getHeight,
-        "getDimensions", love::graphics::getDimensions
+        "getDimensions", love::graphics::getDimensions,
+
+        "setLineWidth", love::graphics::setLineWidth,
+        "getLineWidth", love::graphics::getLineWidth
     );
 
     return 1;

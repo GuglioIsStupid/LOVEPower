@@ -35,7 +35,10 @@ namespace love {
 
         void rectangle(const std::string &mode, float x, float y, float width, float height);
         void circle(const std::string &mode, float x, float y, float radius);
-        void polygon(const std::string &mode, sol::variadic_args args);
+       /*  void polygon_variadic(const std::string &mode, sol::variadic_args args);
+        void polygon_verts(const std::string &mode, std::vector<std::tuple<float, float>> verts); */
+        /* void line_variadic(sol::variadic_args args);
+        void line_verts(std::vector<std::tuple<float, float>> verts); */
 
         #pragma region Textures
 
@@ -104,6 +107,9 @@ namespace love {
         int getWidth();
         int getHeight();
         std::tuple<int, int> getDimensions();
+
+        void setLineWidth(int width);
+        int getLineWidth();
 
         #pragma endregion
     }

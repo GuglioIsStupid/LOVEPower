@@ -6,10 +6,11 @@
 #include <sol/sol.hpp>
 #include <grrlib.h>
 #include "../../data/data.hpp"
+#include "../../../common/Object.h"
 
 namespace love {
     namespace graphics {
-        struct Texture {
+        struct Texture : public Object {
             GRRLIB_texImg *texture;
 
             int width;

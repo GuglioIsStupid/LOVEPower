@@ -56,6 +56,7 @@ function love.run()
             end
 
             love.timer.sleep(0.001)
+            collectgarbage("step")
         end
     end
 end

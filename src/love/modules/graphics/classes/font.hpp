@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "../../../common/Object.h"
+
 namespace {
     [[maybe_unused]] 
     std::vector<wchar_t> utf8_to_wchar_vec(std::string s) {
@@ -23,7 +25,7 @@ namespace {
 
 namespace love {
     namespace graphics {
-        struct Font {
+        struct Font : public Object {
             void       _createFont(const uint8_t* newFont, int dataSize, int size);
 
             FreeTypeGX *font;

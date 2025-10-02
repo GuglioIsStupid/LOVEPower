@@ -2,9 +2,11 @@
 
 #include <tuple>
 
+#include "../../../common/Object.h"
+
 namespace love {
     namespace graphics {
-        struct Quad {
+        struct Quad : public Object {
             float quadX;
             float quadY;
             float quadWidth;

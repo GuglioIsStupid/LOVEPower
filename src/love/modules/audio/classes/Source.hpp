@@ -3,9 +3,11 @@
 #include <string>
 #include <audiogc/audiogc.hpp>
 
+#include "../../../common/Object.h"
+
 namespace love {
     namespace audio {
-        struct Source {
+        struct Source : public Object {
             Source(std::string file, std::string mode);
             
             void play();
