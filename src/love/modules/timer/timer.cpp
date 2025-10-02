@@ -7,67 +7,78 @@ extern "C" {
 }
 #include "timer.hpp"
 
-namespace {
-    std::uint64_t lastTime;
-	double deltaTime = 0.0;
-
-	std::uint64_t lastFrameTime;
-	double fps = 0.0;
-	double avgDelta = 0.0;
-	double frames = 0.0;
-}
-
 namespace love {
     namespace timer {
-        void __init(sol::state &luastate) {
-            lastTime = gettime();
-            lastFrameTime = lastTime;
-        }
+        double _currTime = 0.0;
+        double _prevTime = 0.0;
+        double _prevFpsUpdate = 0.0;
 
-        void sleep(float ms) {
-            if (ms <= 0) {
-                return;
-            }
-            usleep((static_cast<unsigned int>(ms * 1000.0)));
+        int _fps = 0;
+        double _averageDelta = 0.0;
+        double _fpsUpdateFrequency = 1.0;
+        int _frames = 0;
+        double _dt = 0.0;
+        
+        void __init(sol::state &luastate) {
+            _prevFpsUpdate = _currTime = getTime();
         }
 
         double step() {
-            const std::uint64_t curTime = gettime();
+            _frames++;
 
-            const double secondsSinceLastFPSUpdate = static_cast<double>(curTime - lastFrameTime) / (static_cast<double>(TB_TIMER_CLOCK) * 1000.0);
-            deltaTime = static_cast<double>(curTime - lastTime) / (static_cast<double>(TB_TIMER_CLOCK) * 1000.0);
+            _prevTime = _currTime;
+            _currTime = getTime();
 
-            frames++;
+            _dt = _currTime - _prevTime;
 
-            if (secondsSinceLastFPSUpdate >= 1.0) {
-                fps = static_cast<int>(frames);
-                if (frames > 0.0) {
-                    avgDelta = secondsSinceLastFPSUpdate / frames;
-                } else {
-                    avgDelta = 0.0;
-                }
-
-                frames = 0.0;
-                lastFrameTime = curTime;
+            double timeSinceLast = _currTime - _prevFpsUpdate;
+            if (timeSinceLast > _fpsUpdateFrequency) {
+                _fps = int((_frames/timeSinceLast) + 0.5);
+                _averageDelta = timeSinceLast / _frames;
+                _prevFpsUpdate = _currTime;
+                _frames = 0;
             }
 
-            lastTime = curTime;
-            return deltaTime;
+            return _dt;
         }
 
-        double getFPS() {
-            return fps;
+        void sleep(double seconds) {
+            if (seconds >= 0)
+                usleep((useconds_t)(seconds * 1e6));
         }
-    }
+
+        double getDelta() {
+            return _dt;
+        }
+
+        int getFPS() {
+            return _fps;
+        }
+
+        double getAverageDelta() {
+            return _averageDelta;
+        }
+
+        double getTime() {
+            static const u64 start = gettime();
+            const u64 now = gettime();
+            const u64 diff = now - start;
+
+            return (double)ticks_to_microsecs(diff) / 1.0e6;
+        }
+    }   
 }
 
 int luaopen_love_timer(lua_State *L) {
     sol::state_view luastate(L);
 
     luastate["love"]["timer"] = luastate.create_table_with(
-        "sleep", love::timer::sleep,
-        "step", love::timer::step,
-        "getFPS", love::timer::getFPS
+        "step", &love::timer::step,
+        "sleep", &love::timer::sleep,
+        "getDelta", &love::timer::getDelta,
+        "getFPS", &love::timer::getFPS,
+        "getAverageDelta", &love::timer::getAverageDelta,
+        "getTime", &love::timer::getTime
     );
 
     return 1;

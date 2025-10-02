@@ -50,8 +50,7 @@ function love.run()
                 love.graphics.present()
             end
 
-            -- 1 = 0.001 seconds
-            love.timer.sleep(1) -- TODO: Make this take seconds
+            love.timer.sleep(0.001)
         end
     end
 end

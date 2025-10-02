@@ -9,9 +9,22 @@ namespace love {
     namespace timer {
         void    __init(sol::state &luastate);
 
-        void    sleep(float ms);
-        double  step();
-        double  getFPS();
+        double step();
+        void sleep(double seconds);
+        double getDelta();
+        int getFPS();
+        double getAverageDelta();
+        double getTime();
+
+        extern double _currTime;
+        extern double _prevTime;
+        extern double _prevFpsUpdate;
+
+        extern int _fps;
+        extern double _averageDelta;
+        extern double _fpsUpdateFrequency;
+        extern int _frames;
+        extern double _dt;
     }
 }
 
