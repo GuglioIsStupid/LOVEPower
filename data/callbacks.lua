@@ -46,6 +46,11 @@ function love.run()
             if love.graphics and love.graphics.isActive() then
                 love.graphics.origin()
                 --love.graphics.clear(love.graphics.getBackgroundColor()) -- TODO: Figure out why this freezes the game
+                -- until then, render a rectangle
+                local lastColor = {love.graphics.getColor()}
+                love.graphics.setColor(love.graphics.getBackgroundColor())
+                love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+                love.graphics.setColor(unpack(lastColor))
                 if love.draw then love.draw() end
                 love.graphics.present()
             end

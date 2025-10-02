@@ -107,7 +107,7 @@ function love.init()
         "window",
         "graphics",
         "math",
-        --"physics",
+        "physics",
         "wiimote",
         "mii"
     } do

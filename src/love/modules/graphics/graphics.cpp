@@ -139,6 +139,55 @@ namespace love {
             GRRLIB_Rectangle(x, y, width, height, color, mode.compare("fill") == 0);
         }
 
+        void circle(const std::string &mode, float x, float y, float radius) {
+            GRRLIB_Circle(x, y, radius, color, mode.compare("fill") == 0);
+        }
+
+        void polygon_variadic(const std::string &mode, sol::variadic_args args) {
+            std::vector<guVector> verts;
+            
+            unsigned int size = args.size();
+
+            verts.reserve(size / 2);
+            for (unsigned int i = 0; i < size; i += 2) {
+                verts.push_back(guVector{
+                    args[i].as<float>(),
+                    args[i + 1].as<float>(),
+                    0.0
+                });
+            }
+
+            bool fill = mode.compare("fill") == 0;
+            u32 colors[size / 2];
+            for (unsigned int i = 0; i < size / 2; i++) {
+                colors[i] = color;
+            }
+            GRRLIB_GXEngine(verts.data(), colors, size / 2, fill ? GX_TRIANGLEFAN : GX_LINESTRIP);
+        }
+
+        void polygon_verts(const std::string &mode, sol::table vertices) {
+            std::vector<guVector> verts;
+            
+            unsigned int size = vertices.size();
+
+            verts.reserve(size / 2);
+
+            for (unsigned int i = 1; i < size; i += 2) {
+                verts.push_back(guVector{
+                    vertices.get<float>(i),
+                    vertices.get<float>(i + 1),
+                    0.0
+                });
+            }
+
+            bool fill = mode.compare("fill") == 0;
+            u32 colors[size / 2];
+            for (unsigned int i = 0; i < size / 2; i++) {
+                colors[i] = color;
+            }
+            GRRLIB_GXEngine(verts.data(), colors, size / 2, fill ? GX_TRIANGLEFAN : GX_LINESTRIP);
+        }
+
         #pragma region Textures
 
         void _draw(love::graphics::Texture &texture,
@@ -447,6 +496,11 @@ int luaopen_love_graphics(lua_State *L) {
         ),
         "getColor", love::graphics::getColor,
         "rectangle", love::graphics::rectangle,
+        "polygon", sol::overload(
+            love::graphics::polygon_variadic,
+            love::graphics::polygon_verts
+        ),
+        "circle", love::graphics::circle,
         "draw", sol::overload(
             love::graphics::draw,
             love::graphics::draw_x,

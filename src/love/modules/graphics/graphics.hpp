@@ -34,6 +34,8 @@ namespace love {
         #pragma region Shapes
 
         void rectangle(const std::string &mode, float x, float y, float width, float height);
+        void circle(const std::string &mode, float x, float y, float radius);
+        void polygon(const std::string &mode, sol::variadic_args args);
 
         #pragma region Textures
 

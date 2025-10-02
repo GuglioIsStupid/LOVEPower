@@ -26,6 +26,9 @@ extern "C" {
     #include "modules/mii/miimodule.hpp"
 #endif
 #include "modules/window/window.hpp"
+#include "modules/physics/box2d/wrap_Physics.h"
+
+#include "common/Exception.h"
 
 #include "callbacks_lua.h"
 #include "boot_lua.h"
@@ -44,6 +47,8 @@ extern "C" {
 #define LOVE_VERSION_SUFFIX "UNKNOWN"
 #define LOVE_VERSION_STRING (std::to_string(LOVE_VERSION_MAJOR) + "." + std::to_string(LOVE_VERSION_MINOR) + "." + std::to_string(LOVE_VERSION_REVISION) + "-" + LOVE_VERSION_SUFFIX)
 
+extern int luaopen_love_physics(lua_State*);
+
 static const luaL_Reg modules[] = {
     {"love", luaopen_love},
     {"love.graphics", luaopen_love_graphics},
@@ -59,6 +64,7 @@ static const luaL_Reg modules[] = {
         {"love.mii", luaopen_love_mii},
     #endif
     {"love.window", luaopen_love_window},
+    {"love.physics", love::physics::box2d::luaopen_love_physics},
 
     {"love.nogame", luaopen_love_nogame},
     {"love.arg", luaopen_love_arg},
@@ -155,6 +161,7 @@ int luaopen_love_jitsetup(lua_State *L) {
 
     return 1;
 }
+
 
 namespace love {
     void UNUSED();
