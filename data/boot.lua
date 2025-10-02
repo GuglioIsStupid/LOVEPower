@@ -63,7 +63,7 @@ function love.init()
             timer = true,
             --touch = false, -- No love.touch module in LOVEPower
             --video = false, -- No love.video module in LOVEPower
-            --window = false -- No love.window module in LOVEPower
+            window = false -- Dummy module available
         },
         audio = {
             --mic = false, -- Not supported in LOVEPower
@@ -104,7 +104,7 @@ function love.init()
         "audio",
         --"image",
         --"font",
-        --"window",
+        "window",
         "graphics",
         "math",
         --"physics",

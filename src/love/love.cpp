@@ -25,6 +25,7 @@ extern "C" {
 #ifdef USE_LIBMII
     #include "modules/mii/miimodule.hpp"
 #endif
+#include "modules/window/window.hpp"
 
 #include "callbacks_lua.h"
 #include "boot_lua.h"
@@ -57,6 +58,7 @@ static const luaL_Reg modules[] = {
     #ifdef USE_LIBMII
         {"love.mii", luaopen_love_mii},
     #endif
+    {"love.window", luaopen_love_window},
 
     {"love.nogame", luaopen_love_nogame},
     {"love.arg", luaopen_love_arg},
@@ -155,6 +157,9 @@ int luaopen_love_jitsetup(lua_State *L) {
 }
 
 namespace love {
+    void UNUSED();
+    void UNUSED(...) {};
+
     void logError(const std::string &msg) {
         std::ofstream log("sd:/LOVEPower_cpp_error.log", std::ios::app); // append mode
         if (log.is_open()) {

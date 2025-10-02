@@ -6,6 +6,8 @@
 #include <sol/sol.hpp>
 
 namespace love {
+    void UNUSED();
+    void UNUSED(...);
     void logError(const std::string &msg);
     
     inline std::string _console                            = "Wii";

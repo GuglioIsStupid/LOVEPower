@@ -18,6 +18,8 @@
 
 #include "../data/data.hpp"
 
+#include "../../common/math.h"
+
 extern "C" {
     #include <lua.h>
 }
@@ -146,7 +148,7 @@ namespace love {
             if (!texture.texture) {
                 return;
             }
-            float rotationDeg = rotation * (180.0f / M_PI);
+            float rotationDeg = rotation * (180.0f / LOVE_M_PI);
             float cos_r = cos(rotation);
             float sin_r = sin(rotation);
 
@@ -160,7 +162,7 @@ namespace love {
                 auto &t = transforms.back();
                 x += t.x;
                 y += t.y;
-                rotationDeg += t.r * (180.0f / M_PI);
+                rotationDeg += t.r * (180.0f / LOVE_M_PI);
                 sx *= t.sx;
                 sy *= t.sy;
             }
@@ -175,7 +177,7 @@ namespace love {
             if (!texture.texture) {
                 return;
             }
-            float rotationDeg = rotation * (180.0f / M_PI);
+            float rotationDeg = rotation * (180.0f / LOVE_M_PI);
             float cos_r = cos(rotation);
             float sin_r = sin(rotation);
 
@@ -189,7 +191,7 @@ namespace love {
                 auto &t = transforms.back();
                 x += t.x;
                 y += t.y;
-                rotationDeg += t.r * (180.0f / M_PI);
+                rotationDeg += t.r * (180.0f / LOVE_M_PI);
                 sx *= t.sx;
                 sy *= t.sy;
             }
@@ -295,7 +297,7 @@ namespace love {
             if (!curFont) {
                 throw std::runtime_error("No font set for printing text.");
             }
-            float rotationDeg = rotation * (180.0f / M_PI);
+            float rotationDeg = rotation * (180.0f / LOVE_M_PI);
             float cos_r = cos(rotation);
             float sin_r = sin(rotation);
 
@@ -309,7 +311,7 @@ namespace love {
                 auto &t = transforms.back();
                 x += t.x;
                 y += t.y;
-                rotationDeg += t.r * (180.0f / M_PI);
+                rotationDeg += t.r * (180.0f / LOVE_M_PI);
                 sx *= t.sx;
                 sy *= t.sy;
             }
