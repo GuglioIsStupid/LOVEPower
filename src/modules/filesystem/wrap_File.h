@@ -18,35 +18,28 @@
  * 3. This notice may not be removed or altered from any source distribution.
  **/
 
-#ifndef LOVE_LOVE_H
-#define LOVE_LOVE_H
+#ifndef LOVE_FILESYSTEM_WRAP_FILE_H
+#define LOVE_FILESYSTEM_WRAP_FILE_H
 
 // LOVE
-#include "common/config.h"
+#include "common/runtime.h"
+#include "File.h"
 
-// Forward declare lua_State.
-struct lua_State;
-
-#ifdef __cplusplus
-extern "C"
+namespace love
 {
-#endif
+namespace filesystem
+{
 
-const char *love_version();
-const char *love_codename();
-int luaopen_love(lua_State *L);
-int luaopen_love_nogame(lua_State *L);
-int luaopen_love_jitsetup(lua_State *L);
-int luaopen_love_arg(lua_State *L);
-int luaopen_love_callbacks(lua_State *L);
-int luaopen_love_boot(lua_State *L);
+// Does not use lua_error, so it's safe to call in exception handling code.
+int luax_ioError(lua_State *L, const char *fmt, ...);
 
-#ifdef LOVE_LEGENDARY_CONSOLE_IO_HACK // Would be cool for console like how LovePotion does it
-bool love_openConsole(const char *&err);
-#endif
+File *luax_checkfile(lua_State *L, int idx);
+int w_File_lines_i(lua_State *L);
+extern "C" int luaopen_file(lua_State *L);
 
-#ifdef __cplusplus
-}
-#endif
+extern const luaL_Reg w_File_functions[];
 
-#endif // LOVE_LOVE_H
+} // filesystem
+} // love
+
+#endif // LOVE_FILESYSTEM_WRAP_FILE_H

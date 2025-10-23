@@ -41,9 +41,9 @@
 #define LOVE_ENABLE_VIDEO
 #define LOVE_ENABLE_WINDOW
 
-#define LOVE_ENABLE_ENET
-#define LOVE_ENABLE_LUASOCKET
-#define LOVE_ENABLE_LUA51
+//#define LOVE_ENABLE_ENET
+//#define LOVE_ENABLE_LUASOCKET
+//#define LOVE_ENABLE_LUA51
 
 #if !defined(LOVE_WII) && !defined(LOVE_GAMECUBE)
 #  error "Either LOVE_WII or LOVE_GAMECUBE must be defined."

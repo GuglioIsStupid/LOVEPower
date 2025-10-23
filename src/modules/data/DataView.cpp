@@ -18,35 +18,54 @@
  * 3. This notice may not be removed or altered from any source distribution.
  **/
 
-#ifndef LOVE_LOVE_H
-#define LOVE_LOVE_H
+#include "DataView.h"
+#include "common/Exception.h"
+#include "common/int.h"
 
-// LOVE
-#include "common/config.h"
-
-// Forward declare lua_State.
-struct lua_State;
-
-#ifdef __cplusplus
-extern "C"
+namespace love
 {
-#endif
+namespace data
+{
 
-const char *love_version();
-const char *love_codename();
-int luaopen_love(lua_State *L);
-int luaopen_love_nogame(lua_State *L);
-int luaopen_love_jitsetup(lua_State *L);
-int luaopen_love_arg(lua_State *L);
-int luaopen_love_callbacks(lua_State *L);
-int luaopen_love_boot(lua_State *L);
+love::Type DataView::type("DataView", &Data::type);
 
-#ifdef LOVE_LEGENDARY_CONSOLE_IO_HACK // Would be cool for console like how LovePotion does it
-bool love_openConsole(const char *&err);
-#endif
+DataView::DataView(Data *data, size_t offset, size_t size)
+	: data(data)
+	, offset(offset)
+	, size(size)
+{
+	if (offset >= data->getSize() || size > data->getSize() || offset > data->getSize() - size)
+		throw love::Exception("Offset and size of Data View must fit within the original Data's size.");
 
-#ifdef __cplusplus
+	if (size == 0)
+		throw love::Exception("DataView size must be greater than 0.");
 }
-#endif
 
-#endif // LOVE_LOVE_H
+DataView::DataView(const DataView &d)
+	: data(d.data)
+	, offset(d.offset)
+	, size(d.size)
+{
+}
+
+DataView::~DataView()
+{
+}
+
+DataView *DataView::clone() const
+{
+	return new DataView(*this);
+}
+
+void *DataView::getData() const
+{
+	return (uint8 *) data->getData() + offset;
+}
+
+size_t DataView::getSize() const
+{
+	return size;
+}
+
+} // data
+} // love

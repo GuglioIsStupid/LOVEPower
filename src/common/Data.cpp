@@ -18,35 +18,29 @@
  * 3. This notice may not be removed or altered from any source distribution.
  **/
 
-#ifndef LOVE_LOVE_H
-#define LOVE_LOVE_H
-
 // LOVE
-#include "common/config.h"
+#include "Data.h"
+/* #include "thread/threads.h" */
 
-// Forward declare lua_State.
-struct lua_State;
-
-#ifdef __cplusplus
-extern "C"
+namespace love
 {
-#endif
 
-const char *love_version();
-const char *love_codename();
-int luaopen_love(lua_State *L);
-int luaopen_love_nogame(lua_State *L);
-int luaopen_love_jitsetup(lua_State *L);
-int luaopen_love_arg(lua_State *L);
-int luaopen_love_callbacks(lua_State *L);
-int luaopen_love_boot(lua_State *L);
+love::Type Data::type("Data", &Object::type);
 
-#ifdef LOVE_LEGENDARY_CONSOLE_IO_HACK // Would be cool for console like how LovePotion does it
-bool love_openConsole(const char *&err);
-#endif
-
-#ifdef __cplusplus
+Data::~Data()
+{
+	/* delete mutex; */
 }
-#endif
+/* 
+static void createMutex(love::thread::Mutex **mutexAddress)
+{
+	*mutexAddress = love::thread::newMutex();
+}
 
-#endif // LOVE_LOVE_H
+love::thread::Mutex *Data::getMutex()
+{
+	std::call_once(mutexCreated, createMutex, &mutex);
+	return mutex;
+}
+*/
+} // love

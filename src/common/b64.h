@@ -18,35 +18,38 @@
  * 3. This notice may not be removed or altered from any source distribution.
  **/
 
-#ifndef LOVE_LOVE_H
-#define LOVE_LOVE_H
+#include "config.h"
 
-// LOVE
-#include "common/config.h"
+#include <stddef.h>
 
-// Forward declare lua_State.
-struct lua_State;
+#ifndef LOVE_B64_H
+#define LOVE_B64_H
 
-#ifdef __cplusplus
-extern "C"
+namespace love
 {
-#endif
 
-const char *love_version();
-const char *love_codename();
-int luaopen_love(lua_State *L);
-int luaopen_love_nogame(lua_State *L);
-int luaopen_love_jitsetup(lua_State *L);
-int luaopen_love_arg(lua_State *L);
-int luaopen_love_callbacks(lua_State *L);
-int luaopen_love_boot(lua_State *L);
+/**
+ * Base64-encode data.
+ *
+ * @param src The data to encode.
+ * @param srclen The size in bytes of the data.
+ * @param linelen The maximum length of each line in the encoded string.
+ *        0 indicates no maximum length.
+ * @param dstlen The length of the encoded string is stored here.
+ * @return A string containing the base64-encoded data (allocated with new[]).
+ */
+char *b64_encode(const char *src, size_t srclen, size_t linelen, size_t &dstlen);
 
-#ifdef LOVE_LEGENDARY_CONSOLE_IO_HACK // Would be cool for console like how LovePotion does it
-bool love_openConsole(const char *&err);
-#endif
+/**
+ * Decode base64 encoded data.
+ *
+ * @param src The string containing the base64 data.
+ * @param srclen The length of the string.
+ * @param dstlen The size of the binary data is stored here.
+ * @return A chunk of memory containing the binary data (allocated with new[]).
+ */
+char *b64_decode(const char *src, size_t srclen, size_t &dstlen);
 
-#ifdef __cplusplus
-}
-#endif
+} // love
 
-#endif // LOVE_LOVE_H
+#endif // LOVE_B64_H

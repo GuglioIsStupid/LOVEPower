@@ -18,35 +18,23 @@
  * 3. This notice may not be removed or altered from any source distribution.
  **/
 
-#ifndef LOVE_LOVE_H
-#define LOVE_LOVE_H
+#include "wrap_NativeFile.h"
+#include "wrap_File.h"
 
-// LOVE
-#include "common/config.h"
-
-// Forward declare lua_State.
-struct lua_State;
-
-#ifdef __cplusplus
-extern "C"
+namespace love
 {
-#endif
+namespace filesystem
+{
 
-const char *love_version();
-const char *love_codename();
-int luaopen_love(lua_State *L);
-int luaopen_love_nogame(lua_State *L);
-int luaopen_love_jitsetup(lua_State *L);
-int luaopen_love_arg(lua_State *L);
-int luaopen_love_callbacks(lua_State *L);
-int luaopen_love_boot(lua_State *L);
-
-#ifdef LOVE_LEGENDARY_CONSOLE_IO_HACK // Would be cool for console like how LovePotion does it
-bool love_openConsole(const char *&err);
-#endif
-
-#ifdef __cplusplus
+NativeFile *luax_checknativefile(lua_State *L, int idx)
+{
+	return luax_checktype<NativeFile>(L, idx);
 }
-#endif
 
-#endif // LOVE_LOVE_H
+extern "C" int luaopen_nativefile(lua_State *L)
+{
+	return luax_register_type(L, &NativeFile::type, w_File_functions, nullptr);
+}
+
+} // filesystem
+} // love

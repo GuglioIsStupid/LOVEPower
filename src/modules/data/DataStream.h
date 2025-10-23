@@ -18,35 +18,52 @@
  * 3. This notice may not be removed or altered from any source distribution.
  **/
 
-#ifndef LOVE_LOVE_H
-#define LOVE_LOVE_H
+#pragma once
 
-// LOVE
-#include "common/config.h"
+#include "common/Stream.h"
 
-// Forward declare lua_State.
-struct lua_State;
-
-#ifdef __cplusplus
-extern "C"
+namespace love
 {
-#endif
+namespace data
+{
 
-const char *love_version();
-const char *love_codename();
-int luaopen_love(lua_State *L);
-int luaopen_love_nogame(lua_State *L);
-int luaopen_love_jitsetup(lua_State *L);
-int luaopen_love_arg(lua_State *L);
-int luaopen_love_callbacks(lua_State *L);
-int luaopen_love_boot(lua_State *L);
+class DataStream : public love::Stream
+{
+public:
 
-#ifdef LOVE_LEGENDARY_CONSOLE_IO_HACK // Would be cool for console like how LovePotion does it
-bool love_openConsole(const char *&err);
-#endif
+	static love::Type type;
 
-#ifdef __cplusplus
-}
-#endif
+	DataStream(Data *data);
+	virtual ~DataStream();
 
-#endif // LOVE_LOVE_H
+	// Implements Stream.
+	DataStream *clone() override;
+
+	bool isReadable() const override;
+	bool isWritable() const override;
+	bool isSeekable() const override;
+
+	int64 read(void* data, int64 size) override;
+	bool write(const void* data, int64 size) override;
+
+	bool flush() override;
+
+	int64 getSize() override;
+
+	bool seek(int64 pos, SeekOrigin origin = SEEKORIGIN_BEGIN) override;
+	int64 tell() override;
+
+private:
+
+	DataStream(const DataStream &other);
+
+	StrongRef<Data> data;
+	const uint8 *memory;
+	uint8 *writableMemory;
+	size_t offset;
+	size_t size;
+
+}; // DataStream
+
+} // data
+} // love

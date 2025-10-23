@@ -18,35 +18,26 @@
  * 3. This notice may not be removed or altered from any source distribution.
  **/
 
-#ifndef LOVE_LOVE_H
-#define LOVE_LOVE_H
+#pragma once
 
-// LOVE
-#include "common/config.h"
+#include "int.h"
 
-// Forward declare lua_State.
-struct lua_State;
-
-#ifdef __cplusplus
-extern "C"
+namespace love
 {
-#endif
 
-const char *love_version();
-const char *love_codename();
-int luaopen_love(lua_State *L);
-int luaopen_love_nogame(lua_State *L);
-int luaopen_love_jitsetup(lua_State *L);
-int luaopen_love_arg(lua_State *L);
-int luaopen_love_callbacks(lua_State *L);
-int luaopen_love_boot(lua_State *L);
+typedef uint16 float16;
+typedef uint16 float11;
+typedef uint16 float10;
 
-#ifdef LOVE_LEGENDARY_CONSOLE_IO_HACK // Would be cool for console like how LovePotion does it
-bool love_openConsole(const char *&err);
-#endif
+void float16Init();
 
-#ifdef __cplusplus
-}
-#endif
+float float16to32(float16 f);
+float16 float32to16(float f);
 
-#endif // LOVE_LOVE_H
+float float11to32(float11 f);
+float11 float32to11(float f);
+
+float float10to32(float10 f);
+float10 float32to10(float f);
+
+} // love

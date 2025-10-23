@@ -18,35 +18,40 @@
  * 3. This notice may not be removed or altered from any source distribution.
  **/
 
-#ifndef LOVE_LOVE_H
-#define LOVE_LOVE_H
+#include "config.h"
 
-// LOVE
-#include "common/config.h"
+#ifdef LOVE_WINDOWS
 
-// Forward declare lua_State.
-struct lua_State;
+#include <string>
 
-#ifdef __cplusplus
-extern "C"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+
+namespace love
 {
-#endif
 
-const char *love_version();
-const char *love_codename();
-int luaopen_love(lua_State *L);
-int luaopen_love_nogame(lua_State *L);
-int luaopen_love_jitsetup(lua_State *L);
-int luaopen_love_arg(lua_State *L);
-int luaopen_love_callbacks(lua_State *L);
-int luaopen_love_boot(lua_State *L);
+/**
+ * Convert the wide string to a UTF-8 encoded string.
+ * @param wstr The wide-char string.
+ * @return A UTF-8 string.
+ **/
+std::string to_utf8(LPCWSTR wstr);
 
-#ifdef LOVE_LEGENDARY_CONSOLE_IO_HACK // Would be cool for console like how LovePotion does it
-bool love_openConsole(const char *&err);
-#endif
+/**
+ * Convert a UTF-8 encoded string to a wide string.
+ * @param str The UTF-8 string.
+ * @return A wide string.
+**/
+std::wstring to_widestr(const std::string &str);
 
-#ifdef __cplusplus
-}
-#endif
+/**
+ * Replace all occurences of 'find' with 'replace' in a string.
+ * @param str The string to modify.
+ * @param find The character to match.
+ * @param replace The character to replace matches.
+ **/
+void replace_char(std::string &str, char find, char replace);
 
-#endif // LOVE_LOVE_H
+} // love
+
+#endif // LOVE_WINDOWS

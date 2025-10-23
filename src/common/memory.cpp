@@ -18,35 +18,35 @@
  * 3. This notice may not be removed or altered from any source distribution.
  **/
 
-#ifndef LOVE_LOVE_H
-#define LOVE_LOVE_H
+#include "config.h"
+#include "memory.h"
 
-// LOVE
-#include "common/config.h"
+#include <stdlib.h>
 
-// Forward declare lua_State.
-struct lua_State;
+#include <unistd.h> // Assume POSIX support.
 
-#ifdef __cplusplus
-extern "C"
+namespace love
 {
-#endif
 
-const char *love_version();
-const char *love_codename();
-int luaopen_love(lua_State *L);
-int luaopen_love_nogame(lua_State *L);
-int luaopen_love_jitsetup(lua_State *L);
-int luaopen_love_arg(lua_State *L);
-int luaopen_love_callbacks(lua_State *L);
-int luaopen_love_boot(lua_State *L);
-
-#ifdef LOVE_LEGENDARY_CONSOLE_IO_HACK // Would be cool for console like how LovePotion does it
-bool love_openConsole(const char *&err);
-#endif
-
-#ifdef __cplusplus
+bool alignedMalloc(void **mem, size_t size, size_t alignment)
+{
+	return posix_memalign(mem, alignment, size) == 0;
 }
-#endif
 
-#endif // LOVE_LOVE_H
+void alignedFree(void *mem)
+{
+	free(mem);
+}
+
+size_t getPageSize()
+{
+	static const long size = sysconf(_SC_PAGESIZE);
+	return size > 0 ? (size_t) size : 4096;
+}
+
+size_t alignUp(size_t size, size_t alignment)
+{
+	return (size + alignment - 1) & (~(alignment - 1));
+}
+
+} // love

@@ -18,35 +18,48 @@
  * 3. This notice may not be removed or altered from any source distribution.
  **/
 
-#ifndef LOVE_LOVE_H
-#define LOVE_LOVE_H
+#pragma once
 
-// LOVE
-#include "common/config.h"
-
-// Forward declare lua_State.
-struct lua_State;
-
-#ifdef __cplusplus
-extern "C"
+namespace love
 {
-#endif
 
-const char *love_version();
-const char *love_codename();
-int luaopen_love(lua_State *L);
-int luaopen_love_nogame(lua_State *L);
-int luaopen_love_jitsetup(lua_State *L);
-int luaopen_love_arg(lua_State *L);
-int luaopen_love_callbacks(lua_State *L);
-int luaopen_love_boot(lua_State *L);
+// Currently only meant for simple and small types.
+template <typename T>
+struct Optional
+{
+	T value;
+	bool hasValue;
 
-#ifdef LOVE_LEGENDARY_CONSOLE_IO_HACK // Would be cool for console like how LovePotion does it
-bool love_openConsole(const char *&err);
-#endif
+	Optional()
+		: value(T())
+		, hasValue(false)
+	{}
 
-#ifdef __cplusplus
-}
-#endif
+	Optional(T val)
+		: value(val)
+		, hasValue(true)
+	{}
 
-#endif // LOVE_LOVE_H
+	void set(T val)
+	{
+		value = val;
+		hasValue = true;
+	}
+
+	T get(T defaultVal) const
+	{
+		return hasValue ? value : defaultVal;
+	}
+
+	void clear()
+	{
+		hasValue = false;
+	}
+};
+
+typedef Optional<bool> OptionalBool;
+typedef Optional<float> OptionalFloat;
+typedef Optional<double> OptionalDouble;
+typedef Optional<int> OptionalInt;
+
+} // love
