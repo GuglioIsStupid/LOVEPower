@@ -17,11 +17,23 @@ include(GNUInstallDirs)
 set(EXTRA_LIBS)
 list(APPEND EXTRA_LIBS opengx)
 
-set(SOURCES
-    src/main.cpp
+set(LOVE_SRC_COMMON
+    src/common/config.h
+    src/common/int.h
+    src/common/runtime.cpp
+    src/common/runtime.h
+    src/common/version.h
 )
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+set(SOURCES
+    src/love.cpp
+)
+
+set(LOVE_LIB_SRC
+    ${LOVE_SRC_COMMON}
+)
+
+add_executable(${PROJECT_NAME} ${SOURCES} ${LOVE_LIB_SRC})
 
 include_directories("$DEVKITPRO/libogc2/wii/include")
 
