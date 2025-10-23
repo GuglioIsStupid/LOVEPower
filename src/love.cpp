@@ -1,10 +1,16 @@
 #include "common/version.h"
 #include "common/runtime.h"
+#include "common/Variant.h"
 #include "modules/love/love.h"
 #include <SDL.h>
 
+extern "C" {
+	#include <lua.h>
+	#include <lualib.h>
+	#include <lauxlib.h>
+}
+
 #include <vector>
-#include <string>
 
 template class std::vector<std::string>;
 
