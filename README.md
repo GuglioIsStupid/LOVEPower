@@ -1,8 +1,12 @@
-# LÖVEPower
+# LÖVEPower (Revamp Branch)
+
+This is the revamp branch of LÖVEPower
+
+This branch is created to improve the current codebase (because it sucks currently) and update it to newer things.
 
 A "port" of LÖVE2D to the Wii. Based off of [WiiLove](https://github.com/HTV04/WiiLove)
 
-PR's are heavily appreaciated! I'm still new to this stuff
+PR's are heavily appreciated! I'm still new to this stuff
 
 Want support? Join the [Discord Server](https://discord.gg/wqkQxKNNu5)
 
