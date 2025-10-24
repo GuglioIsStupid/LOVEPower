@@ -29,10 +29,6 @@
 
 #include "physfs/Filesystem.h"
 
-#ifdef LOVE_ANDROID
-#include "common/android.h"
-#endif
-
 // SDL
 #include <SDL2/SDL_loadso.h>
 
@@ -930,16 +926,8 @@ int loader(lua_State *L)
 
 static const char *library_extensions[] =
 {
-#ifdef LOVE_WINDOWS
-	".dll"
-#elif defined(LOVE_MACOS) || defined(LOVE_IOS)
-	".dylib", ".so"
-#else
 	".so"
-#endif
 };
-
-#include <SDL2/SDL_loadso.h>  // Ensure this header is included
 
 int extloader(lua_State *L)
 {

@@ -48,7 +48,11 @@ function love.boot()
 	love.rawGameArguments = arg
 
 	local arg0 = love.arg.getLow(love.rawGameArguments)
-	love.filesystem.init(arg0)
+	print(arg0)
+	if arg0 == nil or #arg0 == 0 then
+		arg0 = "love"
+	end
+	love.filesystem.init("sd:/" .. arg0)
 
 	local exepath = love.filesystem.getExecutablePath()
 	if #exepath == 0 then
@@ -117,6 +121,8 @@ function love.boot()
 	else
 		-- Use the name of the exe as the identity for now.
 		identity = love.path.leaf(exepath)
+		print(identity)
+		can_has_game = pcall(love.filesystem.setSource, "sd:/" .. arg0)
 	end
 
 	-- Try to use the archive containing main.lua as the identity name. It
@@ -153,6 +159,7 @@ usage:
 ]]);
 		local nogame = require("love.nogame")
 		nogame()
+		no_game_code = false
 	end
 end
 
@@ -189,24 +196,24 @@ function love.init()
 		},
 		modules = {
 			data = true,
-			event = true,
-			keyboard = true,
-			mouse = true,
-			timer = true,
-			joystick = true,
-			touch = true,
-			image = true,
-			graphics = true,
-			audio = true,
-			math = true,
-			physics = true,
-			sensor = true,
-			sound = true,
-			system = true,
-			font = true,
-			thread = true,
-			window = true,
-			video = true,
+			event = false,
+			keyboard = false,
+			mouse = false,
+			timer = false,
+			joystick = false,
+			touch = false,
+			image = false,
+			graphics = false,
+			audio = false,
+			math = false,
+			physics = false,
+			sensor = false,
+			sound = false,
+			system = false,
+			font = false,
+			thread = false,
+			window = false,
+			video = false,
 		},
 		audio = {
 			mixwithsystem = true, -- Only relevant for Android / iOS.
@@ -332,7 +339,7 @@ function love.init()
 
 	-- Gets desired modules.
 	for k,v in ipairs{
-		"data",
+		--[[ "data",
 		"thread",
 		"timer",
 		"event",
@@ -350,7 +357,8 @@ function love.init()
 		"window",
 		"graphics",
 		"math",
-		"physics",
+		"physics", ]]
+		"data"
 	} do
 		if c.modules[v] then
 			require("love." .. v)
@@ -493,7 +501,8 @@ return function()
 	func = earlyinit
 	local prevFunc = nil
 
-	while func do
+	-- UNCOMMENT ME TO LOOP!
+	--while func do
 		if setModalDrawFunc and love.event and func ~= prevFunc then
 			prevFunc = func
 			love.event._setDefaultModalDrawCallback(func)
@@ -501,7 +510,7 @@ return function()
 		local _, retval, restartvalue = xpcall(func, deferErrhand)
 		if retval then return retval, restartvalue end
 		coroutine_yield()
-	end
+	--end
 
 	return 1
 end

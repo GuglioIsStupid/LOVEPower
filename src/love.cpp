@@ -12,13 +12,30 @@ extern "C" {
 
 #include <vector>
 
+#include <fstream>
+#include <iostream>
+
 template class std::vector<std::string>;
+
+static std::string print_log_buffer = "";
+
+static int custom_print(lua_State *L) {
+    int n = lua_gettop(L);
+    for (int i = 1; i <= n; i++) {
+        const char *str = lua_tolstring(L, i, NULL);
+        print_log_buffer += str;
+        if (i < n) {
+            print_log_buffer += "\t";
+        }
+        lua_pop(L, 1);
+    }
+    print_log_buffer += "\n";
+    return 0;
+}
 
 static void get_app_arguments(int argc, char** argv, int &new_argc, char** &new_argv)
 {
-    // guh (this isn't needed for the wii or gamecube... i think?)
-	// really the only argument would be the path to the .dol lmao
-    return;
+    argv[0] = const_cast<char*>("LOVEPower/game/");
 }
 
 static int love_preload(lua_State *L, lua_CFunction f, const char *name)
@@ -40,15 +57,28 @@ enum DoneAction
 static DoneAction runlove(int argc, char** argv, int &retval, love::Variant &restartvalue)
 {
     lua_State *L = luaL_newstate();
+	if (L == nullptr) {
+		std::ofstream logfile("love_log_error.txt", std::ios::app);
+		logfile << "Failed to initialize Lua state." << std::endl;
+		logfile.close();
+		return DONE_QUIT;  // or appropriate error handling
+	}
+	retval = 0;
+	DoneAction done = DONE_QUIT;
+
 	luaL_openlibs(L);
+
+	// Override Lua's print function
+	lua_pushcfunction(L, custom_print);
+	lua_setglobal(L, "print");
 
 	love_preload(L, luaopen_love_jitsetup, "love.jitsetup");
 	lua_getglobal(L, "require");
 	lua_pushstring(L, "love.jitsetup");
 	lua_call(L, 1, 0);
-
+	
 	love_preload(L, luaopen_love, "love");
-
+	
 	{
 		lua_newtable(L);
 
@@ -69,7 +99,7 @@ static DoneAction runlove(int argc, char** argv, int &retval, love::Variant &res
 
 		lua_setglobal(L, "arg");
 	}
-
+	
 	lua_getglobal(L, "require");
 	lua_pushstring(L, "love");
 	lua_call(L, 1, 1);
@@ -78,17 +108,26 @@ static DoneAction runlove(int argc, char** argv, int &retval, love::Variant &res
 		lua_pushboolean(L, 1);
 		lua_setfield(L, -2, "_exe");
 	}
-
+	
 	love::luax_pushvariant(L, restartvalue);
 	lua_setfield(L, -2, "restart");
 	restartvalue = love::Variant();
 
 	lua_pop(L, 1);
-
+	
 	lua_getglobal(L, "require");
 	lua_pushstring(L, "love.boot");
-	lua_call(L, 1, 1);
 
+	#ifndef LUA_OK
+	#define LUA_OK 0
+	#endif
+	if (lua_pcall(L, 1, 1, 0) != LUA_OK) {
+		std::ofstream logfile("love_log_error.txt", std::ios::app);
+		logfile << "Error calling 'require(\"love.boot\")': " << lua_tostring(L, -1) << std::endl;
+		lua_pop(L, 1);
+		return DONE_QUIT;
+	}
+	
 	lua_newthread(L);
 	lua_pushvalue(L, -2);
 	int stackpos = lua_gettop(L);
@@ -100,9 +139,6 @@ static DoneAction runlove(int argc, char** argv, int &retval, love::Variant &res
 		lua_pop(L, lua_gettop(L) - stackpos);
 #endif
 
-	retval = 0;
-	DoneAction done = DONE_QUIT;
-
 	// if love.boot() returns "restart", we'll start up again after closing this
 	// Lua state.
 	int retidx = stackpos;
@@ -112,6 +148,11 @@ static DoneAction runlove(int argc, char** argv, int &retval, love::Variant &res
 			done = DONE_RESTART;
 		if (lua_isnumber(L, retidx))
 			retval = (int) lua_tonumber(L, retidx);
+
+		// log into another file
+		std::ofstream logfile_check("love_log_check_2.txt", std::ios::app);
+		logfile_check << "love.boot() returned value at index " << retidx << ": " << luaL_typename(L, retidx) << std::endl;
+		logfile_check.close();
 
 		// Disallow userdata (love objects) from being referenced by the restart
 		// value.
@@ -127,15 +168,30 @@ static DoneAction runlove(int argc, char** argv, int &retval, love::Variant &res
 int main(int argc, char** argv)
 {
     // guh
+	std::ofstream logfile("love_log.txt", std::ios::app);
+	logfile << "Love started. Version " << LOVE_VERSION_STRING << std::endl;
+	logfile.close();
 
-    int retval = 0;
+	get_app_arguments(argc, argv, argc, argv);
+
+	int retval = 0;
 	DoneAction done = DONE_QUIT;
 	love::Variant restartvalue;
 
-    do
-    {
-        done = runlove(argc, argv, retval, restartvalue);
-    } while (done == DONE_RESTART);
+	do {
+		done = runlove(argc, argv, retval, restartvalue);
+		std::ofstream logfile_check("love_log_check.txt", std::ios::app);
+		logfile_check << "runlove() returned: " << (done == DONE_RESTART ? "restart" : "quit") << std::endl;
+		logfile_check.close();
+	} while (done == DONE_RESTART);
 
+	std::ofstream print_log_file("love_print_out.txt", std::ios::app);
+	print_log_file << "----- PRINT LOG -----\n" << print_log_buffer;
+	print_log_file.close();
+
+	std::ofstream logfile2("love_log_2.txt", std::ios::app);
+	logfile2 << "Love exited with code " << retval << std::endl;
+	logfile2.close();
+	
     return retval;
 }

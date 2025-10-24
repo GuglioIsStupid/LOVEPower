@@ -35,23 +35,10 @@
 
 // In Windows, we would like to use "LOVE" as the
 // application folder, but in Linux, we like .love.
-#define LOVE_APPDATA_PREFIX ""
-#ifdef LOVE_WINDOWS
-#	define LOVE_APPDATA_FOLDER "LOVE"
-#	define LOVE_PATH_SEPARATOR "/"
-#	define LOVE_MAX_PATH _MAX_PATH
-#else
-#	if defined(LOVE_MACOS) || defined(LOVE_IOS)
-#		define LOVE_APPDATA_FOLDER "LOVE"
-#	elif defined(LOVE_LINUX)
-#		define LOVE_APPDATA_FOLDER "love"
-#	else
-#		define LOVE_APPDATA_PREFIX "."
-#		define LOVE_APPDATA_FOLDER "love"
-#	endif
-#	define LOVE_PATH_SEPARATOR "/"
-#	define LOVE_MAX_PATH MAXPATHLEN
-#endif
+#define LOVE_APPDATA_PREFIX "."
+#define LOVE_APPDATA_FOLDER "love"
+#define LOVE_PATH_SEPARATOR "/"
+#define LOVE_MAX_PATH MAXPATHLEN
 
 namespace love
 {

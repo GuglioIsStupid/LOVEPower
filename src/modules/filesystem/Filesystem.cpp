@@ -27,15 +27,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#if defined(LOVE_MACOS) || defined(LOVE_IOS)
-#include "common/apple.h"
-#include <unistd.h>
-#elif defined(LOVE_WINDOWS)
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <fileapi.h>
-#include "common/utf8.h"
-#elif defined(LOVE_LINUX)
+#if defined(LOVE_LINUX)
 #include <unistd.h>
 #endif
 
@@ -90,21 +82,6 @@ bool Filesystem::isRealDirectory(const std::string &path) const
 
 bool Filesystem::getRealPathType(const std::string &path, FileType &ftype) const
 {
-#ifdef LOVE_WINDOWS
-	// make sure non-ASCII paths work.
-	std::wstring wpath = to_widestr(path);
-
-	struct _stat buf;
-	if (_wstat(wpath.c_str(), &buf) != 0)
-		return false;
-
-	if ((buf.st_mode & _S_IFREG) == _S_IFREG)
-		ftype = FILETYPE_FILE;
-	else if ((buf.st_mode & _S_IFDIR) == _S_IFDIR)
-		ftype = FILETYPE_DIRECTORY;
-	else
-		ftype = FILETYPE_OTHER;
-#else
 	// Assume POSIX support...
 	struct stat buf;
 	if (stat(path.c_str(), &buf) != 0)
@@ -118,7 +95,6 @@ bool Filesystem::getRealPathType(const std::string &path, FileType &ftype) const
 		ftype = FILETYPE_SYMLINK;
 	else
 		ftype = FILETYPE_OTHER;
-#endif
 
 	return true;
 }
@@ -138,26 +114,9 @@ static bool getContainingDirectory(const std::string &path, std::string &newpath
 
 static bool createDirectoryRaw(const std::string &path)
 {
-#ifdef LOVE_WINDOWS
-	std::wstring wpath = to_widestr(path);
-	return CreateDirectoryW(wpath.c_str(), nullptr) != 0;
-#else
 	int mode = S_IRWXU;
 
-#ifdef LOVE_ANDROID
-	// Need to create save directory with ugo+rwx and setgid bit if
-	// t.externalstorage is set and it's for save directory.
-	auto fs = Module::getInstance<Filesystem>(Module::M_FILESYSTEM);
-	if (fs != nullptr && fs->isAndroidSaveExternal())
-	{
-		const std::string &savedir = fs->getFullCommonPath(Filesystem::COMMONPATH_APP_SAVEDIR);
-		if (path.rfind(savedir, 0) == 0)
-			mode |= S_IRWXG | S_IRWXO | S_ISGID;
-	}
-#endif
-
 	return mkdir(path.c_str(), mode) == 0;
-#endif
 }
 
 bool Filesystem::createRealDirectory(const std::string &path)
@@ -205,28 +164,8 @@ std::string Filesystem::canonicalizeRealPath(const std::string &p) const
 
 std::string Filesystem::getExecutablePath() const
 {
-#if defined(LOVE_MACOS) || defined(LOVE_IOS)
-	return love::apple::getExecutablePath();
-#elif defined(LOVE_WINDOWS)
-
-	wchar_t buffer[MAX_PATH + 1] = {0};
-
-	if (GetModuleFileNameW(nullptr, buffer, MAX_PATH) == 0)
-		return "";
-
-	return to_utf8(buffer);
-
-#elif defined(LOVE_LINUX)
-
-	char buffer[2048] = {0};
-
-	ssize_t len = readlink("/proc/self/exe", buffer, 2048);
-	if (len <= 0)
-		return "";
-
-	return std::string(buffer, len);
-#elif defined(LOVE_WII) // TODO: Set this up properly via argv
-	return std::string("sd:/apps/love/love.elf");
+#if defined(LOVE_WII) // TODO: Set this up properly via argv
+	return std::string("sd:/love.elf");
 #else
 #error Missing implementation for Filesystem::getExecutablePath!
 #endif

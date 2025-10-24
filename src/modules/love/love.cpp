@@ -536,7 +536,7 @@ int luaopen_love(lua_State *L)
 /* #ifdef LOVE_ENABLE_SYSTEM
 	lua_pushstring(L, love::system::System::getOS());
 #else */
-	lua_pushstring(L, "Unknown");
+	lua_pushstring(L, "Wii");
 /* #endif */
 	lua_setfield(L, -2, "_os");
 
@@ -581,13 +581,15 @@ int luaopen_love(lua_State *L)
 #ifdef LOVE_ENABLE_ENET
 	love::luax_preload(L, luaopen_enet, "enet");
 #endif
+*/
 #ifdef LOVE_ENABLE_LUA53
 	love::luax_preload(L, luaopen_luautf8, "utf8");
 #endif
+/* 
 #ifdef LOVE_ENABLE_LUAHTTPS
 	love::luax_preload(L, luaopen_https, "https");
-#endif */
-
+#endif
+*/
 /* #ifdef LOVE_ENABLE_WINDOW
 	// In some environments, LuaJIT is limited to 2GB and LuaJIT sometimes panic when it
 	// reaches OOM and closes the whole program, leaving the user confused about what's

@@ -248,14 +248,18 @@ function love.errorhandler(msg)
 	end
 	if love.audio then love.audio.stop() end
 
-	love.graphics.reset()
-	love.graphics.setFont(love.graphics.newFont(15))
+	if love.graphics then
+		love.graphics.reset()
+		love.graphics.setFont(love.graphics.newFont(15))
 
-	love.graphics.setColor(1, 1, 1)
+		love.graphics.setColor(1, 1, 1)
+	end
 
 	local trace = debug.traceback()
 
-	love.graphics.origin()
+	if love.graphics  then
+		love.graphics.origin()
+	end
 
 	local sanitizedmsg = {}
 	for char in msg:gmatch(utf8.charpattern) do
@@ -287,7 +291,7 @@ function love.errorhandler(msg)
 	p = p:gsub("%[string \"(.-)\"%]", "%1")
 
 	local function draw()
-		if not love.graphics.isActive() then return end
+		if not love.graphics or not love.graphics.isActive() then return end
 		local pos = 70
 		love.graphics.clear(89/255, 157/255, 220/255)
 		love.graphics.printf(p, pos, pos, love.graphics.getWidth() - pos)

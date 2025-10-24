@@ -22,7 +22,14 @@ freely, subject to the following restrictions:
 local love = require("love")
 
 function love.nogame()
+	function love.load()
+	end
 
+	function love.update(dt)
+	end
+
+	function love.draw()
+	end
 end
 
 return love.nogame
