@@ -194,8 +194,8 @@ protected:
 
 	Optional<CompareMode> depthCompareMode;
 
-	StrongRef<Quad> quad_t; // this fails to build when... its not quad_t?? but the val is called quad??
-
+	StrongRef<Quad> quad; // this fails to build when... its not quad_t?? but the val is called quad??
+						  // Now it doesn't????? okay man whatever
 	int64 graphicsMemorySize;
 
 private:

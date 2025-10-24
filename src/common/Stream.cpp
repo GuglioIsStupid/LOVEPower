@@ -29,6 +29,41 @@ namespace love
 
 love::Type Stream::type("Stream", &Object::type);
 
+Stream::~Stream() = default;
+
+Stream *Stream::clone() { return nullptr; }
+
+bool Stream::isReadable() const { return false; }
+bool Stream::isWritable() const { return false; }
+bool Stream::isSeekable() const { return false; }
+
+int64 Stream::read(void *dst, int64 size)
+{
+	(void) dst;
+	(void) size;
+	return 0;
+}
+
+bool Stream::write(const void *src, int64 size)
+{
+	(void) src;
+	(void) size;
+	return false;
+}
+
+bool Stream::flush() { return false; }
+
+int64 Stream::getSize() { return 0; }
+
+bool Stream::seek(int64 pos, SeekOrigin origin)
+{
+	(void) pos;
+	(void) origin;
+	return false;
+}
+
+int64 Stream::tell() { return 0; }
+
 Data *Stream::read(int64 size)
 {
 	int64 max = LOVE_INT64_MAX;

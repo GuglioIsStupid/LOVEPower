@@ -403,7 +403,7 @@ static int w__requestRecordingPermission(lua_State *L)
 
 static int w_love_markDeprecated(lua_State *L)
 {
-	int level = (int)luaL_checkinteger(L, 1);
+	/* int level = (int)luaL_checkinteger(L, 1);
 	const char *name = luaL_checkstring(L, 2);
 	const char *apiname = luaL_checkstring(L, 3);
 	const char *deprecationtname = luaL_checkstring(L, 4);
@@ -421,6 +421,7 @@ static int w_love_markDeprecated(lua_State *L)
 		replacement = luaL_checkstring(L, 5);
 
 	love::luax_markdeprecated(L, level, name, api, dtype, replacement);
+	return 0; */
 	return 0;
 }
 

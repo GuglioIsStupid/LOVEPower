@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2006-2025 LOVE Development Team
+ * Copyright (c) 2006-2024 LOVE Development Team
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the authors be held liable for any damages
@@ -20,7 +20,6 @@
 
 #include "ByteData.h"
 #include "common/Exception.h"
-#include "common/int.h"
 
 #include <string.h>
 
@@ -31,20 +30,23 @@ namespace data
 
 love::Type ByteData::type("ByteData", &Data::type);
 
-ByteData::ByteData(size_t size, bool clear)
+ByteData::ByteData()
+	: size(0), data(nullptr)
+{
+}
+
+ByteData::ByteData(size_t size)
 	: size(size)
 {
 	create();
-	if (clear)
-		memset(data, 0, size);
+	memset(data, 0, size);
 }
 
 ByteData::ByteData(const void *d, size_t size)
 	: size(size)
 {
 	create();
-	if (d != nullptr)
-		memcpy(data, d, size);
+	memcpy(data, d, size);
 }
 
 ByteData::ByteData(void *d, size_t size, bool own)
@@ -55,8 +57,7 @@ ByteData::ByteData(void *d, size_t size, bool own)
 	else
 	{
 		create();
-		if (d != nullptr)
-			memcpy(data, d, size);
+		memcpy(data, d, size);
 	}
 }
 
@@ -65,6 +66,14 @@ ByteData::ByteData(const ByteData &d)
 {
 	create();
 	memcpy(data, d.data, size);
+}
+
+ByteData::ByteData(love::int64 size, bool initialize)
+	: size((size_t) size)
+{
+	create();
+	if (initialize)
+		memset(data, 0, this->size);
 }
 
 ByteData::~ByteData()

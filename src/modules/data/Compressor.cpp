@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2006-2025 LOVE Development Team
+ * Copyright (c) 2006-2024 LOVE Development Team
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the authors be held liable for any damages
@@ -22,7 +22,6 @@
 #include "Compressor.h"
 #include "common/config.h"
 #include "common/int.h"
-#include "common/Exception.h"
 
 #include "libraries/lz4/lz4.h"
 #include "libraries/lz4/lz4hc.h"
@@ -341,7 +340,7 @@ public:
 			{
 				// For any error other than "not enough room", throw an exception.
 				delete[] rawbytes;
-				throw love::Exception("Could not decompress zlib/gzip-compressed data (error code: %d).", status);
+				throw love::Exception("Could not decompress zlib/gzip-compressed data.");
 			}
 
 			// Not enough room in the output buffer: try again with a larger size.

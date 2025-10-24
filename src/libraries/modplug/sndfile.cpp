@@ -9,23 +9,6 @@
 #include <libmodplug/stdafx.h>
 #include <libmodplug/sndfile.h>
 
-typedef unsigned char  BYTE;
-typedef unsigned short WORD;
-typedef unsigned long  DWORD;
-typedef const BYTE *  LPCBYTE;
-typedef BYTE *        LPBYTE;
-typedef unsigned int  UINT;
-typedef long          LONG;
-typedef const char *  LPCSTR;
-typedef char *        LPSTR;
-typedef DWORD *       LPDWORD;
-typedef int           BOOL;
-typedef char          CHAR;
-typedef void *        LPVOID;
-typedef float         FLOAT;
-typedef void          VOID;
-typedef DWORD         FOURCC;
-
 #define MMCMP_SUPPORT
 
 #ifdef MMCMP_SUPPORT

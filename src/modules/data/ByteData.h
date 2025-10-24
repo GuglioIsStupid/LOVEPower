@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2006-2025 LOVE Development Team
+ * Copyright (c) 2006-2024 LOVE Development Team
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the authors be held liable for any damages
@@ -21,6 +21,7 @@
 #pragma once
 
 #include "common/Data.h"
+#include "common/int.h"
 
 #include <stddef.h>
 
@@ -35,10 +36,12 @@ public:
 
 	static love::Type type;
 
-	ByteData(size_t size, bool clear = true);
+	ByteData();
+	ByteData(size_t size);
 	ByteData(const void *d, size_t size);
 	ByteData(void *d, size_t size, bool own);
 	ByteData(const ByteData &d);
+	ByteData(love::int64 size, bool initialize);
 	virtual ~ByteData();
 
 	// Implements Data.

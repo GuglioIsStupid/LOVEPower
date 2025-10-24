@@ -25,7 +25,9 @@
 
 #include "Sound.h"
 
+#ifndef LOVE_NO_MODPLUG
 #include "ModPlugDecoder.h"
+#endif // LOVE_NO_MODPLUG
 #include "VorbisDecoder.h"
 #include "GmeDecoder.h"
 #include "WaveDecoder.h"

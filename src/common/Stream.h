@@ -45,7 +45,7 @@ public:
 
 	static love::Type type;
 
-	virtual ~Stream() {}
+	virtual ~Stream();
 
 	/**
 	 * A callback, gets called when some Stream consumer exhausts the data

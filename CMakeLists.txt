@@ -102,8 +102,8 @@ set(LOVE_SRC_MODULES_SOUND
     src/modules/sound/lullaby/FLACDecoder.h
     src/modules/sound/lullaby/GmeDecoder.cpp
     src/modules/sound/lullaby/GmeDecoder.h
-    src/modules/sound/lullaby/ModPlugDecoder.cpp
-    src/modules/sound/lullaby/ModPlugDecoder.h
+    #src/modules/sound/lullaby/ModPlugDecoder.cpp
+    #src/modules/sound/lullaby/ModPlugDecoder.h
     src/modules/sound/lullaby/Mpg123Decoder.cpp
     src/modules/sound/lullaby/Mpg123Decoder.h
     src/modules/sound/lullaby/Sound.cpp
@@ -184,8 +184,6 @@ set(LOVE_SRC_MODULES_DATA
     src/modules/data/Compressor.h
     src/modules/data/DataModule.cpp
     src/modules/data/DataModule.h
-    src/modules/data/DataStream.cpp
-    src/modules/data/DataStream.h
     src/modules/data/DataView.cpp
     src/modules/data/DataView.h
     src/modules/data/HashFunction.cpp
@@ -198,10 +196,10 @@ set(LOVE_SRC_MODULES_DATA
     src/modules/data/wrap_Data.cpp
     src/modules/data/wrap_Data.h
     src/modules/data/wrap_Data.lua
-    src/modules/data/wrap_DataView.cpp
-    src/modules/data/wrap_DataView.h
     src/modules/data/wrap_DataModule.cpp
     src/modules/data/wrap_DataModule.h
+    src/modules/data/wrap_DataView.cpp
+    src/modules/data/wrap_DataView.h
 )
 
 set(LOVE_SRC_MODULES_TIMER
@@ -265,6 +263,11 @@ set(LOVE_SRC_MODULES_THREAD
     src/modules/thread/ThreadModule.h
     src/modules/thread/threads.cpp
     src/modules/thread/threads.h
+
+    src/modules/thread/sdl/Thread.cpp
+    src/modules/thread/sdl/Thread.h
+    src/modules/thread/sdl/threads.cpp
+    src/modules/thread/sdl/threads.h
 
     src/modules/thread/wrap_Channel.cpp
     src/modules/thread/wrap_Channel.h
@@ -524,7 +527,7 @@ set(WUFF_DIR ${CMAKE_SOURCE_DIR}/src/libraries/Wuff)
 set(GLSLANG_DIR ${CMAKE_SOURCE_DIR}/src/libraries/glslang)
 set(GLAD_DIR ${CMAKE_SOURCE_DIR}/src/libraries/glad)
 set(XXHASH_DIR ${CMAKE_SOURCE_DIR}/src/libraries/xxHash)
-set(MODPLUG_DIR ${CMAKE_SOURCE_DIR}/src/libraries/modplug)
+#set(MODPLUG_DIR ${CMAKE_SOURCE_DIR}/src/libraries/modplug)
 
 include_directories(
     ${LUA_53_DIR}
@@ -539,7 +542,7 @@ include_directories(
     ${GLAD_DIR}
     ${XXHASH_DIR}
     ${WUFF_DIR}
-    ${MODPLUG_DIR}
+    #${MODPLUG_DIR}
 
     ${SDL2_INCLUDE_DIRS}
 )
@@ -556,14 +559,14 @@ file(GLOB GLSLANG_SOURCES ${GLSLANG_DIR}/*.h ${GLSLANG_DIR}/*.cpp)
 file(GLOB GLAD_SOURCES ${GLAD_DIR}/*.h ${GLAD_DIR}/*.c)
 file(GLOB XXHASH_SOURCES ${XXHASH_DIR}/*.h ${XXHASH_DIR}/*.c)
 file(GLOB WUFF_SOURCES ${WUFF_DIR}/*.h ${WUFF_DIR}/*.c)
-file(GLOB MODPLUG_SOURCES ${MODPLUG_DIR}/*.h ${MODPLUG_DIR}/*.c ${MODPLUG_DIR}/*.cpp)
+#file(GLOB MODPLUG_SOURCES ${MODPLUG_DIR}/*.h ${MODPLUG_DIR}/*.c ${MODPLUG_DIR}/*.cpp)
 
 list(APPEND LOVE_LIB_SRC 
     ${DR_SOURCES} ${LUA53_SOURCES} ${LZ4_SOURCES} 
     ${NOISE1234_SOURCES} ${STB_SOURCES} ${UTF8_SOURCES} 
     ${DDSPARSE_SOURCES} ${GLSLANG_SOURCES} ${GLAD_SOURCES}
     ${XXHASH_SOURCES} ${LODEPNG_SOURCES} ${WUFF_SOURCES}
-    ${MODPLUG_SOURCES}
+    #${MODPLUG_SOURCES}
 )
 
 set(SOURCES
@@ -571,7 +574,7 @@ set(SOURCES
     ${LOVE_FULL}
 )
 
-add_definitions(-DLOVE_NOMPG123)
+add_definitions(-DLOVE_NOMPG123 -DLOVE_NO_MODPLUG)
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${LOVE_LIB_SRC})
 

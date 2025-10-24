@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2006-2025 LOVE Development Team
+ * Copyright (c) 2006-2024 LOVE Development Team
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the authors be held liable for any damages
@@ -19,7 +19,6 @@
  **/
 
 #include "HashFunction.h"
-#include "common/Exception.h"
 
 // FIXME: Probably trivial by having tole and tobe functions, which can be ifdeffed to being identity functions
 #ifdef LOVE_BIG_ENDIAN
