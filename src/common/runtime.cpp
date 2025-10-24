@@ -26,6 +26,7 @@
 #include "Object.h"
 #include "Reference.h"
 #include "StringMap.h"
+#include "Variant.h"
 
 // C++
 #include <algorithm>
@@ -1076,6 +1077,25 @@ void luax_markdeprecated(lua_State *L, int level, const char *name, APIType api,
 	if (deprecated.info != nullptr && deprecated.info->uses == 1)
 	{
 		luaL_where(L, level);
+		const char *where = lua_tostring(L, -1);
+		if (where != nullptr)
+			deprecated.info->where = where;
+		lua_pop(L, 1);
+	}
+}
+
+void luax_markdeprecated(lua_State *L, const char *name, APIType api)
+{
+	luax_markdeprecated(L, name, api, DEPRECATED_NO_REPLACEMENT, nullptr);
+}
+
+void luax_markdeprecated(lua_State *L, const char *name, APIType api, DeprecationType type, const char *replacement)
+{
+	MarkDeprecated deprecated(name, api, type, replacement);
+
+	if (deprecated.info != nullptr && deprecated.info->uses == 1)
+	{
+		luaL_where(L, 1);
 		const char *where = lua_tostring(L, -1);
 		if (where != nullptr)
 			deprecated.info->where = where;

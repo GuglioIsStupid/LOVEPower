@@ -63,6 +63,7 @@ public:
 	};
 
 	Module(ModuleType moduleType, const char *name);
+	Module() : Module(M_UNKNOWN, "unknown") {}
 	virtual ~Module();
 
     /**

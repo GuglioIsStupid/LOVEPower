@@ -20,7 +20,7 @@
 
 #include "wrap_Data.h"
 #include "common/int.h"
-/* #include "thread/threads.h" */
+#include "thread/threads.h"
 
 // Put the Lua code directly into a raw string literal.
 static const char data_lua[] =
@@ -85,7 +85,7 @@ int w_Data_performAtomic(lua_State *L)
 	int err = 0;
 
 	{
-		/* love::thread::Lock lock(t->getMutex()); */
+		love::thread::Lock lock(t->getMutex());
 		// call the function, passing any user-specified arguments.
 		err = lua_pcall(L, lua_gettop(L) - 2, LUA_MULTRET, 0);
 	}

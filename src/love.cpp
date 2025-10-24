@@ -57,12 +57,6 @@ enum DoneAction
 static DoneAction runlove(int argc, char** argv, int &retval, love::Variant &restartvalue)
 {
     lua_State *L = luaL_newstate();
-	if (L == nullptr) {
-		std::ofstream logfile("love_log_error.txt", std::ios::app);
-		logfile << "Failed to initialize Lua state." << std::endl;
-		logfile.close();
-		return DONE_QUIT;  // or appropriate error handling
-	}
 	retval = 0;
 	DoneAction done = DONE_QUIT;
 
@@ -149,11 +143,6 @@ static DoneAction runlove(int argc, char** argv, int &retval, love::Variant &res
 		if (lua_isnumber(L, retidx))
 			retval = (int) lua_tonumber(L, retidx);
 
-		// log into another file
-		std::ofstream logfile_check("love_log_check_2.txt", std::ios::app);
-		logfile_check << "love.boot() returned value at index " << retidx << ": " << luaL_typename(L, retidx) << std::endl;
-		logfile_check.close();
-
 		// Disallow userdata (love objects) from being referenced by the restart
 		// value.
 		if (retidx < lua_gettop(L))
@@ -167,11 +156,6 @@ static DoneAction runlove(int argc, char** argv, int &retval, love::Variant &res
 
 int main(int argc, char** argv)
 {
-    // guh
-	std::ofstream logfile("love_log.txt", std::ios::app);
-	logfile << "Love started. Version " << LOVE_VERSION_STRING << std::endl;
-	logfile.close();
-
 	get_app_arguments(argc, argv, argc, argv);
 
 	int retval = 0;
@@ -180,18 +164,11 @@ int main(int argc, char** argv)
 
 	do {
 		done = runlove(argc, argv, retval, restartvalue);
-		std::ofstream logfile_check("love_log_check.txt", std::ios::app);
-		logfile_check << "runlove() returned: " << (done == DONE_RESTART ? "restart" : "quit") << std::endl;
-		logfile_check.close();
 	} while (done == DONE_RESTART);
 
 	std::ofstream print_log_file("love_print_out.txt", std::ios::app);
 	print_log_file << "----- PRINT LOG -----\n" << print_log_buffer;
 	print_log_file.close();
-
-	std::ofstream logfile2("love_log_2.txt", std::ios::app);
-	logfile2 << "Love exited with code " << retval << std::endl;
-	logfile2.close();
 	
     return retval;
 }

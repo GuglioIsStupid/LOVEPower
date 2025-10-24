@@ -48,31 +48,48 @@ public:
 	virtual ~Stream() {}
 
 	/**
+	 * A callback, gets called when some Stream consumer exhausts the data
+	 **/
+	virtual void fillBackBuffer() {}
+
+	/**
+	 * Get the front buffer, Streams are supposed to be (at least) double-buffered
+	 **/
+	virtual const void *getFrontBuffer() const { return nullptr; }
+
+	/**
+	 * Swap buffers. Returns true if there is new data in the front buffer,
+     * false otherwise.
+	 * NOTE: If there is no back buffer ready, this call must be ignored
+	 **/
+	virtual bool swapBuffers() { return false; };
+
+	/**
 	 * Creates a new copy of the Stream, with the same settings as the original.
 	 * The seek position will be reset in the copy.
 	 **/
-	virtual Stream *clone() = 0;
+	virtual Stream *clone();
 
 	/**
 	 * Gets whether read() is supported for this Stream.
 	 **/
-	virtual bool isReadable() const = 0;
+	virtual bool isReadable() const;
 
 	/**
 	 * Gets whether write() is supported for this Stream.
 	 **/
-	virtual bool isWritable() const = 0;
+	virtual bool isWritable() const;
 
 	/**
 	 * Gets whether seek(), tell(), and getSize() are supported for this Stream.
 	 **/
-	virtual bool isSeekable() const = 0;
+	virtual bool isSeekable() const;
 
 	/**
 	 * Reads data into the destination buffer, and returns the number of bytes
 	 * actually read.
 	 **/
-	virtual int64 read(void *dst, int64 size) = 0;
+	virtual int64 read(void *dst, int64 size);
 
 	/**
 	 * Reads data into a new Data object.
@@ -82,7 +99,7 @@ public:
 	/**
 	 * Writes data from the source buffer into the Stream.
 	 **/
-	virtual bool write(const void *src, int64 size) = 0;
+	virtual bool write(const void *src, int64 size);
 
 	/**
 	 * Writes data from the source Data object into the Stream.
@@ -93,22 +110,22 @@ public:
 	/**
 	 * Flushes all data written to the Stream.
 	 **/
-	virtual bool flush() = 0;
+	virtual bool flush();
 
 	/**
 	 * Gets the total size of the Stream, if supported.
 	 **/
-	virtual int64 getSize() = 0;
+	virtual int64 getSize();
 
 	/**
 	 * Sets the current position in the Stream, if supported.
 	 **/
-	virtual bool seek(int64 pos, SeekOrigin origin = SEEKORIGIN_BEGIN) = 0;
+	virtual bool seek(int64 pos, SeekOrigin origin = SEEKORIGIN_BEGIN);
 
 	/**
 	 * Gets the current position in the Stream, if supported.
 	 **/
-	virtual int64 tell() = 0;
+	virtual int64 tell();
 
 }; // Stream
 

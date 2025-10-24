@@ -67,11 +67,11 @@ public:
 	 * Gets the Mutex associated with this Data object. Creates it in a thread-
 	 * safe manner if necessary.
 	 **/
-	/* love::thread::Mutex *getMutex(); */
+	love::thread::Mutex *getMutex();
 
 private:
 
-	/* love::thread::Mutex *mutex = nullptr; */
+	love::thread::Mutex *mutex = nullptr;
 	std::once_flag mutexCreated;
 
 }; // Data

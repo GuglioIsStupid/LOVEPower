@@ -20,7 +20,7 @@
 
 #include "common/config.h"
 #include "deprecation.h"
-/* #include "thread/threads.h" */
+#include "thread/threads.h"
 
 #include <atomic>
 #include <map>
@@ -34,14 +34,14 @@ static std::vector<const DeprecationInfo *> *deprecatedList = nullptr;
 
 static std::atomic<int> initCount;
 
-/* static thread::Mutex *mutex = nullptr; */
+static thread::Mutex *mutex = nullptr;
 static bool outputEnabled = false;
 
 void initDeprecation()
 {
 	if (initCount.fetch_add(1) == 0)
 	{
-		/* mutex = thread::newMutex(); */
+		mutex = thread::newMutex();
 
 		// These are heap-allocated because we want to clear them on deinit,
 		// and deinit may be called when the program is shutting down in the
@@ -58,11 +58,11 @@ void deinitDeprecation()
 	{
 		delete deprecated;
 		delete deprecatedList;
-		/* delete mutex; */
+		delete mutex;
 
 		deprecated = nullptr;
 		deprecatedList = nullptr;
-		/* mutex = nullptr; */
+		mutex = nullptr;
 	}
 }
 
@@ -133,14 +133,14 @@ std::string getDeprecationNotice(const DeprecationInfo &info, bool usewhere)
 GetDeprecated::GetDeprecated()
 	: all(*deprecatedList)
 {
-	/* if (mutex != nullptr)
-		mutex->lock(); */
+	if (mutex != nullptr)
+		mutex->lock();
 }
 
 GetDeprecated::~GetDeprecated()
 {
-	/* if (mutex != nullptr)
-		mutex->unlock(); */
+	if (mutex != nullptr)
+		mutex->unlock();
 }
 
 MarkDeprecated::MarkDeprecated(const char *name, APIType api)
@@ -151,8 +151,8 @@ MarkDeprecated::MarkDeprecated(const char *name, APIType api)
 MarkDeprecated::MarkDeprecated(const char *name, APIType api, DeprecationType type, const char *replacement)
 	: info(nullptr)
 {
-	/* if (mutex != nullptr)
-		mutex->lock(); */
+	if (mutex != nullptr)
+		mutex->lock();
 
 	auto it = deprecated->find(name);
 
@@ -185,8 +185,8 @@ MarkDeprecated::~MarkDeprecated()
 	if (outputEnabled && info != nullptr && info->uses == 1)
 		printDeprecationNotice(*info);
 
-	/* if (mutex != nullptr)
-		mutex->unlock(); */
+	if (mutex != nullptr)
+		mutex->unlock();
 }
 
 STRINGMAP_BEGIN(APIType, API_MAX_ENUM, apiType)

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2006-2025 LOVE Development Team
+ * Copyright (c) 2006-2024 LOVE Development Team
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the authors be held liable for any damages
@@ -22,15 +22,15 @@
 #define LOVE_AUDIO_WRAP_SOURCE_H
 
 #include "common/runtime.h"
-/* #include "Source.h"
-#include "Filter.h" */
+#include "Source.h"
+#include "Filter.h"
 
 namespace love
 {
 namespace audio
 {
 
-/* Source */void *luax_checksource(lua_State *L, int idx);
+Source *luax_checksource(lua_State *L, int idx);
 extern "C" int luaopen_source(lua_State *L);
 
 } // audio

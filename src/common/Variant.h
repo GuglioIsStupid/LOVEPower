@@ -24,10 +24,18 @@
 #include "common/config.h"
 #include "common/Object.h"
 #include "common/int.h"
+#include "common/runtime.h"
 
 #include <cstring>
 #include <string>
 #include <vector>
+#include <set>
+
+extern "C" {
+	#include <lua.h>
+	#include <lualib.h>
+	#include <lauxlib.h>
+}
 
 namespace love
 {
@@ -111,6 +119,9 @@ public:
 	const Data &getData() const { return data; }
 
 	static Variant unknown() { return Variant(UNKNOWN); }
+
+	static Variant fromLua(lua_State *L, int n, std::set<const void*> *tableSet = nullptr);
+	void toLua(lua_State *L) const;
 
 private:
 

@@ -47,6 +47,7 @@ namespace love
 // Forward declarations.
 class Module;
 class Reference;
+class Variant;
 
 template<typename T>
 class StrongRef;
@@ -499,6 +500,8 @@ lua_State *luax_getpinnedthread(lua_State *L);
  **/
 void luax_markdeprecated(lua_State *L, int level, const char *name, APIType api);
 void luax_markdeprecated(lua_State *L, int level, const char *name, APIType api, DeprecationType type, const char *replacement);
+void luax_markdeprecated(lua_State *L, const char *name, APIType api);
+void luax_markdeprecated(lua_State *L, const char *name, APIType api, DeprecationType type, const char *replacement);
 
 extern "C" { // Also called from luasocket
 	int luax_typerror(lua_State *L, int narg, const char *tname);
