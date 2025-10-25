@@ -196,24 +196,24 @@ function love.init()
 		},
 		modules = {
 			data = true,
-			event = false,
-			keyboard = false,
-			mouse = false,
+			event = true,
+			keyboard = true,
+			mouse = true,
 			timer = false,
-			joystick = false,
+			joystick = true,
 			touch = false,
 			image = false,
 			graphics = false,
 			audio = false,
-			math = false,
+			math = true,
 			physics = false,
 			sensor = false,
 			sound = false,
 			system = false,
 			font = false,
-			thread = false,
-			window = false,
-			video = false,
+			thread = true,
+			window = true,
+			video = true,
 		},
 		audio = {
 			mixwithsystem = true, -- Only relevant for Android / iOS.
@@ -339,7 +339,7 @@ function love.init()
 
 	-- Gets desired modules.
 	for k,v in ipairs{
-		--[[ "data",
+		"data",
 		"thread",
 		"timer",
 		"event",
@@ -357,7 +357,7 @@ function love.init()
 		"window",
 		"graphics",
 		"math",
-		"physics", ]]
+		"physics",
 		"data"
 	} do
 		if c.modules[v] then
@@ -502,7 +502,7 @@ return function()
 	local prevFunc = nil
 
 	-- UNCOMMENT ME TO LOOP!
-	--while func do
+	while func do
 		if setModalDrawFunc and love.event and func ~= prevFunc then
 			prevFunc = func
 			love.event._setDefaultModalDrawCallback(func)
@@ -510,7 +510,7 @@ return function()
 		local _, retval, restartvalue = xpcall(func, deferErrhand)
 		if retval then return retval, restartvalue end
 		coroutine_yield()
-	--end
+	end
 
 	return 1
 end

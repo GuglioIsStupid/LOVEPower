@@ -146,13 +146,13 @@ static const luaL_Reg modules[] = {
 #if defined(LOVE_ENABLE_DATA)
 	{ "love.data", luaopen_love_data },
 #endif
-/* #if defined(LOVE_ENABLE_EVENT)
+#if defined(LOVE_ENABLE_EVENT)
 	{ "love.event", luaopen_love_event },
-#endif */
+#endif
 #if defined(LOVE_ENABLE_FILESYSTEM)
 	{ "love.filesystem", luaopen_love_filesystem },
 #endif
-/* 
+
 #if defined(LOVE_ENABLE_FONT)
 	{ "love.font", luaopen_love_font },
 #endif
@@ -200,7 +200,7 @@ static const luaL_Reg modules[] = {
 #endif
 #if defined(LOVE_ENABLE_WINDOW)
 	{ "love.window", luaopen_love_window },
-#endif */
+#endif
 	{ "love.nogame", luaopen_love_nogame },
 	{ "love.jitsetup", luaopen_love_jitsetup },
 	{ "love.arg", luaopen_love_arg },
@@ -534,11 +534,11 @@ int luaopen_love(lua_State *L)
 	lua_pushcfunction(L, w_love_isVersionCompatible);
 	lua_setfield(L, -2, "isVersionCompatible");
 
-/* #ifdef LOVE_ENABLE_SYSTEM
+#ifdef LOVE_ENABLE_SYSTEM
 	lua_pushstring(L, love::system::System::getOS());
-#else */
+#else
 	lua_pushstring(L, "Wii");
-/* #endif */
+#endif
 	lua_setfield(L, -2, "_os");
 
 	{

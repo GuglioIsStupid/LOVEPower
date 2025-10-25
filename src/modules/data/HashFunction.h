@@ -24,6 +24,8 @@
 #include "common/Data.h"
 #include "common/StringMap.h"
 #include "common/int.h"
+#include <memory>
+#include <common/Exception.h>
 
 namespace love
 {

@@ -22,6 +22,7 @@
 
 // LOVE
 #include "common/StringMap.h"
+#include "common/Exception.h"
 
 namespace love
 {

@@ -21,9 +21,9 @@
 #include "HashFunction.h"
 
 // FIXME: Probably trivial by having tole and tobe functions, which can be ifdeffed to being identity functions
-#ifdef LOVE_BIG_ENDIAN
+/* #ifdef LOVE_BIG_ENDIAN
 #	error Hashing not yet implemented for big endian
-#endif
+#endif */
 
 namespace love
 {

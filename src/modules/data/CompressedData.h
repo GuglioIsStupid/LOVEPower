@@ -22,6 +22,7 @@
 
 // LOVE
 #include "common/Data.h"
+#include "common/Exception.h"
 #include "Compressor.h"
 
 namespace love
