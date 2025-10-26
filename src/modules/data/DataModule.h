@@ -114,7 +114,7 @@ class DataModule : public Module
 {
 public:
 
-	DataModule();
+	DataModule(const char *name);
 	virtual ~DataModule();
 
 	// Implements Module.

@@ -63,6 +63,11 @@ public:
 	virtual ModuleType getModuleType() { return M_FONT; }
 	const char *getName() const;
 
+private:
+	StrongRef<Data> defaultFontData;
+
+protected:
+	Font(const char *name);
 }; // Font
 
 } // font

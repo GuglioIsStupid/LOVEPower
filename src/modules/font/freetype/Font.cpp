@@ -35,7 +35,8 @@ namespace font
 namespace freetype
 {
 
-Font::Font()
+Font::Font() 
+	: love::font::Font("love.font.freetype")
 {
 	if (FT_Init_FreeType(&library))
 		throw love::Exception("TrueTypeFont Loading error: FT_Init_FreeType failed");

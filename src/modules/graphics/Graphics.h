@@ -34,8 +34,8 @@
 #include "Texture.h"
 #include "Canvas.h"
 #include "Font.h"
-#include "ShaderStage.h"
-#include "Shader.h"
+/* #include "ShaderStage.h"
+#include "Shader.h" */
 #include "Quad.h"
 #include "Mesh.h"
 #include "Image.h"
@@ -58,7 +58,7 @@ namespace graphics
 {
 
 class SpriteBatch;
-class ParticleSystem;
+/* class ParticleSystem; */
 class Text;
 class Video;
 class Buffer;
@@ -160,8 +160,8 @@ public:
 		FEATURE_CLAMP_ZERO,
 		FEATURE_LIGHTEN,
 		FEATURE_FULL_NPOT,
-		FEATURE_PIXEL_SHADER_HIGHP,
-		FEATURE_SHADER_DERIVATIVES,
+		/* FEATURE_PIXEL_SHADER_HIGHP,
+		FEATURE_SHADER_DERIVATIVES, */
 		FEATURE_GLSL3,
 		FEATURE_INSTANCING,
 		FEATURE_MAX_ENUM
@@ -305,7 +305,7 @@ public:
 		vertex::TriangleIndexMode indexMode = vertex::TriangleIndexMode::NONE;
 		int vertexCount = 0;
 		Texture *texture = nullptr;
-		Shader::StandardShader standardShaderType = Shader::STANDARD_DEFAULT;
+		/* Shader::StandardShader standardShaderType = Shader::STANDARD_DEFAULT; */
 
 		StreamDrawCommand()
 		{
@@ -460,12 +460,12 @@ public:
 		}
 	};
 
-	struct DefaultShaderCode
+	/* struct DefaultShaderCode
 	{
 		std::string source[ShaderStage::STAGE_MAX_ENUM];
-	};
+	}; */
 
-	Graphics();
+	Graphics(const char *name);
 	virtual ~Graphics();
 
 	// Implements Module.
@@ -480,13 +480,13 @@ public:
 	Video *newVideo(love::video::VideoStream *stream, float dpiscale);
 
 	SpriteBatch *newSpriteBatch(Texture *texture, int size, vertex::Usage usage);
-	ParticleSystem *newParticleSystem(Texture *texture, int size);
+	/* ParticleSystem *newParticleSystem(Texture *texture, int size); */
 
 	virtual Canvas *newCanvas(const Canvas::Settings &settings) = 0;
 
-	ShaderStage *newShaderStage(ShaderStage::StageType stage, const std::string &source);
+	/* ShaderStage *newShaderStage(ShaderStage::StageType stage, const std::string &source);
 	Shader *newShader(const std::string &vertex, const std::string &pixel);
-
+ */
 	virtual Buffer *newBuffer(size_t size, const void *data, BufferType type, vertex::Usage usage, uint32 mapflags) = 0;
 
 	Mesh *newMesh(const std::vector<Vertex> &vertices, PrimitiveType drawmode, vertex::Usage usage);
@@ -496,7 +496,7 @@ public:
 
 	Text *newText(Font *font, const std::vector<Font::ColoredString> &text = {});
 
-	bool validateShader(bool gles, const std::string &vertex, const std::string &pixel, std::string &err);
+	/* bool validateShader(bool gles, const std::string &vertex, const std::string &pixel, std::string &err); */
 
 	/**
 	 * Resets the current color, background color, line style, and so forth.
@@ -581,10 +581,10 @@ public:
 	void setFont(Font *font);
 	Font *getFont();
 
-	void setShader(Shader *shader);
+	/* void setShader(Shader *shader);
 	void setShader();
 
-	Shader *getShader() const;
+	Shader *getShader() const; */
 
 	void setCanvas(RenderTarget rt, uint32 temporaryRTFlags);
 	void setCanvas(const RenderTargets &rts);
@@ -828,21 +828,21 @@ public:
 	 * Gets whether the specified pixel format is supported by Canvases or
 	 * Images.
 	 **/
-	virtual bool isCanvasFormatSupported(PixelFormat format) const = 0;
-	virtual bool isCanvasFormatSupported(PixelFormat format, bool readable) const = 0;
-	virtual bool isImageFormatSupported(PixelFormat format, bool sRGB = false) const = 0;
+	virtual bool isCanvasFormatSupported(PixelFormat format) = 0;
+	virtual bool isCanvasFormatSupported(PixelFormat format, bool readable) = 0;
+	virtual bool isImageFormatSupported(PixelFormat format, bool sRGB = false) = 0;
 
 	/**
 	 * Gets the renderer used by love.graphics.
 	 **/
-	virtual Renderer getRenderer() const = 0;
+	virtual Renderer getRenderer() = 0;
 
 	/**
 	 * Returns system-dependent renderer information.
 	 * Returned strings can vary greatly between systems! Do not rely on it for
 	 * anything!
 	 **/
-	virtual RendererInfo getRendererInfo() const = 0;
+	virtual RendererInfo getRendererInfo() = 0;
 
 	/**
 	 * Returns performance-related statistics.
@@ -877,10 +877,10 @@ public:
 
 	static void flushStreamDrawsGlobal();
 
-	virtual Shader::Language getShaderLanguageTarget() const = 0;
+	/* virtual Shader::Language getShaderLanguageTarget();
 	const DefaultShaderCode &getCurrentDefaultShaderCode() const;
 
-	void cleanupCachedShaderStage(ShaderStage::StageType type, const std::string &cachekey);
+	void cleanupCachedShaderStage(ShaderStage::StageType type, const std::string &cachekey); */
 
 	template <typename T>
 	T *getScratchBuffer(size_t count)
@@ -928,7 +928,7 @@ public:
 	static std::vector<std::string> getConstants(StackType);
 
 	// Default shader code (a shader is always required internally.)
-	static DefaultShaderCode defaultShaderCode[Shader::STANDARD_MAX_ENUM][Shader::LANGUAGE_MAX_ENUM][2];
+	/* static DefaultShaderCode defaultShaderCode[Shader::STANDARD_MAX_ENUM][Shader::LANGUAGE_MAX_ENUM][2]; */
 
 protected:
 
@@ -959,7 +959,7 @@ protected:
 		vertex::Winding winding = vertex::WINDING_CCW;
 
 		StrongRef<Font> font;
-		StrongRef<Shader> shader;
+		/* StrongRef<Shader> shader; */
 
 		RenderTargetsStrongRef renderTargets;
 
@@ -981,7 +981,7 @@ protected:
 		PrimitiveType primitiveMode = PRIMITIVE_TRIANGLES;
 		vertex::CommonFormat formats[2];
 		StrongRef<Texture> texture;
-		Shader::StandardShader standardShaderType = Shader::STANDARD_DEFAULT;
+		/* Shader::StandardShader standardShaderType = Shader::STANDARD_DEFAULT; */
 		int vertexCount = 0;
 		int indexCount = 0;
 
@@ -1007,14 +1007,14 @@ protected:
 		{}
 	};
 
-	virtual ShaderStage *newShaderStageInternal(ShaderStage::StageType stage, const std::string &cachekey, const std::string &source, bool gles) = 0;
-	virtual Shader *newShaderInternal(ShaderStage *vertex, ShaderStage *pixel) = 0;
+	/* virtual ShaderStage *newShaderStageInternal(ShaderStage::StageType stage, const std::string &cachekey, const std::string &source, bool gles);
+	virtual Shader *newShaderInternal(ShaderStage *vertex, ShaderStage *pixel); */
 	virtual StreamBuffer *newStreamBuffer(BufferType type, size_t size) = 0;
 
 	virtual void setCanvasInternal(const RenderTargets &rts, int w, int h, int pixelw, int pixelh, bool hasSRGBcanvas) = 0;
 
 	virtual void initCapabilities() = 0;
-	virtual void getAPIStats(int &shaderswitches) const = 0;
+	//virtual void getAPIStats(int &shaderswitches);
 
 	void createQuadIndexBuffer();
 
@@ -1073,7 +1073,7 @@ private:
 
 	std::vector<uint8> scratchBuffer;
 
-	std::unordered_map<std::string, ShaderStage *> cachedShaderStages[ShaderStage::STAGE_MAX_ENUM];
+	/* std::unordered_map<std::string, ShaderStage *> cachedShaderStages[ShaderStage::STAGE_MAX_ENUM]; */
 
 	static StringMap<DrawMode, DRAW_MAX_ENUM>::Entry drawModeEntries[];
 	static StringMap<DrawMode, DRAW_MAX_ENUM> drawModes;

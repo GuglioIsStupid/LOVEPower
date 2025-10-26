@@ -89,6 +89,9 @@ public:
 	 **/
 	virtual Decoder *newDecoder(filesystem::FileData *file, int bufferSize) = 0;
 
+protected:
+	Sound(const char *name);
+
 }; // Sound
 
 } // sound

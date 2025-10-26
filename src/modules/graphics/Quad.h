@@ -23,7 +23,7 @@
 
 // LOVE
 #include "common/Object.h"
-#include "common/math.h"
+#include "common/lovemath.h"
 #include "common/Vector.h"
 
 namespace love

@@ -25,7 +25,7 @@
 
 // LOVE
 #include "common/Module.h"
-#include "common/math.h"
+#include "common/lovemath.h"
 #include "common/Vector.h"
 #include "common/int.h"
 

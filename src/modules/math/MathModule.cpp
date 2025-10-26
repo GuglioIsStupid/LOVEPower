@@ -201,6 +201,7 @@ float linearToGamma(float c)
 
 Math::Math()
 	: rng()
+	, Module(M_MATH, "love.math")
 {
 	RandomGenerator::Seed seed;
 	seed.b64 = (uint64) time(nullptr);

@@ -40,6 +40,7 @@ namespace image
 love::Type Image::type("image", &Module::type);
 
 Image::Image()
+	: Module(M_IMAGE, "love.image.magpie")
 {
 	using namespace magpie;
 

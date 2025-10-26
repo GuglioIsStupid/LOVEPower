@@ -21,7 +21,7 @@
 #include "Video.h"
 
 // LOVE
-#include "Shader.h"
+/* #include "Shader.h" */
 #include "Graphics.h"
 
 namespace love
@@ -119,7 +119,7 @@ void Video::draw(Graphics *gfx, const Matrix4 &m)
 	cmd.formats[1] = vertex::CommonFormat::STf_RGBAub;
 	cmd.indexMode = vertex::TriangleIndexMode::QUADS;
 	cmd.vertexCount = 4;
-	cmd.standardShaderType = Shader::STANDARD_VIDEO;
+	/* cmd.standardShaderType = Shader::STANDARD_VIDEO; */
 
 	Graphics::StreamVertexData data = gfx->requestStreamDraw(cmd);
 
@@ -139,8 +139,8 @@ void Video::draw(Graphics *gfx, const Matrix4 &m)
 		verts[i].color = c;
 	}
 
-	if (Shader::current != nullptr)
-		Shader::current->setVideoTextures(images[0], images[1], images[2]);
+	/* if (Shader::current != nullptr)
+		Shader::current->setVideoTextures(images[0], images[1], images[2]); */
 
 	gfx->flushStreamDraws();
 }

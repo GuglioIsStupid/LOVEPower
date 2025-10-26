@@ -27,7 +27,7 @@
 #include <unordered_map>
 
 // LOVE
-#include "common/math.h"
+#include "common/lovemath.h"
 #include "common/Matrix.h"
 #include "common/Color.h"
 #include "Drawable.h"

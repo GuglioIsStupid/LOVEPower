@@ -63,6 +63,7 @@ const char *Mouse::getName() const
 
 Mouse::Mouse()
 	: curCursor(nullptr)
+	, love::mouse::Mouse("love.mouse.sdl")
 {
 	// SDL may need the video subsystem in order to clean up the cursor when
 	// quitting. Subsystems are reference-counted.

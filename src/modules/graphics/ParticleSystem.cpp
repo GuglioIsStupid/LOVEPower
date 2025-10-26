@@ -23,7 +23,7 @@
 #include "ParticleSystem.h"
 #include "Graphics.h"
 
-#include "common/math.h"
+#include "common/lovemath.h"
 #include "modules/math/RandomGenerator.h"
 
 // STD

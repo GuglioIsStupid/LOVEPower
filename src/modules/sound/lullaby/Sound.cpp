@@ -70,6 +70,7 @@ namespace lullaby
 {
 
 Sound::Sound()
+	: love::sound::Sound("love.sound.lullaby")
 {
 }
 

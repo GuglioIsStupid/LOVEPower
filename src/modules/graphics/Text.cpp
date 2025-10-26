@@ -244,11 +244,11 @@ void Text::draw(Graphics *gfx, const Matrix4 &m)
 
 	gfx->flushStreamDraws();
 
-	if (Shader::isDefaultActive())
+	/* if (Shader::isDefaultActive())
 		Shader::attachDefault(Shader::STANDARD_DEFAULT);
 
 	if (Shader::current)
-		Shader::current->checkMainTextureType(TEXTURE_2D, false);
+		Shader::current->checkMainTextureType(TEXTURE_2D, false); */
 
 	// Re-generate the text if the Font's texture cache was invalidated.
 	if (font->getTextureCacheID() != texture_cache_id)

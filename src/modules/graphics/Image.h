@@ -23,7 +23,7 @@
 // LOVE
 #include "common/config.h"
 #include "common/StringMap.h"
-#include "common/math.h"
+#include "common/lovemath.h"
 #include "image/ImageData.h"
 #include "image/CompressedImageData.h"
 #include "Texture.h"

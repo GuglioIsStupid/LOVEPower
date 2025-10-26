@@ -35,10 +35,14 @@
 #include <unistd.h>
 #include <time.h>
 #include <sys/time.h>
-#elif defined(LOVE_WII)
-#include <ogc/lwp.h>
-#include <ogc/system.h>
 #endif
+
+namespace {
+#if defined(LOVE_WII) || defined(LOVE_GAMECUBE)
+// Time of startup
+u64 startTime;
+#endif
+}
 
 namespace love
 {
@@ -81,6 +85,11 @@ double Timer::step()
 		prevFpsUpdate = currTime;
 		frames = 0;
 	}
+
+	// if wii
+	#if defined(LOVE_WII)
+	startTime = gettime();
+	#endif
 
 	return dt;
 }
@@ -188,6 +197,15 @@ double Timer::getTime()
 	LARGE_INTEGER rel;
 	rel.QuadPart = now.QuadPart - start.QuadPart;
 	return (double) rel.QuadPart / (double) freq.QuadPart;
+}
+
+#elif defined(LOVE_WII)
+
+double Timer::getTime()
+{
+	u64 currentTime = gettime();
+	u64 diff = currentTime - startTime;
+	return (double)diff / 1000000.0;
 }
 
 #endif

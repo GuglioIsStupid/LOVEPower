@@ -24,6 +24,10 @@
 // LOVE
 #include "common/Module.h"
 
+#if defined(LOVE_WII)
+#include <ogc/lwp_watchdog.h>
+#endif
+
 namespace love
 {
 namespace timer
@@ -96,6 +100,9 @@ private:
 
 	// The current timestep.
 	double dt;
+
+protected:
+	Timer(const char *name);
 
 }; // Timer
 

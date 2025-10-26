@@ -22,7 +22,7 @@
 #include "common/config.h"
 #include "OpenGL.h"
 
-#include "Shader.h"
+/* #include "Shader.h" */
 #include "Canvas.h"
 #include "common/Exception.h"
 
@@ -95,7 +95,7 @@ OpenGL::TempDebugGroup::~TempDebugGroup()
 OpenGL::OpenGL()
 	: stats()
 	, contextInitialized(false)
-	, pixelShaderHighpSupported(false)
+	/* , pixelShaderHighpSupported(false) */
 	, baseVertexSupported(false)
 	, maxAnisotropy(1.0f)
 	, max2DTextureSize(0)
@@ -464,11 +464,11 @@ void OpenGL::initMaxValues()
 	{
 		GLint range = 0;
 		GLint precision = 0;
-		glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_HIGH_FLOAT, &range, &precision);
-		pixelShaderHighpSupported = range > 0;
+		/* glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_HIGH_FLOAT, &range, &precision);
+		pixelShaderHighpSupported = range > 0; */
 	}
-	else
-		pixelShaderHighpSupported = true;
+	/* else
+		pixelShaderHighpSupported = true; */
 
 	baseVertexSupported = GLAD_VERSION_3_2 || GLAD_ES_VERSION_3_2 || GLAD_ARB_draw_elements_base_vertex
 		|| GLAD_OES_draw_elements_base_vertex || GLAD_EXT_draw_elements_base_vertex;
@@ -587,8 +587,8 @@ void OpenGL::prepareDraw()
 	TempDebugGroup debuggroup("Prepare OpenGL draw");
 
 	// Make sure the active shader's love-provided uniforms are up to date.
-	if (Shader::current != nullptr)
-		((Shader *)Shader::current)->updateBuiltinUniforms();
+	/* if (Shader::current != nullptr)
+		((Shader *)Shader::current)->updateBuiltinUniforms(); */
 
 	if (state.constantColor != state.lastConstantColor)
 	{
@@ -1041,12 +1041,12 @@ void OpenGL::bindTextureToUnit(Texture *texture, int textureunit, bool restorepr
 	}
 	else
 	{
-		if (textureunit == 0 && Shader::current != nullptr)
+		/* if (textureunit == 0 && Shader::current != nullptr)
 		{
 			TextureType shadertex = Shader::current->getMainTextureType();
 			if (shadertex != TEXTURE_MAX_ENUM)
 				textype = shadertex;
-		}
+		} */
 
 		handle = getDefaultTexture(textype);
 	}
@@ -1257,10 +1257,10 @@ bool OpenGL::isClampZeroTextureWrapSupported() const
 	return GLAD_VERSION_1_3 || GLAD_EXT_texture_border_clamp || GLAD_NV_texture_border_clamp;
 }
 
-bool OpenGL::isPixelShaderHighpSupported() const
+/* bool OpenGL::isPixelShaderHighpSupported() const
 {
 	return pixelShaderHighpSupported;
-}
+} */
 
 bool OpenGL::isInstancingSupported() const
 {
@@ -1996,8 +1996,8 @@ const char *OpenGL::debugSourceString(GLenum source)
 		return "API";
 	case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
 		return "window";
-	case GL_DEBUG_SOURCE_SHADER_COMPILER:
-		return "shader";
+	/* case GL_DEBUG_SOURCE_SHADER_COMPILER:
+		return "shader"; */
 	case GL_DEBUG_SOURCE_THIRD_PARTY:
 		return "external";
 	case GL_DEBUG_SOURCE_APPLICATION:

@@ -40,6 +40,7 @@ namespace sdl
 {
 
 JoystickModule::JoystickModule()
+	: love::joystick::JoystickModule("love.joystick.sdl")
 {
 	if (SDL_InitSubSystem(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0)
 		throw love::Exception("Could not initialize SDL joystick subsystem (%s)", SDL_GetError());

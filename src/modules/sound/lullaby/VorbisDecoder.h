@@ -28,8 +28,8 @@
 
 // vorbis
 #define OV_EXCLUDE_STATIC_CALLBACKS
-#include "codec.h"
-#include "vorbisfile.h"
+#include <vorbis/codec.h>
+#include <vorbis/vorbisfile.h>
 
 namespace love
 {

@@ -29,6 +29,7 @@ namespace null
 
 Audio::Audio()
 	: distanceModel(DISTANCE_NONE)
+	, love::audio::Audio("love.audio.null")
 {
 }
 

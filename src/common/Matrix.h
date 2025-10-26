@@ -22,7 +22,7 @@
 #define LOVE_MATRIX_H
 
 // LOVE
-#include "math.h"
+#include "lovemath.h"
 #include "Vector.h"
 
 namespace love

@@ -21,8 +21,12 @@
 #ifndef LOVE_MATH_H
 #define LOVE_MATH_H
 
-#include <climits> // for CHAR_BIT
-#include <cstdlib> // for rand() and RAND_MAX
+/* #include <climits> // for CHAR_BIT */
+#ifndef CHAR_BIT
+#define CHAR_BIT 8
+#endif
+/* #include <cstdlib> // for rand() and RAND_MAX */
+#include <ogc/tpl.h>
 
 /* Definitions of useful mathematical constants
  * M_E        - e

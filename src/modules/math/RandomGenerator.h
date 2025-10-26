@@ -24,7 +24,7 @@
 // LOVE
 #include "common/config.h"
 #include "common/Exception.h"
-#include "common/math.h"
+#include "common/lovemath.h"
 #include "common/int.h"
 #include "common/Object.h"
 

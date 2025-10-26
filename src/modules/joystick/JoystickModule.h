@@ -101,6 +101,11 @@ public:
 	 **/
 	virtual std::string getGamepadMappingString(const std::string &guid) const = 0;
 
+protected:
+	JoystickModule(const char *name)
+		: Module(M_JOYSTICK, name)
+	{}
+
 }; // JoystickModule
 
 } // joystick

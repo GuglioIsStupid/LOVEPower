@@ -398,7 +398,7 @@ extern "C" int luaopen_love_data(lua_State *L)
 	DataModule *instance = instance();
 	if (instance == nullptr)
 	{
-		luax_catchexcept(L, [&](){ instance = new DataModule(); });
+		luax_catchexcept(L, [&](){ instance = new DataModule("love.data"); });
 	}
 	else
 		instance->retain();

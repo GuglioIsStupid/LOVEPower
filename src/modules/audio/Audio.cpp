@@ -28,6 +28,10 @@ namespace audio
 
 static bool requestRecPermission = false;
 
+Audio::Audio(const char *name)
+	: Module(M_AUDIO, name)
+{}
+
 void setRequestRecordingPermission(bool rec)
 {
 	requestRecPermission = rec;

@@ -79,7 +79,6 @@ void showRecordingPermissionMissingDialog();
 class Audio : public Module
 {
 public:
-
 	/**
 	 * Attenuation by distance.
 	 */
@@ -301,6 +300,9 @@ private:
 
 	static StringMap<DistanceModel, DISTANCE_MAX_ENUM>::Entry distanceModelEntries[];
 	static StringMap<DistanceModel, DISTANCE_MAX_ENUM> distanceModels;
+
+protected:
+	Audio(const char *name);
 }; // Audio
 
 } // audio

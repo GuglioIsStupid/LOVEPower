@@ -21,7 +21,7 @@
 #pragma once
 
 // LOVE
-#include "common/math.h"
+#include "common/lovemath.h"
 #include "Drawable.h"
 #include "Image.h"
 #include "vertex.h"

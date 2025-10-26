@@ -23,14 +23,28 @@
 
 #include <stdlib.h>
 
-#include <unistd.h> // Assume POSIX support.
+/* #include <unistd.h> // Assume POSIX support. */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <malloc.h>
+#include <ogcsys.h>
+#include <gccore.h>
+#include <stdarg.h>
+#include <ctype.h>
+#include <math.h>
+// wii memory
 
 namespace love
 {
 
 bool alignedMalloc(void **mem, size_t size, size_t alignment)
 {
-	return posix_memalign(mem, alignment, size) == 0;
+	if (alignment & (alignment - 1))
+		return false; // alignment is not a power of two
+
+	*mem = memalign(alignment, size);
+	return *mem != nullptr;
 }
 
 void alignedFree(void *mem)
@@ -40,8 +54,9 @@ void alignedFree(void *mem)
 
 size_t getPageSize()
 {
-	static const long size = sysconf(_SC_PAGESIZE);
-	return size > 0 ? (size_t) size : 4096;
+	/* static const long size = sysconf(_SC_PAGESIZE);
+	return size > 0 ? (size_t) size : 4096; */
+	return 4096; // just an estimate
 }
 
 size_t alignUp(size_t size, size_t alignment)

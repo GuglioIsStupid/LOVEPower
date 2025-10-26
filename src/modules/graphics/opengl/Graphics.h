@@ -38,7 +38,7 @@
 
 #include "Image.h"
 #include "Canvas.h"
-#include "Shader.h"
+/* #include "Shader.h" */
 
 #include "libraries/xxHash/xxhash.h"
 
@@ -92,7 +92,7 @@ public:
 
 	void setStencilTest(CompareMode compare, int value) override;
 
-	void setDepthMode(CompareMode compare, bool write) override;
+	virtual void setDepthMode(CompareMode compare, bool write) override;
 
 	void setFrontFaceWinding(vertex::Winding winding) override;
 
@@ -104,13 +104,13 @@ public:
 
 	void setWireframe(bool enable) override;
 
-	bool isCanvasFormatSupported(PixelFormat format) const override;
-	bool isCanvasFormatSupported(PixelFormat format, bool readable) const override;
-	bool isImageFormatSupported(PixelFormat format, bool sRGB) const override;
-	Renderer getRenderer() const override;
-	RendererInfo getRendererInfo() const override;
+	bool isCanvasFormatSupported(PixelFormat format) override;
+	bool isCanvasFormatSupported(PixelFormat format, bool readable) override;
+	bool isImageFormatSupported(PixelFormat format, bool sRGB) override;
+	Renderer getRenderer() override;
+	RendererInfo getRendererInfo() override;
 
-	Shader::Language getShaderLanguageTarget() const override;
+	/* Shader::Language getShaderLanguageTarget() const override; */
 
 	// Internal use.
 	void cleanupCanvas(Canvas *canvas);
@@ -136,12 +136,12 @@ private:
 		}
 	};
 
-	love::graphics::ShaderStage *newShaderStageInternal(ShaderStage::StageType stage, const std::string &cachekey, const std::string &source, bool gles) override;
-	love::graphics::Shader *newShaderInternal(love::graphics::ShaderStage *vertex, love::graphics::ShaderStage *pixel) override;
+	/* love::graphics::ShaderStage *newShaderStageInternal(ShaderStage::StageType stage, const std::string &cachekey, const std::string &source, bool gles) override;
+	love::graphics::Shader *newShaderInternal(love::graphics::ShaderStage *vertex, love::graphics::ShaderStage *pixel) override; */
 	love::graphics::StreamBuffer *newStreamBuffer(BufferType type, size_t size) override;
 	void setCanvasInternal(const RenderTargets &rts, int w, int h, int pixelw, int pixelh, bool hasSRGBcanvas) override;
 	void initCapabilities() override;
-	void getAPIStats(int &shaderswitches) const override;
+	//void getAPIStats(int &shaderswitches) const;
 
 	void endPass();
 	void bindCachedFBO(const RenderTargets &targets);

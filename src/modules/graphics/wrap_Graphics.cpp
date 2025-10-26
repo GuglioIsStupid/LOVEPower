@@ -45,10 +45,10 @@ static const char graphics_lua[] =
 #include "wrap_Graphics.lua"
 ;
 
-// This is in a separate file because VS2013 has a 16KB limit for raw strings..
+/* // This is in a separate file because VS2013 has a 16KB limit for raw strings..
 static const char graphics_shader_lua[] =
 #include "wrap_GraphicsShader.lua"
-;
+; */
 
 namespace love
 {
@@ -1165,7 +1165,7 @@ int w_newSpriteBatch(lua_State *L)
 	return 1;
 }
 
-int w_newParticleSystem(lua_State *L)
+/* int w_newParticleSystem(lua_State *L)
 {
 	luax_checkgraphicscreated(L);
 
@@ -1182,7 +1182,7 @@ int w_newParticleSystem(lua_State *L)
 	luax_pushtype(L, t);
 	t->release();
 	return 1;
-}
+} */
 
 int w_newCanvas(lua_State *L)
 {
@@ -1257,7 +1257,7 @@ int w_newCanvas(lua_State *L)
 	return 1;
 }
 
-static int w_getShaderSource(lua_State *L, int startidx, bool gles, std::string &vertexsource, std::string &pixelsource)
+/* static int w_getShaderSource(lua_State *L, int startidx, bool gles, std::string &vertexsource, std::string &pixelsource)
 {
 	using namespace love::filesystem;
 
@@ -1419,7 +1419,7 @@ int w_validateShader(lua_State *L)
 	}
 
 	return 1;
-}
+} */
 
 static vertex::Usage luax_optmeshusage(lua_State *L, int idx, vertex::Usage def)
 {
@@ -1672,11 +1672,12 @@ int w_newVideo(lua_State *L)
 	float dpiscale = (float) luaL_optnumber(L, 2, 1.0);
 	Video *video = nullptr;
 
-	luax_catchexcept(L, [&]() { video = instance()->newVideo(stream, dpiscale); });
+	/* luax_catchexcept(L, [&]() { video = instance()->newVideo(stream, dpiscale); }); */
 
-	luax_pushtype(L, video);
-	video->release();
-	return 1;
+	/* luax_pushtype(L, video);
+	video->release(); */
+	
+	return 0;
 }
 
 int w_setColor(lua_State *L)
@@ -2074,7 +2075,7 @@ int w_isWireframe(lua_State *L)
 	return 1;
 }
 
-int w_setShader(lua_State *L)
+/* int w_setShader(lua_State *L)
 {
 	if (lua_isnoneornil(L,1))
 	{
@@ -2136,7 +2137,7 @@ int w_setDefaultShaderCode(lua_State *L)
 	}
 
 	return 0;
-}
+} */
 
 int w_getSupported(lua_State *L)
 {
@@ -2921,14 +2922,14 @@ static const luaL_Reg functions[] =
 	{ "newFont", w_newFont },
 	{ "newImageFont", w_newImageFont },
 	{ "newSpriteBatch", w_newSpriteBatch },
-	{ "newParticleSystem", w_newParticleSystem },
+	/* { "newParticleSystem", w_newParticleSystem }, */
 	{ "newCanvas", w_newCanvas },
-	{ "newShader", w_newShader },
+	/* { "newShader", w_newShader }, */
 	{ "newMesh", w_newMesh },
 	{ "newText", w_newText },
 	{ "_newVideo", w_newVideo },
 
-	{ "validateShader", w_validateShader },
+	/* { "validateShader", w_validateShader }, */
 
 	{ "setCanvas", w_setCanvas },
 	{ "getCanvas", w_getCanvas },
@@ -2967,9 +2968,9 @@ static const luaL_Reg functions[] =
 	{ "setWireframe", w_setWireframe },
 	{ "isWireframe", w_isWireframe },
 
-	{ "setShader", w_setShader },
+	/* { "setShader", w_setShader },
 	{ "getShader", w_getShader },
-	{ "_setDefaultShaderCode", w_setDefaultShaderCode },
+	{ "_setDefaultShaderCode", w_setDefaultShaderCode }, */
 
 	{ "getSupported", w_getSupported },
 	{ "getCanvasFormats", w_getCanvasFormats },
@@ -3047,9 +3048,9 @@ static const lua_CFunction types[] =
 	luaopen_image,
 	luaopen_quad,
 	luaopen_spritebatch,
-	luaopen_particlesystem,
+	/* luaopen_particlesystem, */
 	luaopen_canvas,
-	luaopen_shader,
+	/* luaopen_shader, */
 	luaopen_mesh,
 	luaopen_text,
 	luaopen_video,
@@ -3080,10 +3081,10 @@ extern "C" int luaopen_love_graphics(lua_State *L)
 	else
 		lua_error(L);
 
-	if (luaL_loadbuffer(L, (const char *)graphics_shader_lua, sizeof(graphics_shader_lua), "=[love \"wrap_GraphicsShader.lua\"]") == 0)
+	/* if (luaL_loadbuffer(L, (const char *)graphics_shader_lua, sizeof(graphics_shader_lua), "=[love \"wrap_GraphicsShader.lua\"]") == 0)
 		lua_call(L, 0, 0);
 	else
-		lua_error(L);
+		lua_error(L); */
 
 	return n;
 }

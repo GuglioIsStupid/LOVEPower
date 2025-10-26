@@ -27,7 +27,7 @@
 #include "font/Font.h"
 #include "window/Window.h"
 #include "SpriteBatch.h"
-#include "ParticleSystem.h"
+/* #include "ParticleSystem.h" */
 #include "Font.h"
 //#include "Video.h"
 #include "Text.h"
@@ -104,10 +104,11 @@ bool isDebugEnabled()
 
 love::Type Graphics::type("graphics", &Module::type);
 
-Graphics::DefaultShaderCode Graphics::defaultShaderCode[Shader::STANDARD_MAX_ENUM][Shader::LANGUAGE_MAX_ENUM][2];
+/* Graphics::DefaultShaderCode Graphics::defaultShaderCode[Shader::STANDARD_MAX_ENUM][Shader::LANGUAGE_MAX_ENUM][2]; */
 
-Graphics::Graphics()
-	: width(0)
+Graphics::Graphics(const char *name)
+	: Module(M_GRAPHICS, name)
+	, width(0)
 	, height(0)
 	, pixelWidth(0)
 	, pixelHeight(0)
@@ -120,8 +121,8 @@ Graphics::Graphics()
 	, drawCalls(0)
 	, drawCallsBatched(0)
 	, quadIndexBuffer(nullptr)
-	, capabilities()
-	, cachedShaderStages()
+	, capabilities()/* 
+	, cachedShaderStages() */
 {
 	transformStack.reserve(16);
 	transformStack.push_back(Matrix4());
@@ -132,8 +133,8 @@ Graphics::Graphics()
 	states.reserve(10);
 	states.push_back(DisplayState());
 
-	if (!Shader::initialize())
-		throw love::Exception("Shader support failed to initialize!");
+	/* if (!Shader::initialize())
+		throw love::Exception("Shader support failed to initialize!"); */
 }
 
 Graphics::~Graphics()
@@ -144,14 +145,14 @@ Graphics::~Graphics()
 	// the active shader may try to activate a standard shader when deactivating
 	// itself, which will cause problems since it calls Graphics methods in the
 	// Graphics destructor.
-	for (int i = 0; i < Shader::STANDARD_MAX_ENUM; i++)
+	/* for (int i = 0; i < Shader::STANDARD_MAX_ENUM; i++)
 	{
 		if (Shader::standardShaders[i])
 		{
 			Shader::standardShaders[i]->release();
 			Shader::standardShaders[i] = nullptr;
 		}
-	}
+	} */
 
 	states.clear();
 
@@ -161,10 +162,10 @@ Graphics::~Graphics()
 	delete streamBufferState.vb[1];
 	delete streamBufferState.indexBuffer;
 
-	for (int i = 0; i < (int) ShaderStage::STAGE_MAX_ENUM; i++)
+	/* for (int i = 0; i < (int) ShaderStage::STAGE_MAX_ENUM; i++)
 		cachedShaderStages[i].clear();
 
-	Shader::deinitialize();
+	Shader::deinitialize(); */
 }
 
 void Graphics::createQuadIndexBuffer()
@@ -209,12 +210,12 @@ love::graphics::SpriteBatch *Graphics::newSpriteBatch(Texture *texture, int size
 	return new SpriteBatch(this, texture, size, usage);
 }
 
-love::graphics::ParticleSystem *Graphics::newParticleSystem(Texture *texture, int size)
+/* love::graphics::ParticleSystem *Graphics::newParticleSystem(Texture *texture, int size)
 {
 	return new ParticleSystem(texture, size);
-}
+} */
 
-ShaderStage *Graphics::newShaderStage(ShaderStage::StageType stage, const std::string &optsource)
+/* ShaderStage *Graphics::newShaderStage(ShaderStage::StageType stage, const std::string &optsource)
 {
 	if (stage == ShaderStage::STAGE_MAX_ENUM)
 		throw love::Exception("Invalid shader stage.");
@@ -247,9 +248,9 @@ ShaderStage *Graphics::newShaderStage(ShaderStage::StageType stage, const std::s
 	}
 
 	return s;
-}
+} */
 
-Shader *Graphics::newShader(const std::string &vertex, const std::string &pixel)
+/* Shader *Graphics::newShader(const std::string &vertex, const std::string &pixel)
 {
 	if (vertex.empty() && pixel.empty())
 		throw love::Exception("Error creating shader: no source code!");
@@ -258,7 +259,7 @@ Shader *Graphics::newShader(const std::string &vertex, const std::string &pixel)
 	StrongRef<ShaderStage> pixelstage(newShaderStage(ShaderStage::STAGE_PIXEL, pixel), Acquire::NORETAIN);
 
 	return newShaderInternal(vertexstage.get(), pixelstage.get());
-}
+} */
 
 Mesh *Graphics::newMesh(const std::vector<Vertex> &vertices, PrimitiveType drawmode, vertex::Usage usage)
 {
@@ -285,12 +286,12 @@ love::graphics::Text *Graphics::newText(graphics::Font *font, const std::vector<
 	return new Text(font, text);
 }
 
-void Graphics::cleanupCachedShaderStage(ShaderStage::StageType type, const std::string &hashkey)
+/* void Graphics::cleanupCachedShaderStage(ShaderStage::StageType type, const std::string &hashkey)
 {
 	cachedShaderStages[type].erase(hashkey);
-}
+} */
 
-bool Graphics::validateShader(bool gles, const std::string &vertex, const std::string &pixel, std::string &err)
+/* bool Graphics::validateShader(bool gles, const std::string &vertex, const std::string &pixel, std::string &err)
 {
 	if (vertex.empty() && pixel.empty())
 	{
@@ -310,7 +311,7 @@ bool Graphics::validateShader(bool gles, const std::string &vertex, const std::s
 		pixelstage.set(new ShaderStageForValidation(this, ShaderStage::STAGE_PIXEL, pixel, gles), Acquire::NORETAIN);
 
 	return Shader::validate(vertexstage.get(), pixelstage.get(), err);
-}
+} */
 
 int Graphics::getWidth() const
 {
@@ -396,7 +397,7 @@ void Graphics::restoreState(const DisplayState &s)
 	setFrontFaceWinding(s.winding);
 
 	setFont(s.font.get());
-	setShader(s.shader.get());
+	/* setShader(s.shader.get()); */
 	setCanvas(s.renderTargets);
 
 	setColorMask(s.colorMask);
@@ -446,7 +447,7 @@ void Graphics::restoreStateChecked(const DisplayState &s)
 		setFrontFaceWinding(s.winding);
 
 	setFont(s.font.get());
-	setShader(s.shader.get());
+	/* setShader(s.shader.get()); */
 
 	const auto &sRTs = s.renderTargets;
 	const auto &curRTs = cur.renderTargets;
@@ -525,7 +526,7 @@ love::graphics::Font *Graphics::getFont()
 	return states.back().font.get();
 }
 
-void Graphics::setShader(love::graphics::Shader *shader)
+/* void Graphics::setShader(love::graphics::Shader *shader)
 {
 	if (shader == nullptr)
 		return setShader();
@@ -543,7 +544,7 @@ void Graphics::setShader()
 love::graphics::Shader *Graphics::getShader() const
 {
 	return states.back().shader.get();
-}
+} */
 
 void Graphics::setCanvas(RenderTarget rt, uint32 temporaryRTFlags)
 {
@@ -991,7 +992,7 @@ Graphics::StreamVertexData Graphics::requestStreamDraw(const StreamDrawCommand &
 		|| cmd.formats[0] != state.formats[0] || cmd.formats[1] != state.formats[1]
 		|| ((cmd.indexMode != TriangleIndexMode::NONE) != (state.indexCount > 0))
 		|| cmd.texture != state.texture
-		|| cmd.standardShaderType != state.standardShaderType)
+		/* || cmd.standardShaderType != state.standardShaderType */)
 	{
 		shouldflush = true;
 	}
@@ -1050,14 +1051,14 @@ Graphics::StreamVertexData Graphics::requestStreamDraw(const StreamDrawCommand &
 		state.formats[0] = cmd.formats[0];
 		state.formats[1] = cmd.formats[1];
 		state.texture = cmd.texture;
-		state.standardShaderType = cmd.standardShaderType;
+		/* state.standardShaderType = cmd.standardShaderType; */
 	}
 
-	if (state.vertexCount == 0 && Shader::isDefaultActive())
+	/* if (state.vertexCount == 0 && Shader::isDefaultActive())
 		Shader::attachDefault(state.standardShaderType);
 
 	if (state.vertexCount == 0 && Shader::current != nullptr && cmd.texture != nullptr)
-		Shader::current->checkMainTexture(cmd.texture);
+		Shader::current->checkMainTexture(cmd.texture); */
 
 	if (shouldresize)
 	{
@@ -1588,7 +1589,7 @@ Graphics::Stats Graphics::getStats() const
 {
 	Stats stats;
 
-	getAPIStats(stats.shaderSwitches);
+	//getAPIStats(stats.shaderSwitches);
 
 	stats.drawCalls = drawCalls;
 	if (streamBufferState.vertexCount > 0)
@@ -1737,13 +1738,13 @@ Vector2 Graphics::inverseTransformPoint(Vector2 point)
 	return p;
 }
 
-const Graphics::DefaultShaderCode &Graphics::getCurrentDefaultShaderCode() const
+/* const Graphics::DefaultShaderCode &Graphics::getCurrentDefaultShaderCode() const
 {
 	int languageindex = (int) getShaderLanguageTarget();
 	int gammaindex = isGammaCorrect() ? 1 : 0;
 
 	return defaultShaderCode[Shader::STANDARD_DEFAULT][languageindex][gammaindex];
-}
+} */
 
 /**
  * Constants.
@@ -1937,8 +1938,8 @@ StringMap<Graphics::Feature, Graphics::FEATURE_MAX_ENUM>::Entry Graphics::featur
 	{ "clampzero",          FEATURE_CLAMP_ZERO           },
 	{ "lighten",            FEATURE_LIGHTEN              },
 	{ "fullnpot",           FEATURE_FULL_NPOT            },
-	{ "pixelshaderhighp",   FEATURE_PIXEL_SHADER_HIGHP   },
-	{ "shaderderivatives",  FEATURE_SHADER_DERIVATIVES   },
+	/* { "pixelshaderhighp",   FEATURE_PIXEL_SHADER_HIGHP   },
+	{ "shaderderivatives",  FEATURE_SHADER_DERIVATIVES   }, */
 	{ "glsl3",              FEATURE_GLSL3                },
 	{ "instancing",         FEATURE_INSTANCING           },
 };

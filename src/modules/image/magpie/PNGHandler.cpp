@@ -22,7 +22,7 @@
 
 // LOVE
 #include "common/Exception.h"
-#include "common/math.h"
+#include "common/lovemath.h"
 
 // LodePNG
 #include "lodepng/lodepng.h"

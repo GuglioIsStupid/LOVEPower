@@ -213,7 +213,7 @@ void hash(HashFunction::Function function, const char *input, uint64_t size, Has
 	hashfunction->hash(function, input, size, output);
 }
 
-DataModule::DataModule()
+DataModule::DataModule(const char *name) : Module(M_DATA, name)
 {
 }
 

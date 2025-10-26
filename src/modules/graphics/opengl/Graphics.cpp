@@ -20,7 +20,7 @@
 
 // LOVE
 #include "common/config.h"
-#include "common/math.h"
+#include "common/lovemath.h"
 #include "common/Vector.h"
 
 #include "Graphics.h"
@@ -29,7 +29,7 @@
 #include "math/MathModule.h"
 #include "window/Window.h"
 #include "Buffer.h"
-#include "ShaderStage.h"
+//#include "ShaderStage.h"
 
 #include "libraries/xxHash/xxhash.h"
 
@@ -57,6 +57,7 @@ namespace opengl
 Graphics::Graphics()
 	: windowHasStencil(false)
 	, mainVAO(0)
+	, love::graphics::Graphics("love.graphics.opengl")
 {
 	gl = OpenGL();
 	Canvas::resetFormatSupport();
@@ -111,7 +112,7 @@ love::graphics::Canvas *Graphics::newCanvas(const Canvas::Settings &settings)
 	return new Canvas(settings);
 }
 
-love::graphics::ShaderStage *Graphics::newShaderStageInternal(ShaderStage::StageType stage, const std::string &cachekey, const std::string &source, bool gles)
+/* love::graphics::ShaderStage *Graphics::newShaderStageInternal(ShaderStage::StageType stage, const std::string &cachekey, const std::string &source, bool gles)
 {
 	return new ShaderStage(this, stage, source, gles, cachekey);
 }
@@ -119,7 +120,7 @@ love::graphics::ShaderStage *Graphics::newShaderStageInternal(ShaderStage::Stage
 love::graphics::Shader *Graphics::newShaderInternal(love::graphics::ShaderStage *vertex, love::graphics::ShaderStage *pixel)
 {
 	return new Shader(vertex, pixel);
-}
+} */
 
 love::graphics::Buffer *Graphics::newBuffer(size_t size, const void *data, BufferType type, vertex::Usage usage, uint32 mapflags)
 {
@@ -228,7 +229,7 @@ bool Graphics::setMode(int width, int height, int pixelwidth, int pixelheight, b
 	restoreState(states.back());
 
 	int gammacorrect = isGammaCorrect() ? 1 : 0;
-	Shader::Language target = getShaderLanguageTarget();
+	/* Shader::Language target = getShaderLanguageTarget();
 
 	// We always need a default shader.
 	for (int i = 0; i < Shader::STANDARD_MAX_ENUM; i++)
@@ -258,7 +259,7 @@ bool Graphics::setMode(int width, int height, int pixelwidth, int pixelheight, b
 	// A shader should always be active, but the default shader shouldn't be
 	// returned by getShader(), so we don't do setShader(defaultShader).
 	if (!Shader::current)
-		Shader::standardShaders[Shader::STANDARD_DEFAULT]->attach();
+		Shader::standardShaders[Shader::STANDARD_DEFAULT]->attach(); */
 
 	return true;
 }
@@ -626,13 +627,13 @@ void Graphics::clear(OptionalColorf c, OptionalInt stencil, OptionalDouble depth
 	if (depth.hasValue && !hadDepthWrites)
 		gl.setDepthWrites(hadDepthWrites);
 
-	if (c.hasValue && gl.bugs.clearRequiresDriverTextureStateUpdate && Shader::current)
+	/* if (c.hasValue && gl.bugs.clearRequiresDriverTextureStateUpdate && Shader::current)
 	{
 		// This seems to be enough to fix the bug for me. Other methods I've
 		// tried (e.g. dummy draws) don't work in all cases.
 		gl.useProgram(0);
 		gl.useProgram((GLuint) Shader::current->getHandle());
-	}
+	} */
 }
 
 void Graphics::clear(const std::vector<OptionalColorf> &colors, OptionalInt stencil, OptionalDouble depth)
@@ -714,13 +715,13 @@ void Graphics::clear(const std::vector<OptionalColorf> &colors, OptionalInt sten
 	if (depth.hasValue && !hadDepthWrites)
 		gl.setDepthWrites(hadDepthWrites);
 
-	if (gl.bugs.clearRequiresDriverTextureStateUpdate && Shader::current)
+	/* if (gl.bugs.clearRequiresDriverTextureStateUpdate && Shader::current)
 	{
 		// This seems to be enough to fix the bug for me. Other methods I've
 		// tried (e.g. dummy draws) don't work in all cases.
 		gl.useProgram(0);
 		gl.useProgram((GLuint) Shader::current->getHandle());
-	}
+	} */
 }
 
 void Graphics::discard(const std::vector<bool> &colorbuffers, bool depthstencil)
@@ -1331,12 +1332,12 @@ void Graphics::setWireframe(bool enable)
 	states.back().wireframe = enable;
 }
 
-Graphics::Renderer Graphics::getRenderer() const
+Graphics::Renderer Graphics::getRenderer()
 {
 	return GLAD_ES_VERSION_2_0 ? RENDERER_OPENGLES : RENDERER_OPENGL;
 }
 
-Graphics::RendererInfo Graphics::getRendererInfo() const
+Graphics::RendererInfo Graphics::getRendererInfo()
 {
 	RendererInfo info;
 
@@ -1366,10 +1367,10 @@ Graphics::RendererInfo Graphics::getRendererInfo() const
 	return info;
 }
 
-void Graphics::getAPIStats(int &shaderswitches) const
+/* void Graphics::getAPIStats(int &shaderswitches) const
 {
 	shaderswitches = gl.stats.shaderSwitches;
-}
+} */
 
 void Graphics::initCapabilities()
 {
@@ -1377,11 +1378,11 @@ void Graphics::initCapabilities()
 	capabilities.features[FEATURE_CLAMP_ZERO] = gl.isClampZeroTextureWrapSupported();
 	capabilities.features[FEATURE_LIGHTEN] = GLAD_VERSION_1_4 || GLAD_ES_VERSION_3_0 || GLAD_EXT_blend_minmax;
 	capabilities.features[FEATURE_FULL_NPOT] = GLAD_VERSION_2_0 || GLAD_ES_VERSION_3_0 || GLAD_OES_texture_npot;
-	capabilities.features[FEATURE_PIXEL_SHADER_HIGHP] = gl.isPixelShaderHighpSupported();
-	capabilities.features[FEATURE_SHADER_DERIVATIVES] = GLAD_VERSION_2_0 || GLAD_ES_VERSION_3_0 || GLAD_OES_standard_derivatives;
+	/* capabilities.features[FEATURE_PIXEL_SHADER_HIGHP] = gl.isPixelShaderHighpSupported();
+	capabilities.features[FEATURE_SHADER_DERIVATIVES] = GLAD_VERSION_2_0 || GLAD_ES_VERSION_3_0 || GLAD_OES_standard_derivatives; */
 	capabilities.features[FEATURE_GLSL3] = GLAD_ES_VERSION_3_0 || gl.isCoreProfile();
 	capabilities.features[FEATURE_INSTANCING] = gl.isInstancingSupported();
-	static_assert(FEATURE_MAX_ENUM == 8, "Graphics::initCapabilities must be updated when adding a new graphics feature!");
+	//static_assert(FEATURE_MAX_ENUM == 8, "Graphics::initCapabilities must be updated when adding a new graphics feature!");
 
 	capabilities.limits[LIMIT_POINT_SIZE] = gl.getMaxPointSize();
 	capabilities.limits[LIMIT_TEXTURE_SIZE] = gl.getMax2DTextureSize();
@@ -1391,28 +1392,28 @@ void Graphics::initCapabilities()
 	capabilities.limits[LIMIT_MULTI_CANVAS] = gl.getMaxRenderTargets();
 	capabilities.limits[LIMIT_CANVAS_MSAA] = gl.getMaxRenderbufferSamples();
 	capabilities.limits[LIMIT_ANISOTROPY] = gl.getMaxAnisotropy();
-	static_assert(LIMIT_MAX_ENUM == 8, "Graphics::initCapabilities must be updated when adding a new system limit!");
+	//static_assert(LIMIT_MAX_ENUM == 8, "Graphics::initCapabilities must be updated when adding a new system limit!");
 
 	for (int i = 0; i < TEXTURE_MAX_ENUM; i++)
 		capabilities.textureTypes[i] = gl.isTextureTypeSupported((TextureType) i);
 }
 
-bool Graphics::isCanvasFormatSupported(PixelFormat format) const
+bool Graphics::isCanvasFormatSupported(PixelFormat format)
 {
 	return Canvas::isFormatSupported(format);
 }
 
-bool Graphics::isCanvasFormatSupported(PixelFormat format, bool readable) const
+bool Graphics::isCanvasFormatSupported(PixelFormat format, bool readable)
 {
 	return Canvas::isFormatSupported(format, readable);
 }
 
-bool Graphics::isImageFormatSupported(PixelFormat format, bool sRGB) const
+bool Graphics::isImageFormatSupported(PixelFormat format, bool sRGB)
 {
 	return Image::isFormatSupported(format, sRGB);
 }
 
-Shader::Language Graphics::getShaderLanguageTarget() const
+/* Shader::Language Graphics::getShaderLanguageTarget() const
 {
 	if (gl.isCoreProfile())
 		return Shader::LANGUAGE_GLSL3;
@@ -1422,7 +1423,7 @@ Shader::Language Graphics::getShaderLanguageTarget() const
 		return Shader::LANGUAGE_ESSL1;
 	else
 		return Shader::LANGUAGE_GLSL1;
-}
+} */
 
 } // opengl
 } // graphics

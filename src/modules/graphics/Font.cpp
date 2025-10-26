@@ -23,7 +23,7 @@
 
 #include "libraries/utf8/utf8.h"
 
-#include "common/math.h"
+#include "common/lovemath.h"
 #include "common/Matrix.h"
 #include "Graphics.h"
 

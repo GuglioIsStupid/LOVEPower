@@ -180,7 +180,6 @@ function love.init()
 			minheight = 1,
 			fullscreen = false,
 			fullscreentype = "desktop",
-			displayindex = 1,
 			vsync = 1,
 			msaa = 0,
 			borderless = false,
@@ -199,21 +198,21 @@ function love.init()
 			event = true,
 			keyboard = true,
 			mouse = true,
-			timer = false,
+			timer = true,
 			joystick = true,
 			touch = false,
-			image = false,
-			graphics = false,
-			audio = false,
+			image = true,
+			graphics = true,
+			audio = true,
 			math = true,
 			physics = false,
 			sensor = false,
-			sound = false,
+			sound = true,
 			system = false,
-			font = false,
+			font = true,
 			thread = true,
 			window = true,
-			video = true,
+			video = false,
 		},
 		audio = {
 			mixwithsystem = true, -- Only relevant for Android / iOS.
@@ -346,10 +345,10 @@ function love.init()
 		"keyboard",
 		"joystick",
 		"mouse",
-		"touch",
+		--[[ "touch", ]]
 		"sound",
-		"system",
-		"sensor",
+		--[[ "system", ]]
+		--[[ "sensor", ]]
 		"audio",
 		"image",
 		"video",
@@ -357,7 +356,7 @@ function love.init()
 		"window",
 		"graphics",
 		"math",
-		"physics",
+		--[[ "physics", ]]
 		"data"
 	} do
 		if c.modules[v] then
@@ -397,7 +396,7 @@ function love.init()
 		end
 
 		love.window.setTitle(c.window.title or c.title)
-		assert(love.window.setMode(c.window.width, c.window.height,
+		love.window.setMode(c.window.width, c.window.height,
 		{
 			fullscreen = c.window.fullscreen,
 			fullscreentype = c.window.fullscreentype,
@@ -410,13 +409,12 @@ function love.init()
 			minheight = c.window.minheight,
 			borderless = c.window.borderless,
 			centered = c.window.centered,
-			displayindex = c.window.displayindex,
 			display = c.window.display, -- deprecated
 			highdpi = c.window.highdpi, -- deprecated
 			usedpiscale = c.window.usedpiscale,
 			x = c.window.x,
-			y = c.window.y,
-		}), "Could not set window mode")
+			y = c.window.y
+		})
 	end
 
 	-- The first couple event pumps on some systems (e.g. macOS) can take a

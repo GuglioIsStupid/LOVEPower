@@ -34,7 +34,7 @@ set(LOVE_SRC_COMMON
 	src/common/floattypes.cpp
 	src/common/floattypes.h
 	src/common/int.h
-	src/common/math.h
+	src/common/lovemath.h
 	src/common/Matrix.cpp
 	src/common/Matrix.h
 	src/common/memory.cpp
@@ -364,17 +364,17 @@ set(LOVE_SRC_MODULES_GRAPHICS
     src/modules/graphics/Image.h
     src/modules/graphics/Mesh.cpp
     src/modules/graphics/Mesh.h
-    src/modules/graphics/ParticleSystem.cpp
-    src/modules/graphics/ParticleSystem.h
+    #src/modules/graphics/ParticleSystem.cpp
+    #src/modules/graphics/ParticleSystem.h
     src/modules/graphics/Polyline.cpp
     src/modules/graphics/Polyline.h
     src/modules/graphics/Quad.cpp
     src/modules/graphics/Quad.h
     src/modules/graphics/Resource.h
-    src/modules/graphics/Shader.cpp
-    src/modules/graphics/Shader.h
-    src/modules/graphics/ShaderStage.cpp
-    src/modules/graphics/ShaderStage.h
+    #src/modules/graphics/Shader.cpp
+    #src/modules/graphics/Shader.h
+    #src/modules/graphics/ShaderStage.cpp
+    #src/modules/graphics/ShaderStage.h
     src/modules/graphics/SpriteBatch.cpp
     src/modules/graphics/SpriteBatch.h
     src/modules/graphics/StreamBuffer.cpp
@@ -402,10 +402,10 @@ set(LOVE_SRC_MODULES_GRAPHICS
     src/modules/graphics/opengl/Image.h
     src/modules/graphics/opengl/OpenGL.cpp
     src/modules/graphics/opengl/OpenGL.h
-    src/modules/graphics/opengl/Shader.cpp
-    src/modules/graphics/opengl/Shader.h
-    src/modules/graphics/opengl/ShaderStage.cpp
-    src/modules/graphics/opengl/ShaderStage.h
+    #src/modules/graphics/opengl/Shader.cpp
+    #src/modules/graphics/opengl/Shader.h
+    #src/modules/graphics/opengl/ShaderStage.cpp
+    #src/modules/graphics/opengl/ShaderStage.h
     src/modules/graphics/opengl/StreamBuffer.cpp
     src/modules/graphics/opengl/StreamBuffer.h
 
@@ -416,7 +416,7 @@ set(LOVE_SRC_MODULES_GRAPHICS
     src/modules/graphics/wrap_Graphics.cpp
     src/modules/graphics/wrap_Graphics.h
     src/modules/graphics/wrap_Graphics.lua
-    src/modules/graphics/wrap_GraphicsShader.lua
+    #src/modules/graphics/wrap_GraphicsShader.lua
     src/modules/graphics/wrap_Image.cpp
     src/modules/graphics/wrap_Image.h
     src/modules/graphics/wrap_Mesh.cpp
@@ -425,8 +425,8 @@ set(LOVE_SRC_MODULES_GRAPHICS
     src/modules/graphics/wrap_ParticleSystem.h
     src/modules/graphics/wrap_Quad.cpp
     src/modules/graphics/wrap_Quad.h
-    src/modules/graphics/wrap_Shader.cpp
-    src/modules/graphics/wrap_Shader.h
+    #src/modules/graphics/wrap_Shader.cpp
+    #src/modules/graphics/wrap_Shader.h
     src/modules/graphics/wrap_SpriteBatch.cpp
     src/modules/graphics/wrap_SpriteBatch.h
     src/modules/graphics/wrap_Text.cpp
@@ -527,6 +527,8 @@ set(WUFF_DIR ${CMAKE_SOURCE_DIR}/src/libraries/Wuff)
 set(GLSLANG_DIR ${CMAKE_SOURCE_DIR}/src/libraries/glslang)
 set(GLAD_DIR ${CMAKE_SOURCE_DIR}/src/libraries/glad)
 set(XXHASH_DIR ${CMAKE_SOURCE_DIR}/src/libraries/xxHash)
+set(VORBIS_DIR ${CMAKE_SOURCE_DIR}/src/libraries/libvorbis)
+set(OGG_DIR ${CMAKE_SOURCE_DIR}/src/libraries/libogg)
 #set(MODPLUG_DIR ${CMAKE_SOURCE_DIR}/src/libraries/modplug)
 
 include_directories(
@@ -543,6 +545,8 @@ include_directories(
     ${XXHASH_DIR}
     ${WUFF_DIR}
     #${MODPLUG_DIR}
+    ${VORBIS_DIR}/include
+    ${OGG_DIR}/include
 
     ${SDL2_INCLUDE_DIRS}
 )
@@ -550,15 +554,17 @@ include_directories(
 file(GLOB DR_SOURCES ${DR_DIR}/*.h ${DR_DIR}/*.c)
 file(GLOB LUA53_SOURCES ${LUA_53_DIR}/*.h ${LUA_53_DIR}/*.c)
 file(GLOB LZ4_SOURCES ${LZ4_DIR}/*.h ${LZ4_DIR}/*.c)
-file(GLOB NOISE1234_SOURCES ${NOISE1234_DIR}/*.h ${NOISE1234_DIR}/*.c)
+file(GLOB NOISE1234_SOURCES ${NOISE1234_DIR}/*.h ${NOISE1234_DIR}/*.c ${NOISE1234_DIR}/*.cpp)
 file(GLOB STB_SOURCES ${STB_DIR}/*.h)
 file(GLOB UTF8_SOURCES ${UTF8_DIR}/*.h)
 file(GLOB DDSPARSE_SOURCES ${DDSPARSE_DIR}/*.h ${DDSPARSE_DIR}/*.cpp)
 file(GLOB LODEPNG_SOURCES ${LODEPNG_DIR}/*.h ${LODEPNG_DIR}/*.cpp)
 file(GLOB GLSLANG_SOURCES ${GLSLANG_DIR}/*.h ${GLSLANG_DIR}/*.cpp)
-file(GLOB GLAD_SOURCES ${GLAD_DIR}/*.h ${GLAD_DIR}/*.c)
+file(GLOB GLAD_SOURCES ${GLAD_DIR}/*.h ${GLAD_DIR}/*.c ${GLAD_DIR}/*.cpp ${GLAD_DIR}/*.hpp)
 file(GLOB XXHASH_SOURCES ${XXHASH_DIR}/*.h ${XXHASH_DIR}/*.c)
 file(GLOB WUFF_SOURCES ${WUFF_DIR}/*.h ${WUFF_DIR}/*.c)
+file(GLOB VORBIS_SOURCES ${VORBIS_DIR}/lib/*.h ${VORBIS_DIR}/lib/*.c)
+file(GLOB OGG_SOURCES ${OGG_DIR}/src/*.h ${OGG_DIR}/src/*.c)
 #file(GLOB MODPLUG_SOURCES ${MODPLUG_DIR}/*.h ${MODPLUG_DIR}/*.c ${MODPLUG_DIR}/*.cpp)
 
 list(APPEND LOVE_LIB_SRC 
@@ -566,6 +572,7 @@ list(APPEND LOVE_LIB_SRC
     ${NOISE1234_SOURCES} ${STB_SOURCES} ${UTF8_SOURCES} 
     ${DDSPARSE_SOURCES} ${GLSLANG_SOURCES} ${GLAD_SOURCES}
     ${XXHASH_SOURCES} ${LODEPNG_SOURCES} ${WUFF_SOURCES}
+    ${VORBIS_SOURCES} ${OGG_SOURCES}
     #${MODPLUG_SOURCES}
 )
 
@@ -581,17 +588,23 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${LOVE_LIB_SRC})
 set(LIBOGC2_LUAJIT_LIB ${DEVKITPRO}/libogc2/wii/lib/libluajit.a)
 include_directories(${DEVKITPRO}/libogc2/wii/include/luajit)
 
+include_directories(${DEVKITPRO}/portlibs/wii/include)
+include_directories(${DEVKITPPC}/powerpc-eabi/include)
+include_directories(${DEVKITPRO}/portlibs/ppc/include)
+include_directories(${DEVKITPRO}/libogc2/wii/include)
+
 message(STATUS "Using PORTLIBS_PATH: ${DEVKITPRO}/portlibs")
 set(WII_PHYSFS_LIB ${DEVKITPRO}/portlibs/wii/lib/libphysfs.a)
-include_directories(${DEVKITPRO}/portlibs/wii/include)
 
 set(PPC_ZLIB_LIB ${DEVKITPRO}/portlibs/ppc/lib/libz.a)
-include_directories(${DEVKITPRO}/portlibs/ppc/include)
 
 set(PPC_FREETYPE_LIB ${DEVKITPRO}/portlibs/ppc/lib/libfreetype.a)
 include_directories(${DEVKITPRO}/portlibs/ppc/include/freetype2)
 
-include_directories(${DEVKITPPC}/powerpc-eabi/include)
+set(WII_OPENGX_LIB ${DEVKITPRO}/libogc2/wii/lib/libopengx.a)
+
+set(PPC_PNG_LIB ${DEVKITPRO}/portlibs/ppc/lib/libpng.a)
+set(PPC_Z_LIB_LIB ${DEVKITPRO}/portlibs/ppc/lib/libz.a)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     ${EXTRA_LIBS} 
@@ -600,6 +613,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ${WII_PHYSFS_LIB}
     ${PPC_ZLIB_LIB}
     ${PPC_FREETYPE_LIB}
+    ${WII_OPENGX_LIB}
+    ${PPC_PNG_LIB}
+    ${PPC_Z_LIB_LIB}
+    bz2
 )
 
 add_custom_command(

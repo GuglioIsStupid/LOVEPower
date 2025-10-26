@@ -26,6 +26,11 @@ namespace love
 namespace window
 {
 
+Window::Window(const char *name)
+	: Module(M_WINDOW, name)
+{
+}
+
 Window::~Window()
 {
 }

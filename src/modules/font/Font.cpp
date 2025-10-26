@@ -22,6 +22,7 @@
 #include "Font.h"
 #include "BMFontRasterizer.h"
 #include "ImageRasterizer.h"
+#include "data/DataModule.h"
 
 #include "libraries/utf8/utf8.h"
 
@@ -36,22 +37,32 @@ namespace font
 class DefaultFontData : public love::Data
 {
 public:
-
-	Data *clone() const override { return new DefaultFontData(); }
-	void *getData() const override { return Vera_ttf; }
-	size_t getSize() const override { return sizeof(Vera_ttf); }
+    Data *clone() const override { return new DefaultFontData(); }
+    void *getData() const override { return Vera_ttf; }
+    size_t getSize() const override { return sizeof(Vera_ttf); }
 };
+
+Font::Font(const char *name)
+	: Module(M_FONT, name)
+
+{
+	auto compressedbytes = (const char *) Vera_ttf;
+	auto compressedsize = (size_t)Vera_ttf_len;
+
+	size_t rawsize = 0;
+
+	StrongRef<DefaultFontData> data(new DefaultFontData, Acquire::NORETAIN);
+	defaultFontData.set(data.get());
+}
 
 Rasterizer *Font::newTrueTypeRasterizer(int size, TrueTypeRasterizer::Hinting hinting)
 {
-	StrongRef<DefaultFontData> data(new DefaultFontData, Acquire::NORETAIN);
-	return newTrueTypeRasterizer(data.get(), size, hinting);
+	return newTrueTypeRasterizer(defaultFontData.get(), size, hinting);
 }
 
 Rasterizer *Font::newTrueTypeRasterizer(int size, float dpiscale, TrueTypeRasterizer::Hinting hinting)
 {
-	StrongRef<DefaultFontData> data(new DefaultFontData, Acquire::NORETAIN);
-	return newTrueTypeRasterizer(data.get(), size, dpiscale, hinting);
+	return newTrueTypeRasterizer(defaultFontData.get(), size, dpiscale, hinting);
 }
 
 Rasterizer *Font::newBMFontRasterizer(love::filesystem::FileData *fontdef, const std::vector<image::ImageData *> &images, float dpiscale)

@@ -24,7 +24,7 @@
 // LOVE
 #include "common/Module.h"
 #include "common/StringMap.h"
-#include "common/math.h"
+#include "common/lovemath.h"
 #include "common/Optional.h"
 #include "image/ImageData.h"
 
@@ -247,6 +247,8 @@ private:
 	static StringMap<DisplayOrientation, ORIENTATION_MAX_ENUM>::Entry orientationEntries[];
 	static StringMap<DisplayOrientation, ORIENTATION_MAX_ENUM> orientations;
 
+protected:
+	Window(const char *name);
 }; // Window
 
 struct WindowSettings

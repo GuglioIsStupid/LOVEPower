@@ -24,7 +24,7 @@
 // LOVE
 #include "common/config.h"
 #include "common/int.h"
-#include "common/math.h"
+#include "common/lovemath.h"
 #include "common/Color.h"
 #include "graphics/Texture.h"
 #include "graphics/vertex.h"
@@ -370,7 +370,7 @@ public:
 
 	bool isTextureTypeSupported(TextureType type) const;
 	bool isClampZeroTextureWrapSupported() const;
-	bool isPixelShaderHighpSupported() const;
+	/* bool isPixelShaderHighpSupported() const; */
 	bool isInstancingSupported() const;
 	bool isDepthCompareSampleSupported() const;
 	bool isSamplerLODBiasSupported() const;
@@ -453,7 +453,7 @@ private:
 
 	bool contextInitialized;
 
-	bool pixelShaderHighpSupported;
+	/* bool pixelShaderHighpSupported; */
 	bool baseVertexSupported;
 
 	float maxAnisotropy;

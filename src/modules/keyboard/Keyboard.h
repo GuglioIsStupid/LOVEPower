@@ -600,6 +600,9 @@ private:
 	static StringMap<Scancode, SCANCODE_MAX_ENUM>::Entry scancodeEntries[];
 	static StringMap<Scancode, SCANCODE_MAX_ENUM> scancodes;
 
+protected:
+	Keyboard(const char *name);
+
 }; // Keyboard
 
 } // keyboard

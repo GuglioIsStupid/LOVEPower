@@ -313,7 +313,7 @@ void SpriteBatch::draw(Graphics *gfx, const Matrix4 &m)
 
 	gfx->flushStreamDraws();
 
-	if (texture.get())
+	/* if (texture.get())
 	{
 		if (Shader::isDefaultActive())
 		{
@@ -326,7 +326,7 @@ void SpriteBatch::draw(Graphics *gfx, const Matrix4 &m)
 
 		if (Shader::current)
 			Shader::current->checkMainTexture(texture);
-	}
+	} */
 
 	// Make sure the buffer isn't mapped when we draw (sends data to GPU if needed.)
 	array_buf->unmap();
@@ -360,8 +360,8 @@ void SpriteBatch::draw(Graphics *gfx, const Matrix4 &m)
 		BuiltinVertexAttribute builtinattrib;
 		if (vertex::getConstant(it.first.c_str(), builtinattrib))
 			attributeindex = (int) builtinattrib;
-		else if (Shader::current)
-			attributeindex = Shader::current->getVertexAttributeIndex(it.first);
+		/* else if (Shader::current)
+			attributeindex = Shader::current->getVertexAttributeIndex(it.first); */
 
 		if (attributeindex >= 0)
 		{

@@ -581,11 +581,11 @@ void Mesh::drawInstanced(Graphics *gfx, const Matrix4 &m, int instancecount)
 
 	gfx->flushStreamDraws();
 
-	if (Shader::isDefaultActive())
+	/* if (Shader::isDefaultActive())
 		Shader::attachDefault(Shader::STANDARD_DEFAULT);
 
 	if (Shader::current && texture.get())
-		Shader::current->checkMainTexture(texture);
+		Shader::current->checkMainTexture(texture); */
 
 	vertex::Attributes attributes;
 	vertex::BufferBindings buffers;
@@ -605,8 +605,8 @@ void Mesh::drawInstanced(Graphics *gfx, const Matrix4 &m, int instancecount)
 		BuiltinVertexAttribute builtinattrib;
 		if (vertex::getConstant(attrib.first.c_str(), builtinattrib))
 			attributeindex = (int) builtinattrib;
-		else if (Shader::current)
-			attributeindex = Shader::current->getVertexAttributeIndex(attrib.first);
+		/* else if (Shader::current)
+			attributeindex = Shader::current->getVertexAttributeIndex(attrib.first); */
 
 		if (attributeindex >= 0)
 		{

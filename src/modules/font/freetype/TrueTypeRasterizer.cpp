@@ -25,13 +25,6 @@
 // C
 #include <math.h>
 
-#ifndef floorf
-static float floorf(float x)
-{
-	return (float)((int)x - (x < 0 && x != (int)x ? 1 : 0));
-}
-#endif
-
 namespace love
 {
 namespace font

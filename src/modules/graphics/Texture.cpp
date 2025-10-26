@@ -190,7 +190,7 @@ void Texture::drawLayer(Graphics *gfx, int layer, Quad *q, const Matrix4 &m)
 	cmd.indexMode = TriangleIndexMode::QUADS;
 	cmd.vertexCount = 4;
 	cmd.texture = this;
-	cmd.standardShaderType = Shader::STANDARD_ARRAY;
+	/* cmd.standardShaderType = Shader::STANDARD_ARRAY; */
 
 	Graphics::StreamVertexData data = gfx->requestStreamDraw(cmd);
 

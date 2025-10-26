@@ -53,6 +53,7 @@ Window::Window()
 	, displayedWindowError(false)
 	, hasSDL203orEarlier(false)
 	, contextAttribs()
+	, love::window::Window("love.window.sdl")
 {
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
 		throw love::Exception("Could not initialize SDL video subsystem (%s)", SDL_GetError());
