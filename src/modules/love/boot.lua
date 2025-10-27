@@ -205,7 +205,7 @@ function love.init()
 			graphics = true,
 			audio = true,
 			math = true,
-			physics = false,
+			physics = true,
 			sensor = false,
 			sound = true,
 			system = false,
@@ -356,7 +356,7 @@ function love.init()
 		"window",
 		"graphics",
 		"math",
-		--[[ "physics", ]]
+		"physics",
 		"data"
 	} do
 		if c.modules[v] then

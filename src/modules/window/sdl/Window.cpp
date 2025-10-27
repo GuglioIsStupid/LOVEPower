@@ -34,6 +34,10 @@
 // SDL
 #include <SDL_syswm.h>
 
+// logging
+#include <fstream>
+#include <sstream>
+
 #ifndef APIENTRY
 #define APIENTRY
 #endif
@@ -113,7 +117,7 @@ void Window::setGLFramebufferAttributes(int msaa, bool sRGB, bool stencil, int d
 			SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, 0);
 	}
 
-#if defined(LOVE_WINDOWS)
+#if defined(LOVE_WINDOWS) || defined(LOVE_LINUX)
 	// Avoid the Microsoft OpenGL 1.1 software renderer on Windows. Apparently
 	// older Intel drivers like to use it as a fallback when requesting some
 	// unsupported framebuffer attribute values, rather than properly failing.
@@ -126,25 +130,20 @@ void Window::setGLContextAttributes(const ContextAttribs &attribs)
 	int profilemask = 0;
 	int contextflags = 0;
 
-	if (attribs.gles)
-		profilemask = SDL_GL_CONTEXT_PROFILE_ES;
-	else if (attribs.versionMajor * 10 + attribs.versionMinor >= 32)
-		profilemask |= SDL_GL_CONTEXT_PROFILE_CORE;
-	else if (attribs.debug)
-		profilemask = SDL_GL_CONTEXT_PROFILE_COMPATIBILITY;
+	profilemask = SDL_GL_CONTEXT_PROFILE_CORE;
 
 	if (attribs.debug)
 		contextflags |= SDL_GL_CONTEXT_DEBUG_FLAG;
 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, attribs.versionMajor);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, attribs.versionMinor);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, profilemask);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, contextflags);
 }
 
 bool Window::checkGLVersion(const ContextAttribs &attribs, std::string &outversion)
 {
-	typedef unsigned char GLubyte;
+	/* typedef unsigned char GLubyte;
 	typedef unsigned int GLenum;
 	typedef const GLubyte *(APIENTRY *glGetStringPtr)(GLenum name);
 	const GLenum GL_VENDOR_ENUM   = 0x1F00;
@@ -185,7 +184,7 @@ bool Window::checkGLVersion(const ContextAttribs &attribs, std::string &outversi
 
 	if (glmajor < attribs.versionMajor
 		|| (glmajor == attribs.versionMajor && glminor < attribs.versionMinor))
-		return false;
+		return false; */
 
 	return true;
 }
@@ -302,10 +301,6 @@ bool Window::createWindowAndContext(int x, int y, int w, int h, Uint32 windowfla
 			return false;
 		}
 
-#ifdef LOVE_MACOSX
-		love::macosx::setWindowSRGBColorSpace(window);
-#endif
-
 		context = SDL_GL_CreateContext(window);
 
 		if (!context)
@@ -400,6 +395,14 @@ bool Window::createWindowAndContext(int x, int y, int w, int h, Uint32 windowfla
 			displayedWindowError = true;
 		}
 
+		// log into love_window_err.txt
+		std::ofstream log("love_window_err.txt", std::ios::out | std::ios::app);
+		if (log.is_open())
+		{
+			log << title << std::endl << message << std::endl;
+			log.close();
+		}
+
 		close();
 		return false;
 	}
@@ -436,19 +439,6 @@ bool Window::setWindow(int width, int height, WindowSettings *settings)
 	}
 
 	Uint32 sdlflags = SDL_WINDOW_OPENGL;
-
-	// On Android, disable fullscreen first on window creation so it's
-	// possible to change the orientation by specifying portait width and
-	// height, otherwise SDL will pick the current orientation dimensions when
-	// fullscreen flag is set. Don't worry, we'll set it back later when user
-	// also requested fullscreen after the window is created.
-	// See https://github.com/love2d/love-android/issues/196
-#ifdef LOVE_ANDROID
-	bool fullscreen = f.fullscreen;
-
-	f.fullscreen = false;
-	f.fstype = FULLSCREEN_DESKTOP;
-#endif
 
 	if (f.fullscreen)
 	{
@@ -531,13 +521,6 @@ bool Window::setWindow(int width, int height, WindowSettings *settings)
 		fromPixels((double) pixelWidth, (double) pixelHeight, scaledw, scaledh);
 		graphics->setMode((int) scaledw, (int) scaledh, pixelWidth, pixelHeight, f.stencil);
 	}
-
-	// Set fullscreen when user requested it before.
-	// See above for explanation.
-#ifdef LOVE_ANDROID
-	setFullscreen(fullscreen);
-	love::android::setImmersive(fullscreen);
-#endif
 
 	return true;
 }

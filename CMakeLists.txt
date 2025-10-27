@@ -489,6 +489,105 @@ set(LOVE_SRC_MODULES_VIDEO
     src/modules/video/wrap_VideoStream.h
 )
 
+set(LOVE_SRC_MODULES_PHYSICS
+    src/modules/physics/Body.cpp
+    src/modules/physics/Body.h
+    src/modules/physics/Joint.cpp
+    src/modules/physics/Joint.h
+    src/modules/physics/Shape.cpp
+    src/modules/physics/Shape.h
+
+    src/modules/physics/box2d/Body.cpp
+    src/modules/physics/box2d/Body.h
+    src/modules/physics/box2d/ChainShape.cpp
+    src/modules/physics/box2d/ChainShape.h
+    src/modules/physics/box2d/CircleShape.cpp
+    src/modules/physics/box2d/CircleShape.h
+    src/modules/physics/box2d/Contact.cpp
+    src/modules/physics/box2d/Contact.h
+    src/modules/physics/box2d/DistanceJoint.cpp
+    src/modules/physics/box2d/DistanceJoint.h
+    src/modules/physics/box2d/EdgeShape.cpp
+    src/modules/physics/box2d/EdgeShape.h
+    src/modules/physics/box2d/Fixture.cpp
+    src/modules/physics/box2d/Fixture.h
+    src/modules/physics/box2d/FrictionJoint.cpp
+    src/modules/physics/box2d/FrictionJoint.h
+    src/modules/physics/box2d/GearJoint.cpp
+    src/modules/physics/box2d/GearJoint.h
+    src/modules/physics/box2d/Joint.cpp
+    src/modules/physics/box2d/Joint.h
+    src/modules/physics/box2d/MotorJoint.cpp
+    src/modules/physics/box2d/MotorJoint.h
+    src/modules/physics/box2d/MouseJoint.cpp
+    src/modules/physics/box2d/MouseJoint.h
+    src/modules/physics/box2d/Physics.cpp
+    src/modules/physics/box2d/Physics.h
+    src/modules/physics/box2d/PolygonShape.cpp
+    src/modules/physics/box2d/PolygonShape.h
+    src/modules/physics/box2d/PrismaticJoint.cpp
+    src/modules/physics/box2d/PrismaticJoint.h
+    src/modules/physics/box2d/PulleyJoint.cpp
+    src/modules/physics/box2d/PulleyJoint.h
+    src/modules/physics/box2d/RevoluteJoint.cpp
+    src/modules/physics/box2d/RevoluteJoint.h
+    src/modules/physics/box2d/RopeJoint.cpp
+    src/modules/physics/box2d/RopeJoint.h
+    src/modules/physics/box2d/Shape.cpp
+    src/modules/physics/box2d/Shape.h
+    src/modules/physics/box2d/WeldJoint.cpp
+    src/modules/physics/box2d/WeldJoint.h
+    src/modules/physics/box2d/WheelJoint.cpp
+    src/modules/physics/box2d/WheelJoint.h
+    src/modules/physics/box2d/World.cpp
+    src/modules/physics/box2d/World.h
+    src/modules/physics/box2d/wrap_Body.cpp
+    src/modules/physics/box2d/wrap_Body.h
+    src/modules/physics/box2d/wrap_ChainShape.cpp
+    src/modules/physics/box2d/wrap_ChainShape.h
+    src/modules/physics/box2d/wrap_CircleShape.cpp
+    src/modules/physics/box2d/wrap_CircleShape.h
+    src/modules/physics/box2d/wrap_Contact.cpp
+    src/modules/physics/box2d/wrap_Contact.h
+    src/modules/physics/box2d/wrap_DistanceJoint.cpp
+    src/modules/physics/box2d/wrap_DistanceJoint.h
+    src/modules/physics/box2d/wrap_EdgeShape.cpp
+    src/modules/physics/box2d/wrap_EdgeShape.h
+    src/modules/physics/box2d/wrap_Fixture.cpp
+    src/modules/physics/box2d/wrap_Fixture.h
+    src/modules/physics/box2d/wrap_FrictionJoint.cpp
+    src/modules/physics/box2d/wrap_FrictionJoint.h
+    src/modules/physics/box2d/wrap_GearJoint.cpp
+    src/modules/physics/box2d/wrap_GearJoint.h
+    src/modules/physics/box2d/wrap_Joint.cpp
+    src/modules/physics/box2d/wrap_Joint.h
+    src/modules/physics/box2d/wrap_MotorJoint.cpp
+    src/modules/physics/box2d/wrap_MotorJoint.h
+    src/modules/physics/box2d/wrap_MouseJoint.cpp
+    src/modules/physics/box2d/wrap_MouseJoint.h
+    src/modules/physics/box2d/wrap_Physics.cpp
+    src/modules/physics/box2d/wrap_Physics.h
+    src/modules/physics/box2d/wrap_PolygonShape.cpp
+    src/modules/physics/box2d/wrap_PolygonShape.h
+    src/modules/physics/box2d/wrap_PrismaticJoint.cpp
+    src/modules/physics/box2d/wrap_PrismaticJoint.h
+    src/modules/physics/box2d/wrap_PulleyJoint.cpp
+    src/modules/physics/box2d/wrap_PulleyJoint.h
+    src/modules/physics/box2d/wrap_RevoluteJoint.cpp
+    src/modules/physics/box2d/wrap_RevoluteJoint.h
+    src/modules/physics/box2d/wrap_RopeJoint.cpp
+    src/modules/physics/box2d/wrap_RopeJoint.h
+    src/modules/physics/box2d/wrap_Shape.cpp
+    src/modules/physics/box2d/wrap_Shape.h
+    src/modules/physics/box2d/wrap_WeldJoint.cpp
+    src/modules/physics/box2d/wrap_WeldJoint.h
+    src/modules/physics/box2d/wrap_WheelJoint.cpp
+    src/modules/physics/box2d/wrap_WheelJoint.h
+    src/modules/physics/box2d/wrap_World.cpp
+    src/modules/physics/box2d/wrap_World.h
+)
+
+
 set(LOVE_FULL
     ${LOVE_SRC_COMMON}
     ${LOVE_SRC_MODULES_LOVE}
@@ -508,6 +607,7 @@ set(LOVE_FULL
     ${LOVE_SRC_MODULES_MATH}
     ${LOVE_SRC_MODULES_VIDEO}
     ${LOVE_SRC_MODULES_SOUND}
+    ${LOVE_SRC_MODULES_PHYSICS}
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
@@ -529,6 +629,7 @@ set(GLAD_DIR ${CMAKE_SOURCE_DIR}/src/libraries/glad)
 set(XXHASH_DIR ${CMAKE_SOURCE_DIR}/src/libraries/xxHash)
 set(VORBIS_DIR ${CMAKE_SOURCE_DIR}/src/libraries/libvorbis)
 set(OGG_DIR ${CMAKE_SOURCE_DIR}/src/libraries/libogg)
+set(BOX2D_DIR ${CMAKE_SOURCE_DIR}/src/libraries/Box2D)
 #set(MODPLUG_DIR ${CMAKE_SOURCE_DIR}/src/libraries/modplug)
 
 include_directories(
@@ -547,6 +648,7 @@ include_directories(
     #${MODPLUG_DIR}
     ${VORBIS_DIR}/include
     ${OGG_DIR}/include
+    ${BOX2D_DIR}
 
     ${SDL2_INCLUDE_DIRS}
 )
@@ -565,6 +667,17 @@ file(GLOB XXHASH_SOURCES ${XXHASH_DIR}/*.h ${XXHASH_DIR}/*.c)
 file(GLOB WUFF_SOURCES ${WUFF_DIR}/*.h ${WUFF_DIR}/*.c)
 file(GLOB VORBIS_SOURCES ${VORBIS_DIR}/lib/*.h ${VORBIS_DIR}/lib/*.c)
 file(GLOB OGG_SOURCES ${OGG_DIR}/src/*.h ${OGG_DIR}/src/*.c)
+file(GLOB BOX2D_SOURCES 
+    ${BOX2D_DIR}/*.h ${BOX2D_DIR}/*.cpp
+    ${BOX2D_DIR}/Collision/*.h ${BOX2D_DIR}/Collision/*.cpp
+    ${BOX2D_DIR}/Collision/Shapes/*.h ${BOX2D_DIR}/Collision/Shapes/*.cpp
+    ${BOX2D_DIR}/Common/*.h ${BOX2D_DIR}/Common/*.cpp
+    ${BOX2D_DIR}/Dynamics/*.h ${BOX2D_DIR}/Dynamics/*.cpp
+    ${BOX2D_DIR}/Dynamics/Contacts/*.h ${BOX2D_DIR}/Dynamics/Contacts/*.cpp
+    ${BOX2D_DIR}/Dynamics/Joints/*.h ${BOX2D_DIR}/Dynamics/Joints/*.cpp
+    ${BOX2D_DIR}/Rope/*.h ${BOX2D_DIR}/Rope/*.cpp
+)
+
 #file(GLOB MODPLUG_SOURCES ${MODPLUG_DIR}/*.h ${MODPLUG_DIR}/*.c ${MODPLUG_DIR}/*.cpp)
 
 list(APPEND LOVE_LIB_SRC 
@@ -572,7 +685,7 @@ list(APPEND LOVE_LIB_SRC
     ${NOISE1234_SOURCES} ${STB_SOURCES} ${UTF8_SOURCES} 
     ${DDSPARSE_SOURCES} ${GLSLANG_SOURCES} ${GLAD_SOURCES}
     ${XXHASH_SOURCES} ${LODEPNG_SOURCES} ${WUFF_SOURCES}
-    ${VORBIS_SOURCES} ${OGG_SOURCES}
+    ${VORBIS_SOURCES} ${OGG_SOURCES} ${BOX2D_SOURCES}
     #${MODPLUG_SOURCES}
 )
 
