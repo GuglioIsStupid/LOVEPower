@@ -34,7 +34,9 @@ namespace glad {
 /* GL_VERSION_1_0 */
 inline void glCullFace(GLenum mode) { fp_glCullFace(mode); }
 inline void glFrontFace(GLenum mode) { fp_glFrontFace(mode); }
-inline void glHint(GLenum target, GLenum mode) { fp_glHint(target, mode); }
+inline void glHint(GLenum target, GLenum mode) {
+    //fp_glHint(target, mode); 
+}
 inline void glLineWidth(GLfloat width) { fp_glLineWidth(width); }
 inline void glPointSize(GLfloat size) { fp_glPointSize(size); }
 inline void glPolygonMode(GLenum face, GLenum mode) { fp_glPolygonMode(face, mode); }
@@ -63,7 +65,9 @@ inline void glStencilFunc(GLenum func, GLint ref, GLuint mask) { fp_glStencilFun
 inline void glStencilOp(GLenum fail, GLenum zfail, GLenum zpass) { fp_glStencilOp(fail, zfail, zpass); }
 inline void glDepthFunc(GLenum func) { fp_glDepthFunc(func); }
 inline void glPixelStoref(GLenum pname, GLfloat param) { fp_glPixelStoref(pname, param); }
-inline void glPixelStorei(GLenum pname, GLint param) { fp_glPixelStorei(pname, param); }
+inline void glPixelStorei(GLenum pname, GLint param) { 
+    //fp_glPixelStorei(pname, param); 
+}
 inline void glReadBuffer(GLenum src) { fp_glReadBuffer(src); }
 inline void glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, void* pixels) { fp_glReadPixels(x, y, width, height, format, type, pixels); }
 inline void glGetBooleanv(GLenum pname, GLboolean* data) { fp_glGetBooleanv(pname, data); }

@@ -110,10 +110,13 @@ OpenGL::OpenGL()
 	, vendor(VENDOR_UNKNOWN)
 	, state()
 {
-	state.constantColor = Colorf(1.0f, 1.0f, 1.0f, 1.0f);
+    state.constantColor = Colorf(1.0f, 1.0f, 1.0f, 1.0f);
 
-	float nan = std::numeric_limits<float>::quiet_NaN();
-	state.lastConstantColor = Colorf(nan, nan, nan, nan);
+    float nan = std::numeric_limits<float>::quiet_NaN();
+    state.lastConstantColor = Colorf(nan, nan, nan, nan);
+
+    state.viewport = Rect{0, 0, 640, 480};
+    state.scissor = Rect{0, 0, 640, 480};
 }
 
 bool OpenGL::initContext()
@@ -807,8 +810,12 @@ void OpenGL::clearDepth(double value)
 
 void OpenGL::setViewport(const Rect &v)
 {
-	glViewport(v.x, v.y, v.w, v.h);
-	state.viewport = v;
+    if (!contextInitialized) return;
+    if (v.w < 0 || v.h < 0) return;
+    if (v == state.viewport) return;
+
+    glViewport(v.x, v.y, v.w, v.h);
+    state.viewport = v;
 }
 
 Rect OpenGL::getViewport() const

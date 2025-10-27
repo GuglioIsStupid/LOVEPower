@@ -137,7 +137,7 @@ void Graphics::setViewportSize(int width, int height, int pixelwidth, int pixelh
 	if (!isCanvasActive())
 	{
 		// Set the viewport to top-left corner.
-		gl.setViewport({0, 0, pixelwidth, pixelheight});
+		//gl.setViewport({0, 0, pixelwidth, pixelheight});
 
 		// Re-apply the scissor if it was active, since the rectangle passed to
 		// glScissor is affected by the viewport dimensions.
@@ -156,10 +156,12 @@ bool Graphics::setMode(int width, int height, int pixelwidth, int pixelheight, b
 
 	this->windowHasStencil = windowhasstencil;
 
+	bool isCore = gl.isCoreProfile();
+
 	// Okay, setup OpenGL.
 	gl.initContext();
 
-	if (gl.isCoreProfile())
+	if (isCore)
 	{
 		glGenVertexArrays(1, &mainVAO);
 		glBindVertexArray(mainVAO);
@@ -176,39 +178,39 @@ bool Graphics::setMode(int width, int height, int pixelwidth, int pixelheight, b
 	glEnable(GL_BLEND);
 
 	// Auto-generated mipmaps should be the best quality possible
-	if (!gl.isCoreProfile())
+	if (!isCore)
 		glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
 
-	if (!GLAD_ES_VERSION_2_0 && !gl.isCoreProfile())
+	/* if (!GLAD_ES_VERSION_2_0 && !isCore)
 	{
 		// Make sure antialiasing works when set elsewhere
 		glEnable(GL_MULTISAMPLE);
 
 		// Enable texturing
 		glEnable(GL_TEXTURE_2D);
-	}
+	} */
 
-	gl.setTextureUnit(0);
+	//gl.setTextureUnit(0);
 
 	// Set pixel row alignment
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
 	// Always enable seamless cubemap filtering when possible.
-	if (GLAD_VERSION_3_2 || GLAD_ARB_seamless_cube_map)
-		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+	/* if (GLAD_VERSION_3_2 || GLAD_ARB_seamless_cube_map)
+		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); */
 
 	// Set whether drawing converts input from linear -> sRGB colorspace.
-	if (!gl.bugs.brokenSRGB && (GLAD_VERSION_3_0 || GLAD_ARB_framebuffer_sRGB
+	/* if (!gl.bugs.brokenSRGB && (GLAD_VERSION_3_0 || GLAD_ARB_framebuffer_sRGB
 		|| GLAD_EXT_framebuffer_sRGB || GLAD_ES_VERSION_3_0 || GLAD_EXT_sRGB))
 	{
 		if (GLAD_VERSION_1_0 || GLAD_EXT_sRGB_write_control)
 			gl.setEnableState(OpenGL::ENABLE_FRAMEBUFFER_SRGB, isGammaCorrect());
 	}
-	else
-		setGammaCorrect(false);
+	else */
+	//setGammaCorrect(false);
 
-	setDebug(isDebugEnabled());
+	//setDebug(isDebugEnabled());
 
 	if (streamBufferState.vb[0] == nullptr)
 	{

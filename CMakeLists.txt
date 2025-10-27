@@ -696,6 +696,9 @@ set(SOURCES
 
 add_definitions(-DLOVE_NOMPG123 -DLOVE_NO_MODPLUG)
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fexceptions -lm")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Map=${CMAKE_BINARY_DIR}/${PROJECT_NAME}.map")
 add_executable(${PROJECT_NAME} ${SOURCES} ${LOVE_LIB_SRC})
 
 set(LIBOGC2_LUAJIT_LIB ${DEVKITPRO}/libogc2/wii/lib/libluajit.a)
