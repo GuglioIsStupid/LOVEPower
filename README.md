@@ -9,8 +9,8 @@ Want support? Join the [Discord Server](https://discord.gg/wqkQxKNNu5)
 # Compiling
 
 1. Download, compile and install [Lua for Wii](https://wiibrew.org/wiki/Lua_for_Wii).
-2. (Optional) Download and install [libmii](https://wiibrew.org/wiki/Libmii).
-3. Download, compile and install [SDL-Wii](https://github.com/GuglioIsStupid/sdl-wii).
+2. Download, compile and install [SDL-Wii](https://github.com/GuglioIsStupid/sdl-wii).
+3. (Optional) Download and install [libmii](https://wiibrew.org/wiki/Libmii).
 4. Compile with "make". For some reason multiple threads don't work(?). I'll look into it in the near future.
 
 Modified libraries will be available in source code for ease of user compiling
