@@ -74,12 +74,13 @@ endif
 
 ifeq ($(strip $(NO_LUAJIT)),true)
 # just use regular lua
-LIBS    += -llua
+LIBS    += -llua5.1
 else
-LIBS	 += -lluajit -lSDL # SDL is used for threads
+LIBS	 += -lluajit
 CFLAGS   += -DUSE_LUAJIT
 CXXFLAGS += -DUSE_LUAJIT
 endif
+LIBS     +=  -lSDL # SDL is used for threads
 
 ifeq ($(strip $(USE_PHYSICS)),)
 	USE_PHYSICS := true
@@ -156,11 +157,15 @@ export HFILES += $(LUA_HDRS) $(TTF_HDRS)
 #---------------------------------------------------------------------------------
 # build a list of include paths
 #---------------------------------------------------------------------------------
-export INCLUDE	:=	$(foreach dir,$(INCLUDES), -I$(CURDIR)/$(dir)) \
-					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-					-I$(CURDIR)/$(BUILD) \
-					-I$(LIBOGC_INC) \
-					-I$(PORTLIBS_PATH)/ppc/include/freetype2
+export INCLUDE := \
+    $(foreach dir,$(INCLUDES), -I$(CURDIR)/$(dir)) \
+    $(foreach dir,$(LIBDIRS),-I$(dir)/include) \
+    -I$(CURDIR)/$(BUILD) \
+    -I$(LIBOGC_INC) \
+	-I$(PORTLIBS_PATH)/wii/include \
+    -I$(PORTLIBS_PATH)/ppc/include \
+    -I$(PORTLIBS_PATH)/ppc/include/lua5.1 \
+    -I$(PORTLIBS_PATH)/ppc/include/freetype2
 
 #---------------------------------------------------------------------------------
 # build a list of library paths
