@@ -44,13 +44,13 @@ SOURCES		:=	src \
 				src/lib/GRRLIB/grrlib
 
 DATA		:=	data 
-INCLUDES    :=  src/lib/ 
+INCLUDES    :=  src/lib/ src/lib/pngu
 
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CFLAGS  	=  -g -O2 -Wall $(MACHDEP) $(INCLUDE) -DLOVE_WII
+CFLAGS  	=  -g -O2 -Wall $(MACHDEP) $(INCLUDE) -DLOVE_WII  -I./src/lib/pngu
 CXXFLAGS	=  $(CFLAGS)
 
 LDFLAGS	    =  -g $(MACHDEP) -Wl,-Map,$(notdir $@).map

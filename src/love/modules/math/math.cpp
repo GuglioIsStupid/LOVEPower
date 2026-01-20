@@ -1,5 +1,5 @@
 #include "math.hpp"
-#include "classes/randomGenerator.hpp"
+#include "classes/RandomGenerator.hpp"
 extern "C" {
     #include <lua.h>
 }
