@@ -2,7 +2,7 @@
 
 #include <sol/sol.hpp>
 
-#include "classes/randomGenerator.hpp"
+#include "classes/RandomGenerator.hpp"
 extern "C" {
     #include <lua.h>
 }
