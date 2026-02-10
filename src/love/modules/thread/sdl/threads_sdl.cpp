@@ -6,7 +6,6 @@ namespace love {
 namespace thread {
 namespace sdl1 {
 
-// Derived Mutex for SDL1
 struct SDLMutex : public Mutex {
     SDL_mutex* m;
 
@@ -17,7 +16,6 @@ struct SDLMutex : public Mutex {
     void unlock() override { SDL_mutexV(m); }
 };
 
-// Derived Conditional for SDL1
 struct SDLConditional : public Conditional {
     SDL_cond* c;
 
@@ -35,7 +33,6 @@ struct SDLConditional : public Conditional {
     }
 };
 
-// Thread wrapper for SDL1
 struct SDLThread : public Thread {
     SDL_Thread* thread;
     Threadable* t;
@@ -66,7 +63,6 @@ private:
 
 } // namespace sdl1
 
-// Factory functions
 Mutex* newMutex() { return new sdl1::SDLMutex(); }
 Conditional* newConditional() { return new sdl1::SDLConditional(); }
 Thread* newThread(Threadable* t) { return new sdl1::SDLThread(t); }

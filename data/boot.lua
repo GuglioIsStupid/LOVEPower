@@ -8,7 +8,7 @@ local invalidGamePath = nil
 
 function love.boot()
     require("love.filesystem")
-    local arg0 = love.arg.getLow(arg) or "sd:/LOVEPower/LOVEPower.dol"
+    local arg0 = love.arg.getLow(arg) or "sd:/LOVEPower/"
     if type(arg0) == "string" and arg0 ~= "" then
         -- Dolpin or something like that
         arg0 = "sd:/LOVEPower/"

@@ -8,9 +8,6 @@ namespace love {
 namespace thread {
 namespace sdl1 {
 
-// ------------------------------------------------------------------
-// Mutex
-// ------------------------------------------------------------------
 struct SDLMutex : public Mutex {
     SDL_mutex* m;
 
@@ -21,9 +18,6 @@ struct SDLMutex : public Mutex {
     void unlock() override;
 };
 
-// ------------------------------------------------------------------
-// Conditional
-// ------------------------------------------------------------------
 struct SDLConditional : public Conditional {
     SDL_cond* c;
 
@@ -35,9 +29,6 @@ struct SDLConditional : public Conditional {
     bool wait(Mutex* mutex, int timeout=-1) override;
 };
 
-// ------------------------------------------------------------------
-// Thread
-// ------------------------------------------------------------------
 struct SDLThread : public Thread {
     SDL_Thread* thread;
     Threadable* t;
@@ -53,9 +44,6 @@ private:
     static int thread_runner(void* data);
 };
 
-// ------------------------------------------------------------------
-// Factory functions
-// ------------------------------------------------------------------
 Mutex* newMutex();
 Conditional* newConditional();
 Thread* newThread(Threadable* t);

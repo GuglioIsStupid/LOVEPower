@@ -54,6 +54,12 @@ namespace love {
             }
             std::filesystem::current_path(identity);
 
+            /* std::ofstream identityFile("identity.txt");
+            if (identityFile.is_open()) {
+                identityFile << "Current identity: " << identity << std::endl;
+                identityFile.close();
+            } */
+
             createDirectories("game");
             createDirectories("save");
         }
