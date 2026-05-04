@@ -11,6 +11,12 @@ if(NOT DEFINED ENV{DEVKITPRO})
     message(FATAL_ERROR "DEVKITPRO environment variable is not set. Please set it to your devkitpro installation path.")
 endif()
 
+if(NOT DEFINED CONSOLE)
+    set(CONSOLE "wii")
+elseif(CONSOLE STREQUAL "gamecube")
+    set(CONSOLE "cube")
+endif()
+
 set(LIBOGC_DIR $ENV{DEVKITPRO}/libogc)
 
 set(LOVEPOWER_SRC
@@ -25,7 +31,7 @@ target_include_directories(LOVEPower PRIVATE
 )
 target_link_directories(LOVEPower PRIVATE
     ${CMAKE_SOURCE_DIR}/lib
-    ${LIBOGC_DIR}/lib
+    ${LIBOGC_DIR}/lib/${CONSOLE}
 )
 
 target_link_libraries(LOVEPower
