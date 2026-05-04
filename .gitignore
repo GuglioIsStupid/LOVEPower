@@ -3,3 +3,6 @@ meta.xml
 *.elf
 build/
 .vscode/
+
+cmakesetup.sh
+build.sh
