@@ -13,6 +13,8 @@ namespace love {
 
             int width;
             int height;
+            std::string min;
+            std::string mag;
 
 
             int                  getWidth()      const;

@@ -101,6 +101,7 @@ namespace love {
                     love::graphics::setBackgroundColor_float4,
                     love::graphics::setBackgroundColor_float3
                 ),
+                "setDefaultFilter", love::graphics::setDefaultFilter,
                 "getBackgroundColor", love::graphics::getBackgroundColor,
                 "clear", sol::overload(
                     love::graphics::clear_float4,

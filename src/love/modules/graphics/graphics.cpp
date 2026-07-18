@@ -26,11 +26,17 @@ namespace {
 
 namespace love {
     namespace graphics {
+        Filter defaultFilter;
+
         void __init(sol::state &luastate) {
             GRRLIB_Init();
 
             // set default font
             curFont = new love::graphics::Font();
+
+            // also set default filter
+            love::graphics::defaultFilter.min = "linear";
+            love::graphics::defaultFilter.mag = "linear";
 
             __registerTypes(luastate);
         }
@@ -141,9 +147,22 @@ namespace love {
             float rx = ox * sx * cos_r - oy * sy * sin_r;
             float ry = ox * sx * sin_r + oy * sy * cos_r;
 
+            float diff = sx - sy;
+
+            std::string min = texture.min;
+            std::string mag = texture.mag;
+
             x -= rx;
             y -= ry;
 
+            if (diff > 0) {
+                bool magbool = (mag == "linear");
+                GRRLIB_SetAntiAliasing(magbool);
+            } else {
+                bool minbool = (min == "linear");
+                GRRLIB_SetAntiAliasing(minbool);
+            }
+            
             GRRLIB_DrawImg(x, y, texture.texture, rotationDeg, sx, sy, color);
         }
 
@@ -301,6 +320,13 @@ namespace love {
 
         void print_x_y_r_sx_sy_ox_oy(const std::string &text, float x, float y, float rotation, float sx, float sy, float ox, float oy) {
             _print(text, x, y, rotation, sx, sy, ox, oy);
+        }
+
+        #pragma region FIlter
+
+        void setDefaultFilter(const std::string &min, const std::string &mag) {
+            love::graphics::defaultFilter.min = min;
+            love::graphics::defaultFilter.mag = mag;
         }
 
         #pragma region Helpers

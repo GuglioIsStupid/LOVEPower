@@ -75,6 +75,14 @@ namespace love {
         void print_x_y_r_sx_sy_ox(const std::string &text, float x, float y, float rotation, float sx, float sy, float ox);
         void print_x_y_r_sx_sy_ox_oy(const std::string &text, float x, float y, float rotation, float sx, float sy, float ox, float oy);
 
+        struct Filter {
+            std::string min;
+            std::string mag;
+        };
+
+        extern Filter defaultFilter;
+        void setDefaultFilter(const std::string &min, const std::string &mag);
+
         #pragma region Helpers
 
         bool isActive();
