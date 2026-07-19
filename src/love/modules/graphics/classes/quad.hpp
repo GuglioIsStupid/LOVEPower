@@ -6,7 +6,7 @@
 
 namespace love {
     namespace graphics {
-        struct Quad : public Object {
+        struct Quad {
             float quadX;
             float quadY;
             float quadWidth;

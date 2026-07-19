@@ -1,5 +1,6 @@
 #include <ogc/lwp_watchdog.h>
 #include <sys/unistd.h>
+#include <ogc/lwp.h>
 #include <cstdint>
 #include <sol/sol.hpp>
 extern "C" {
@@ -24,17 +25,19 @@ namespace love {
         }
 
         double step() {
-            _frames++;
-
             _prevTime = _currTime;
             _currTime = getTime();
 
             _dt = _currTime - _prevTime;
 
+            _frames++;
+
             double timeSinceLast = _currTime - _prevFpsUpdate;
-            if (timeSinceLast > _fpsUpdateFrequency) {
-                _fps = int((_frames/timeSinceLast) + 0.5);
+
+            if (timeSinceLast >= _fpsUpdateFrequency) {
+                _fps = (int)((double)_frames / timeSinceLast + 0.5);
                 _averageDelta = timeSinceLast / _frames;
+
                 _prevFpsUpdate = _currTime;
                 _frames = 0;
             }
@@ -43,8 +46,13 @@ namespace love {
         }
 
         void sleep(double seconds) {
-            if (seconds >= 0)
-                usleep((useconds_t)(seconds * 1e6));
+            /* if (seconds <= 0.0)
+                return;
+
+            if (seconds < 0.01)
+                return;
+
+            usleep((useconds_t)(seconds * 1000000.0)); */
         }
 
         double getDelta() {

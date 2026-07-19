@@ -16,7 +16,6 @@ extern "C" {
 namespace love {
     namespace event {
         std::vector<event_t> events;
-        std::vector<event_t>::iterator currentEvent = events.end();
 
         static bool requestQuit = false;
         static bool requestReset = false;
@@ -63,40 +62,47 @@ namespace love {
         }
 
         void pump(sol::this_state lua) {
-            currentEvent = events.begin();
-
             if (requestQuit || requestReset) {
                 __pushEvent(lua, "quit");
 
                 if (requestReset) {
                     SYS_ResetSystem(SYS_RETURNTOMENU, 0, 0);
-                    exit(0);
-                } else {
-                    SYS_ResetSystem(SYS_POWEROFF, 0, 0);
-                    exit(0);
                 }
+                else {
+                    SYS_ResetSystem(SYS_POWEROFF, 0, 0);
+                }
+
+                exit(0);
             }
 
-            if (checkLowMemory()) {
+            /* if (checkLowMemory()) {
                 __pushEvent(lua, "lowmemory");
-            }
+            } */
         }
 
-        event_t poll(sol::this_state lua) {
-            if (currentEvent == events.end()) {
-                events.clear();
-                currentEvent = events.end();
-                return std::make_tuple(sol::lua_nil, sol::lua_nil, sol::lua_nil,
-                                       sol::lua_nil, sol::lua_nil, sol::lua_nil, sol::lua_nil);
-            } else {
-                return *currentEvent++;
+        sol::variadic_results poll(sol::this_state lua) {
+            sol::variadic_results result;
+
+            if (events.empty()) {
+                result.push_back(sol::lua_nil);
+                return result;
             }
+
+            event_t event = events.front();
+            events.erase(events.begin());
+
+            std::apply(
+                [&](auto&&... args) {
+                    (result.push_back(args), ...);
+                },
+                event
+            );
+
+            return result;
         }
 
-        void push(sol::object name, sol::object a, sol::object b,
-                  sol::object c, sol::object d, sol::object e,
-                  sol::object f, sol::this_state s) {
-            events.push_back(std::make_tuple(name, a, b, c, d, e, f));
+        void push(sol::object name, sol::object a, sol::object b, sol::object c, sol::object d, sol::object e, sol::object f, sol::this_state s) {
+            events.emplace_back(name, a, b, c, d, e, f);
         }
 
         void quit(sol::this_state lua) {

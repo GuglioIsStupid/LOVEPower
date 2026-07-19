@@ -25,7 +25,7 @@ namespace {
 
 namespace love {
     namespace graphics {
-        struct Font : public Object {
+        struct Font {
             void       _createFont(const uint8_t* newFont, int dataSize, int size);
 
             FreeTypeGX *font;
