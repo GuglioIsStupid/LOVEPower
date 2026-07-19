@@ -3,7 +3,6 @@
 
 #include <sol/sol.hpp>
 #include <aesndlib.h>
-#include <fat.h>
 #include <audiogc/audiogc.hpp>
 #include "classes/Source.hpp"
 extern "C" {
@@ -17,8 +16,12 @@ namespace {
 namespace love {
     namespace audio {
         void __init(sol::state &luastate) {
-            AESND_Init();
-            fatInitDefault();
+            static bool initialized = false;
+
+            if (!initialized) {
+                AESND_Init();
+                initialized = true;
+            }
 
             __registerTypes(luastate);
         }
@@ -27,6 +30,12 @@ namespace love {
             luastate.new_usertype<love::audio::Source>(
                 "Source",
                 sol::no_constructor,
+                sol::meta_function::garbage_collect,
+                [](love::audio::Source* self)
+                {
+                    delete self;
+                },
+
                 "play", &love::audio::Source::play,
                 "stop", &love::audio::Source::stop,
                 "pause", &love::audio::Source::pause,
@@ -49,8 +58,8 @@ namespace love {
             );
         }
 
-        love::audio::Source newSource_file_type(std::string file, std::string type) {
-            return love::audio::Source(file, type);
+        love::audio::Source* newSource_file_type(std::string file, std::string type) {
+            return new love::audio::Source(file, type);
         }
         
         double getVolume(love::audio::Source* source) {

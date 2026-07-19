@@ -178,7 +178,8 @@ int luaopen_love_wiimote(lua_State *L) {
     luastate["love"]["wiimote"] = luastate.create_table_with(
         "getWiimote", love::wiimote::getWiimote,
         "getWiimotes", love::wiimote::getWiimotes,
-        "getBalanceBoard", love::wiimote::getBalanceBoard
+        "getBalanceBoard", love::wiimote::getBalanceBoard,
+        "update", love::wiimote::update
     );
 
     return 1;

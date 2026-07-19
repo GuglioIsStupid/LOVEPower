@@ -18,7 +18,7 @@ function love.boot()
             arg0 = "sd:/LOVEPower/"
         end
     end
-    love.filesystem.init(arg0)
+    love.filesystem.init("sd:/LOVEPower/")
 
     local canHasGame = true
     -- TODO: Implement fusing
@@ -109,10 +109,12 @@ function love.init()
         "math",
         "physics",
         "wiimote",
-        "mii"
+        --"mii"
     } do
         if c.modules[v] then
+            print("loading module:", v)
             require("love." .. v)
+            print("loaded module:", v)
         end
     end
 
@@ -133,7 +135,9 @@ function love.init()
             local mainok, mainerr = pcall(function()
                 local chunk, err = love.filesystem.load("main.lua")
                 if chunk then chunk()
-                else error(err) end
+                else
+                    error(err)
+                end
             end)
         end
     end
@@ -161,19 +165,31 @@ local function deferErrHand(...)
 end
 
 local function safe_call(f)
-    local ok, err = pcall(f, deferErrHand)
+    local ok, err = xpcall(f, debug.traceback)
     if not ok then
+        print("ERROR:")
+        print(err)
+
+        local file = io.open("sd:/lua_error.log", "w")
+        if file then
+            file:write(err)
+            file:close()
+        end
+
         return false, err
     end
     return true
 end
 
+print('booting')
 local ok = safe_call(love.boot)
 if not ok then return end
 
+print('initing')
 ok = safe_call(love.init)
 if not ok then return end
 
+print('running')
 if love.run then
     safe_call(love.run)
 end

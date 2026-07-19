@@ -14,7 +14,7 @@ namespace love {
             else
                 fileMode = audiogc::mode::stream;
 
-            audiogcPlayer = new audiogc::player(audiogc::type::detect, path, fileMode);
+            audiogcPlayer = std::make_unique<audiogc::player>(audiogc::type::detect, path, fileMode);
             
             if (!audiogcPlayer) {
                 throw std::runtime_error("Failed to load audio file: " + path);

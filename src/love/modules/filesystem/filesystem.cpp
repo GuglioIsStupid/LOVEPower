@@ -70,9 +70,16 @@ namespace love {
         }
 
         sol::protected_function load(const std::string& file, sol::this_state state) {
-            sol::state_view luastate(state);
+            sol::state_view lua(state);
 
-            return luastate.load_file(getFilePath(file)).get<sol::protected_function>();
+            auto result = lua.load_file(getFilePath(file));
+
+            if (!result.valid()) {
+                sol::error err = result;
+                throw sol::error(err.what());
+            }
+
+            return result;
         }
 
         sol::table getInfo(const std::string& file, sol::this_state s) {
@@ -85,7 +92,14 @@ namespace love {
             }
 
             info["filetype"] = std::filesystem::is_directory(path) ? "directory" : "file";
-            info["size"] = static_cast<double>(std::filesystem::file_size(path));
+            if (std::filesystem::is_directory(path)) {
+                info["filetype"] = "directory";
+                info["size"] = 0;
+            }
+            else {
+                info["filetype"] = "file";
+                info["size"] = static_cast<double>(std::filesystem::file_size(path));
+            }
 
             auto ftime = std::filesystem::last_write_time(path);
             auto sctp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(

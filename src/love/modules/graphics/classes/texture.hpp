@@ -10,7 +10,7 @@
 
 namespace love {
     namespace graphics {
-        struct Texture : public Object {
+        struct Texture {
             GRRLIB_texImg *texture;
 
             int width;

@@ -23,41 +23,56 @@ function love.run()
     if love.timer then love.timer.step() end
 
     local dt = 0
+    local count = 0
 
     while true do
-        if love.event then
-            love.event.pump()
-            while true do
-                local name, a, b, c, d, e, f = love.event.poll()
-                if not name then break end
-                if name == "quit" then
-                    if not love.quit or not love.quit() then
-                        return a or 0
-                    end
-                else
-                    love.handlers[name](a, b, c, d, e, f)
+        count = count + 1
+        print("frame count: " .. count)
+        love.event.pump()
+        while true do
+            local name, a, b, c, d, e, f = love.event.poll()
+            if not name then break end
+            print(name)
+            if name == "quit" then
+                if not love.quit or not love.quit() then
+                    return a or 0
                 end
+            else
+                love.handlers[name](a, b, c, d, e, f)
             end
-
-            if love.timer then dt = love.timer.step() end
-            if love.wiimote then love.wiimote.update() end
-            if love.update then love.update(dt) end
-
-            if love.graphics and love.graphics.isActive() then
-                love.graphics.origin()
-                --love.graphics.clear(love.graphics.getBackgroundColor()) -- TODO: Figure out why this freezes the game
-                -- until then, render a rectangle
-                local lastColor = {love.graphics.getColor()}
-                love.graphics.setColor(love.graphics.getBackgroundColor())
-                love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
-                love.graphics.setColor(unpack(lastColor))
-                if love.draw then love.draw() end
-                love.graphics.present()
-            end
-
-            love.timer.sleep(0.001)
-            collectgarbage("step")
         end
+
+        print('mhm')
+        if love.timer then dt = love.timer.step() end
+        if love.wiimote and love.wiimote.update then love.wiimote.update() end
+        if love.update then love.update(dt) end
+
+        print("doing the draw now")
+
+        if love.graphics and love.graphics.isActive() then
+            print("before origin")
+            love.graphics.origin()
+            print("after origin")
+            --love.graphics.clear(love.graphics.getBackgroundColor()) -- TODO: Figure out why this freezes the game
+            -- until then, render a rectangle
+            local lastColor = {love.graphics.getColor()}
+            love.graphics.setColor(love.graphics.getBackgroundColor())
+            love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+            print("after background")
+            love.graphics.setColor(unpack(lastColor))
+            print("before love.draw")
+            if love.draw then love.draw() end
+            print("after love.draw")
+            love.graphics.present()
+            print("after love.present")
+        end
+
+        print('done the draw')
+
+        love.timer.sleep(0.01)
+        print("did sleep, doing garbage")
+        --collectgarbage("step")
+        print('finished garbage')
     end
 end
 

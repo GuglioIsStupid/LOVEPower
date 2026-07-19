@@ -59,26 +59,27 @@ LDFLAGS	    =  -g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 # any extra libraries we wish to link with the project
 # the order can-be/is critical
 #---------------------------------------------------------------------------------
-LIBS	:= -lfreetype -lbz2 -lpng -ljpeg -lz -lfat
+LIBS	:= -lfreetype -lbrotlidec -lbrotlicommon -lbrotlienc -lbz2 -lpng -ljpeg -lz -lfat
 LIBS	+= -lwiiuse
 LIBS	+= -lmodplay -laesnd
 LIBS	+= -lbte -logc -lm
 
 ifeq ($(strip $(NO_LIBMII)),true)
 else
-    SOURCES  += src/love/modules/mii
-    CFLAGS   += -DUSE_LIBMII
-    CXXFLAGS += -DUSE_LIBMII
-	LIBS     += -lmii -lisfs
+    #SOURCES  += src/love/modules/mii
+    #CFLAGS   += -DUSE_LIBMII
+    #CXXFLAGS += -DUSE_LIBMII
+	#LIBS     += -lmii -lisfs
 endif
 
 ifeq ($(strip $(NO_LUAJIT)),true)
 # just use regular lua
 LIBS    += -llua5.1
 else
-LIBS	 += -lluajit
-CFLAGS   += -DUSE_LUAJIT
-CXXFLAGS += -DUSE_LUAJIT
+LIBS    += -llua5.1
+#LIBS	 += -lluajit
+#CFLAGS   += -DUSE_LUAJIT
+#CXXFLAGS += -DUSE_LUAJIT
 endif
 LIBS     +=  -lSDL # SDL is used for threads
 

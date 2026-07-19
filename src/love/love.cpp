@@ -36,6 +36,7 @@ extern "C" {
 #include "arg_lua.h"
 #include "jitsetup_lua.h"
 
+#include <fat.h>
 #include <grrlib.h>
 
 #include <fstream>
@@ -83,6 +84,41 @@ static int love_preload(lua_State *L, lua_CFunction f, const char *name) { // Fr
 	return 0;
 }
 
+static bool lua_safe_pcall(lua_State *L, int nargs, int nresults) {
+    if (lua_pcall(L, nargs, nresults, 0) != 0) {
+        const char *err = lua_tostring(L, -1);
+        love::logError(err ? err : "Unknown Lua error");
+        lua_pop(L, 1);
+        return false;
+    }
+
+    return true;
+}
+
+static int lua_file_print(lua_State *L) {
+    std::ofstream log("sd:/lua_print.log", std::ios::app);
+
+    if (log.is_open()) {
+        int n = lua_gettop(L);
+
+        for (int i = 1; i <= n; i++) {
+            size_t len;
+            const char *str = luaL_tolstring(L, i, &len);
+
+            if (i > 1)
+                log << "\t";
+
+            log.write(str, len);
+
+            lua_pop(L, 1);
+        }
+
+        log << std::endl;
+    }
+
+    return 0;
+}
+
 int luaopen_love(lua_State *L) {
     sol::state_view luastate(L);
 
@@ -99,7 +135,9 @@ int luaopen_love(lua_State *L) {
 
     lua_getglobal(L, "require");
     lua_pushstring(L, "love.jitsetup");
-    lua_call(L, 1, 1);
+    if (!lua_safe_pcall(L, 1, 1)) {
+        return 0;
+    }
 
     static const char *MAIN_THREAD_KEY = "_love_mainthread";
 
@@ -187,6 +225,8 @@ namespace love {
     }
 
     int initialize(int argc, char** argv) {
+        fatInitDefault();
+
         //int retval = 1;
         sol::state luastate;
 
@@ -210,6 +250,9 @@ namespace love {
                 #endif
             );
 
+            lua_pushcfunction(luastate.lua_state(), lua_file_print);
+            lua_setglobal(luastate.lua_state(), "print");
+
             lua_State *L = luastate.lua_state();
             love_preload(L, luaopen_love_jitsetup, "love.jitsetup");
             lua_getglobal(L, "require");
@@ -219,14 +262,16 @@ namespace love {
             love_preload(L, luaopen_love, "love");
             lua_getglobal(L, "require");
             lua_pushstring(L, "love");
-            lua_call(L, 1, 1);
+            if (!lua_safe_pcall(L, 1, 1)) {
+                return 0;
+            }
 
             lua_pop(L, 1);
 
             love::event::__init(luastate);
-            love::audio::__init(luastate);
-            love::graphics::__init(luastate);
             love::filesystem::__init(luastate, argc, argv);
+            love::graphics::__init(luastate);
+            love::audio::__init(luastate);
             love::timer::__init(luastate);
             love::wiimote::__init(luastate);
             #ifdef USE_LIBMII
@@ -242,7 +287,9 @@ namespace love {
 
             lua_getglobal(L, "require");
             lua_pushstring(L, "love.boot");
-            lua_call(L, 1, 1);
+            if (!lua_safe_pcall(L, 1, 1)) {
+                return 0;
+            }
 
             //retval = 0;
             int done = 0;
@@ -253,6 +300,7 @@ namespace love {
             if (lua_isnumber(L, -1)) {
                 retval = (int)lua_tonumber(L, -1);
             } */
+
             lua_close(L);
         
             return done;

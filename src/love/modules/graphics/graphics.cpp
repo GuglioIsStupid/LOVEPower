@@ -493,11 +493,11 @@ namespace love {
         }
         
         void pop() {
-            if (!transforms.empty()) {
+            if (transforms.size() > 1) {
                 transforms.pop_back();
             }
         }
-        
+
         void translate(float x, float y) {
             if (!transforms.empty()) {
                 transforms.back().translate(x, y);
