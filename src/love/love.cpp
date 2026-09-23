@@ -30,11 +30,23 @@ extern "C" {
 
 #include "common/Exception.h"
 
-#include "callbacks_lua.h"
-#include "boot_lua.h"
 #include "nogame_lua.h"
-#include "arg_lua.h"
-#include "jitsetup_lua.h"
+
+static const char arg_lua[] =
+#include "scripts/arg.lua"
+;
+
+static const char callbacks_lua[] =
+#include "scripts/callbacks.lua"
+;
+
+static const char boot_lua[] =
+#include "scripts/boot.lua"
+;
+
+static const char jit_setup_lua[] =
+#include "scripts/jitsetup.lua"
+;
 
 #include <fat.h>
 #include <grrlib.h>
@@ -166,35 +178,35 @@ int luaopen_love(lua_State *L) {
 }
 
 int luaopen_love_nogame(lua_State *L) {
-    if (luaL_loadbuffer(L, (const char *)nogame_lua, nogame_lua_size, "=[love \"nogame.lua\"]") == 0)
+    if (luaL_loadbuffer(L, (const char*)nogame_lua, nogame_lua_size, "=[love \"nogame.lua\"]") == 0)
         lua_call(L, 0, 1);
 
     return 1;
 }
 
 int luaopen_love_arg(lua_State *L) {
-    if (luaL_loadbuffer(L, (const char *)arg_lua, arg_lua_size, "=[love \"arg.lua\"]") == 0)
+    if (luaL_loadbuffer(L, arg_lua, sizeof(arg_lua), "=[love \"arg.lua\"]") == 0)
         lua_call(L, 0, 1);
 
     return 1;
 }
 
 int luaopen_love_callbacks(lua_State *L) {
-    if (luaL_loadbuffer(L, (const char *)callbacks_lua, callbacks_lua_size, "=[love \"callbacks.lua\"]") == 0)
+    if (luaL_loadbuffer(L, callbacks_lua, sizeof(callbacks_lua), "=[love \"callbacks.lua\"]") == 0)
         lua_call(L, 0, 1);
 
     return 1;
 }
 
 int luaopen_love_boot(lua_State *L) {
-    if (luaL_loadbuffer(L, (const char *)boot_lua, boot_lua_size, "=[love \"boot.lua\"]") == 0)
+    if (luaL_loadbuffer(L, boot_lua, sizeof(boot_lua), "=[love \"boot.lua\"]") == 0)
         lua_call(L, 0, 1);
 
     return 1;
 }
 
 int luaopen_love_jitsetup(lua_State *L) {
-    if (luaL_loadbuffer(L, (const char *)jitsetup_lua, jitsetup_lua_size, "=[love \"jitsetup.lua\"]") == 0)
+    if (luaL_loadbuffer(L, jit_setup_lua, sizeof(jit_setup_lua), "=[love \"jitsetup.lua\"]") == 0)
         lua_call(L, 0, 1);
 
     return 1;

@@ -1,4 +1,4 @@
-function love.load()
+function love87  .load()
 
 end
 

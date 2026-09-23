@@ -1,3 +1,4 @@
+R"luastring"--(
 --[[
 Copyright (c) 2006-2022 LOVE Development Team
 
@@ -62,3 +63,4 @@ else
 	-- Somewhat arbitrary value (>= the default).
 	jit.opt.start("sizemcode=128")
 end
+--)luastring"--"

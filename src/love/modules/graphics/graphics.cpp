@@ -35,10 +35,19 @@ namespace {
     int lineWidth = 1;
 
     std::vector<love::graphics::Transform> transforms;
+
+    struct lineData {
+        float x;
+        float y;
+        float endx;
+        float endy;
+    };
 }
 
 namespace love {
     namespace graphics {
+        Filter defaultFilter;
+        
         void __init(sol::state &luastate) {
             GRRLIB_Init();
 
@@ -52,6 +61,10 @@ namespace love {
             luastate.new_usertype<love::graphics::Texture>(
                 "Texture",
                 sol::no_constructor,
+                "setFilter", sol::overload(
+                    &love::graphics::Texture::setFilter_string1,
+                    &love::graphics::Texture::setFilter_string2
+                ),
                 "getWidth", &love::graphics::Texture::getWidth,
                 "getHeight", &love::graphics::Texture::getHeight,
                 "getDimensions", &love::graphics::Texture::getDimensions
@@ -193,45 +206,41 @@ namespace love {
         void line_variadic(sol::variadic_args args) {
             GX_SetLineWidth(lineWidth, GX_TO_ZERO);
 
-            std::vector<guVector> verts;
+            std::vector<lineData> verts;
             unsigned int size = args.size();
-            verts.reserve(size / 2);
-            for (unsigned int i = 0; i < size; i += 2) {
-                verts.push_back(guVector{
+            verts.reserve(size / 4);
+            for (unsigned int i = 0; i < size; i += 4) {
+                verts.push_back(lineData{
                     args[i].as<float>(),
                     args[i + 1].as<float>(),
-                    0.0
+                    args[i + 2].as<float>(),
+                    args[i + 3].as<float>(),
                 });
             }
 
-            GX_Begin(GX_LINES, GX_VTXFMT0, size / 2);
-                for (unsigned int i = 0; i < size / 2; i++) {
-                    GX_Color1u32(color); // Colour is always the same
-                    GX_Position3f32(verts[i].x, verts[i].y, 0.0f);
-                }
-            GX_End();
+            for (int i = 0; i < size / 4; i++) {
+                GRRLIB_Line(verts[i].x, verts[i].y, verts[i].endx, verts[i].endy, color);
+            }
         }
 
         void line_verts(sol::table vertices) {
             GX_SetLineWidth(lineWidth, GX_TO_ZERO);
 
-            std::vector<guVector> verts;
+            std::vector<lineData> verts;
             unsigned int size = vertices.size();
-            verts.reserve(size / 2);
-            for (unsigned int i = 1; i < size; i += 2) {
-                verts.push_back(guVector{
+            verts.reserve(size / 4);
+            for (unsigned int i = 1; i < size; i += 4) {
+                verts.push_back(lineData{
                     vertices.get<float>(i),
                     vertices.get<float>(i + 1),
-                    0.0
+                    vertices.get<float>(i + 2),
+                    vertices.get<float>(i + 3),
                 });
             }
 
-            GX_Begin(GX_LINES, GX_VTXFMT0, size / 2);
-                for (unsigned int i = 0; i < size / 2; i++) {
-                    GX_Color1u32(color);
-                    GX_Position3f32(verts[i].x, verts[i].y, 0.0f);
-                }
-            GX_End();
+            for (int i = 0; i < size / 4; i++) {
+                GRRLIB_Line(verts[i].x, verts[i].y, verts[i].endx, verts[i].endy, color);
+            }
         }
 
         #pragma region Textures
@@ -252,6 +261,9 @@ namespace love {
 
             x -= rx;
             y -= ry;
+            
+            float diff = sx - sy;
+            GRRLIB_SetAntiAliasing(diff > 0 ? texture.filterMag == "linear" : texture.filterMin == "linear");
 
             if (transforms.size() > 0) {
                 auto &t = transforms.back();
@@ -281,6 +293,9 @@ namespace love {
 
             x -= rx;
             y -= ry;
+
+            float diff = sx - sy;
+            GRRLIB_SetAntiAliasing(diff > 0 ? texture.filterMag == "linear" : texture.filterMin == "linear");
 
             if (transforms.size() > 0) {
                 auto &t = transforms.back();
@@ -450,6 +465,16 @@ namespace love {
 
         #pragma region Helpers
 
+        void setDefaultFilter_string1(const std::string &min) {
+            love::graphics::defaultFilter.min = min;
+            love::graphics::defaultFilter.mag = min;
+        }
+
+        void setDefaultFilter_string2(const std::string &min, const std::string &mag) {
+            love::graphics::defaultFilter.min = min;
+            love::graphics::defaultFilter.mag = mag;
+        }
+
         bool isActive() {
             return true;
         }
@@ -543,6 +568,8 @@ namespace love {
     }
 }
 
+#pragma region Initialization
+
 int luaopen_love_graphics(lua_State *L) {
     sol::state_view luastate(L);
 
@@ -607,6 +634,10 @@ int luaopen_love_graphics(lua_State *L) {
         "setBackgroundColor", sol::overload(
             love::graphics::setBackgroundColor_float4,
             love::graphics::setBackgroundColor_float3
+        ),
+        "setDefaultFilter", sol::overload(
+            love::graphics::setDefaultFilter_string1,
+            love::graphics::setDefaultFilter_string2
         ),
         "getBackgroundColor", love::graphics::getBackgroundColor,
         "clear", sol::overload(

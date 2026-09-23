@@ -4,6 +4,7 @@
 #include "../../filesystem/filesystem.hpp"
 #include "../../data/data.hpp"
 #include "texture.hpp"
+#include "../graphics.hpp"
 
 namespace love {
     namespace graphics {
@@ -16,6 +17,8 @@ namespace love {
             }
             width = texture->w;
             height = texture->h;
+            filterMin = love::graphics::defaultFilter.min;
+            filterMag = love::graphics::defaultFilter.mag;
         }
 
         Texture::Texture(love::data::Data data) {
@@ -32,6 +35,8 @@ namespace love {
 
             width = texture->w;
             height = texture->h;
+            filterMin = love::graphics::defaultFilter.min;
+            filterMag = love::graphics::defaultFilter.mag;
         }
 
         Texture::Texture() {
@@ -42,6 +47,17 @@ namespace love {
 
             width = 4;
             height = 4;
+            filterMin = love::graphics::defaultFilter.min;
+            filterMag = love::graphics::defaultFilter.mag;
+        }
+
+        void Texture::setFilter_string1(std::string min) {
+            filterMin = min;
+            filterMag = min;
+        }
+        void Texture::setFilter_string2(std::string min, std::string mag) {
+            filterMin = min;
+            filterMag = mag;
         }
 
         int Texture::getWidth() const {

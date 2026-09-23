@@ -111,6 +111,15 @@ namespace love {
         void setLineWidth(int width);
         int getLineWidth();
 
+        struct Filter {
+            std::string min;
+            std::string mag;
+        };
+
+        extern Filter defaultFilter;
+        void setDefaultFilter_string1(const std::string &min);
+        void setDefaultFilter_string2(const std::string &min, const std::string &mag);
+
         #pragma endregion
     }
 }

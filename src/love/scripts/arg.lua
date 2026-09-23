@@ -1,3 +1,4 @@
+R"luastring"--(
 local love = require("love")
 
 love.path = {}
@@ -84,3 +85,4 @@ function love.arg.parseGameArguments(a)
 
 	return out
 end
+--)luastring"--"

@@ -1,3 +1,4 @@
+R"luastring"--(
 local love = require("love")
 
 require("love.arg")
@@ -193,3 +194,4 @@ print('running')
 if love.run then
     safe_call(love.run)
 end
+--)luastring"--"

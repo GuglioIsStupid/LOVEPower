@@ -1,3 +1,4 @@
+R"luastring"--(
 local love = require("love")
 
 function love.createhandlers()
@@ -128,3 +129,4 @@ function love.errhand(err)
         end
     end
 end
+--)luastring"--"
